@@ -1,0 +1,37 @@
+.Login {
+    margin: auto;
+    max-width: 320px;
+    min-height: 86vh;
+}
+
+.Login form {
+    margin: auto;
+    max-width: 320px;
+    z-index: 0;
+}
+.Modal {
+    height: 90%;
+    margin: 5%;
+    width: 90%;
+    position: absolute;
+    vertical-align: center;
+    z-index: 10;
+}
+
+.scan {
+    vertical-align: center;
+    z-index: 10;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+.input-group .form-control {
+    z-index: 0;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.input-group-btn{
+    z-index: 0;
+}

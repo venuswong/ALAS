@@ -1,0 +1,22 @@
+body {
+    background: #FEFEFE ;
+    font-family: Roboto, sans-serif !important;
+}
+
+.navbar-default{
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+}
+
+/* Color palette (Nationwide Children's):
+ * Neutral background: #FEFEFE
+ * Primary blue: #4677D8
+ * Blue-1 (dark): #1A4397
+ * Blue-2 (lighter): #3E6FD0
+ * Blue-3 (much lighter): #70A5FA
+ * Green-1 (used for careers accent): #1C5F29
+ * Yellow-1 (used for achievements): #F9C500
+ * Yellow-2 (used for stories): #F19800
+ */

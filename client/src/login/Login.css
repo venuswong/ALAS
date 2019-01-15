@@ -1,0 +1,9 @@
+.login {
+    margin: auto;
+    max-width: 320px;
+    min-height: 86vh;
+}
+
+.input-group-btn {
+    vertical-align: bottom;
+}

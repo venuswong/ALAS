@@ -1,0 +1,26 @@
+.homeview {
+    position: relative;
+    min-height: 86vh;
+    top: -20px;
+    margin: 0;
+
+}
+
+.homeview-btn-container {
+    margin: 24px;
+}
+
+.btn-space {
+    width: 48%;
+    padding: 20px;
+    margin: 1%;
+}
+
+@media all and (max-width: 800px){
+    .homeview-btn-container{
+        text-align: center;
+    }
+    h3{
+        font-size: 1em;
+    }
+}

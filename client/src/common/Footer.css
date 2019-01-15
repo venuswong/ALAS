@@ -1,0 +1,10 @@
+.footer-item-container {
+    margin: 1.8vh;
+    text-align: center;
+}
+
+.footer-item {
+    height: 2.8vh;
+    padding-right: 24px;
+    width: 2.8vw;
+}

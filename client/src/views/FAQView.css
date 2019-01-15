@@ -1,0 +1,114 @@
+.search-bar{
+    max-width: 800px;
+    margin: auto;
+}
+
+.search-bar .MuiInputBase-root-49{
+    font-size: 2rem;
+}
+
+.background{
+    background: #999999;
+    height: 30vh;
+    width: 100%;
+    margin: -20px 0 auto;
+}
+
+.panel-group{
+    margin: 10vh auto 0;
+    width: 65vw;
+}
+
+.question{
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.askaq {
+    margin: 10vh auto 0;
+    width: 100%;
+    height: 48px;
+    text-align: center;
+    background-color: #3E6FD0;
+    color: white;
+}
+
+.askaq:hover {
+    background-color: #70A5FA;;
+    color: white;
+}
+
+.askaq:active {
+    background-color: #70A5FA;;
+    color: white;
+}
+
+.askaq:focus {
+    background-color: #70A5FA;;
+    color: white;
+}
+
+.footer{
+    display: none;
+}
+
+.row-eq-height {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+}
+.padcol {
+    padding: 0;
+}
+
+.Modal {
+    height: 90%;
+    margin: 5%;
+    width: 90%;
+    position: absolute;
+    vertical-align: center;
+    z-index: 10;
+}
+
+.Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: .95;
+}
+
+.modal-space {
+    padding: 0 10px;
+}
+
+@media all and (max-width: 800px){
+    .search-bar{
+        margin: 5vh auto 0;
+        width: 100%;
+        padding-right: 0;
+        padding-left: 0;
+    }
+    .search-bar .MuiInputBase-root-49{
+        font-size: 2rem;
+    }
+    .background{
+        background: #999999;
+        height: 15vh;
+        width: 100%;
+        margin: -20px 0 auto;
+    }
+
+    .askaq {
+        margin: 5vh auto 0;
+        width: 100%;
+        height: 48px;
+        background-color: #3E6FD0;
+        color: white;
+        font-size: 10px;
+    }
+}
