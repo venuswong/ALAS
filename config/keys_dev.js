@@ -1,6 +1,6 @@
 module.exports = {
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWD,
-    database: process.env.DB
+    host: 'alasdbinstance123.cgdbunnaevjk.us-east-2.rds.amazonaws.com',
+    user: 'alasadmin',
+    password: 'forthekids123',
+    database: 'ALAS'
 };
