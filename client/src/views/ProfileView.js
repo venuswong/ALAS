@@ -64,19 +64,26 @@ class ProfileView extends Component {
         }
     }
 
-    handleChange(event, childInsuranceIndex) {
-        let newArray = Object.assign(this.state.Children_Insurance);
-        console.log("Array before change: " + newArray);
-        newArray[childInsuranceIndex].Name = event.target.value;
-        this.setState({
-            Children_Insurance: newArray
-        });
+    handleChange(event, dataType, childDataIndex) {
+        if(dataType === 'insurance') {
+            let newArray = Object.assign(this.state.Children_Insurance);
+            newArray[childDataIndex].Name = event.target.value;
+            this.setState({
+                Children_Insurance: newArray
+            });
+        } else {
+            let newArray = Object.assign(this.state.Children_School);
+            newArray[childDataIndex].Name = event.target.value;
+            console.log(newArray);
+            this.setState({
+                Children_School: newArray
+            });
+        }
     };
 
     handleInsuranceSubmit(e, childInsuranceIndex) {
+        console.log('got here');
         const { Children_Information, Children_Insurance} = this.state;
-        console.log(Children_Information);
-        console.log(Children_Insurance);
         e.preventDefault();
         postChildInsurance(Children_Information[childInsuranceIndex], Children_Insurance[childInsuranceIndex]).then((res) => {
             if (res.status === 200) {
@@ -118,10 +125,11 @@ class ProfileView extends Component {
     };
 
     handleSchoolSubmit(e, childSchoolIndex) {
-        const { Child_Information, Children_School} = this.state;
-        console.log()
+        const { Children_Information, Children_School} = this.state;
         e.preventDefault();
-        postChildSchool(Child_Information[childSchoolIndex], Children_School[childSchoolIndex]).then((res) => {
+        console.log(Children_Information);
+        console.log(childSchoolIndex);
+        postChildSchool(Children_Information[childSchoolIndex], Children_School[childSchoolIndex]).then((res) => {
             if (res.status === 200) {
                 this.setState({
                     alertProps: {
@@ -181,24 +189,18 @@ class ProfileView extends Component {
                 });
             getChildrenInfo().then(result => result.json())
                 .then(json => {
-                    console.log("TEST---------->:\n");
-                    console.log(json.result);
                     this.setState({
                         Children_Information: json.result
                     })
                 });
             getChildrenInsurance().then(result => result.json())
                 .then(json => {
-                    console.log("TEST---------->:\n");
-                    console.log(json.result);
                     this.setState({
                         Children_Insurance: json.result
                     })
                 });
             getChildrenSchool().then(result => result.json())
                 .then(json => {
-                    console.log("TEST---------->:\n");
-                    console.log(json.result);
                     this.setState({
                         Children_School: json.result
                     })
@@ -284,8 +286,6 @@ class ProfileView extends Component {
     }
 
     createChildInfoTab(child, childInsuranceIndex, childinsurance) {
-        console.log(childinsurance)
-        console.log(childinsurance[childInsuranceIndex] + ' info index: ' + childInsuranceIndex)
         return (
             <Tab eventKey={childInsuranceIndex+"insurance"} title={child.Fname + ' ' + child.Lname}>
                 <form onSubmit={(e) => this.handleInsuranceSubmit(e, childInsuranceIndex)}>
@@ -323,7 +323,7 @@ class ProfileView extends Component {
                                 componentClass="select"
                                 placeholder={childinsurance[childInsuranceIndex].Name}
                                 value={childinsurance[childInsuranceIndex].Name}
-                                onChange={(e)=>this.handleChange(e,childInsuranceIndex)}
+                                onChange={(e)=>this.handleChange(e, 'insurance', childInsuranceIndex)}
                             >
                                 <option value="Aetna">Aetna</option>
                                 <option value="Anthem">Anthem</option>
@@ -343,18 +343,17 @@ class ProfileView extends Component {
     }
 
     createChildSchoolTab(child, childSchoolIndex, childschool) {
-        console.log(childschool[childSchoolIndex] + ' school index: ' + childSchoolIndex)
         return (
             <Tab eventKey={childSchoolIndex+"school"} title={child.Fname + ' ' + child.Lname}>
                 <form onSubmit={(e) => this.handleSchoolSubmit(e, childSchoolIndex)}>
                     <div>
-                        <FormGroup controlId="Children_School" bsSize="medium">
+                        <FormGroup controlId={childSchoolIndex} bsSize="medium">
                             <ControlLabel>School District</ControlLabel>
                             <FormControl
                                 componentClass="select"
-                                placeholder={this.state.Children_School}
-                                value={this.state.Children_School}
-                                onChange={this.handleChange}
+                                placeholder={childschool[childSchoolIndex].Name}
+                                value={childschool[childSchoolIndex].Name}
+                                onChange={(e)=>this.handleChange(e, 'school', childSchoolIndex)}
                             >
                                 <option value="South-Western City School Dist">South-Western City School Dist</option>
                                 <option value="School 2">School District 2</option>

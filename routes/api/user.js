@@ -190,6 +190,33 @@ router.post('/updatechildinsurance', function (req, res) {
     }
 });
 
+router.post('/updatechildschool', function (req, res) {
+    const params = req.body;
+    console.log(params.school);
+    const information = params.information;
+    const schoolName = params.school.DName;
+    const Uid = information.Uid;
+    const PIid = information.PIid;
+    if (!req.session.Uid) {
+        res.status(404).send("User is not logged in");
+    } else {
+        if (req.session.Uid !== Uid) {
+            res.status(404).send("User currently logged in does not correspond to child");
+        } else {
+            const query = 'UPDATE Patient_Info ' +
+                'SET Patient_Info.SDIid =(SELECT SDIid FROM School_District_Info WHERE School_District_Info.DName = ?) ' +
+                'WHERE Patient_Info.PIid = ?';
+            const filter = [schoolName, PIid];
+            db.query(query, filter, function (err, result) {
+                if (err) throw err;
+                else {
+                    res.status(200).send(JSON.stringify(result));
+                }
+            });
+        }
+    }
+});
+
 router.get('/childrenschool', function (req, res) {
     if (req.session.Uid) {
         const query = 'SELECT Dname, Phone, Email FROM School_District_Info AS SDI, Patient_Info AS PI WHERE SDI.SDIid = PI.SDIid AND PI.Uid = ?;';

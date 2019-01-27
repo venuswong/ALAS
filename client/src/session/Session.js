@@ -110,7 +110,7 @@ export function postChildInsurance(information, insurance) {
 }
 
 export function postChildSchool(information, school) {
-    return fetch("/api/user/updatechildinsurance", {
+    return fetch("/api/user/updatechildschool", {
         method: "post",
         headers: {
             'Accept': 'application/json',
