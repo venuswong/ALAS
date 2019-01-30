@@ -53,6 +53,18 @@ class ActionView extends Component {
             })
     }
 
+    renderAgeSpecificMaterials(age) {
+        if (age > 5) {
+            return <p>hey!</p>
+        } else if (age >= 3 && age <= 5) {
+
+        } else if (age < 3) {
+
+        } else {
+            return;
+        }
+    }
+
 
     createTabFromActions(actions) {
         const { childrenInfo } = this.state;
@@ -60,13 +72,16 @@ class ActionView extends Component {
         const PIid = actions[0].PIid;
         let childName = 'Name not found';
         let firstName;
+        let age;
         if (typeof childrenInfo[PIid] !== "undefined") {
+            age = childrenInfo[PIid].Age;
             firstName = childrenInfo[PIid].Fname;
             childName = firstName + ' ' + childrenInfo[PIid].Lname;
         }
         return (
             <Tab eventKey={PIid} title={childName}>
                 <p> Based on {firstName}'s age, here are important learning materials for you: </p>
+                { this.renderAgeSpecificMaterials(age) }
                 {actions.map((action) => {
                     return <ActionComponent action={action}/>;
                 })}
