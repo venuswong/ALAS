@@ -131,7 +131,7 @@ export function getChildrenSchool() {
     });
 }
 
-export function getChildNameByPIid(PIid) {
+export function getBasicChildInfoByPIid(PIid) {
     return fetch("/api/patient/" + PIid.toString(), {
         method: "get",
         headers: {

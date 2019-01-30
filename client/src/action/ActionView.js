@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "./ActionView.css";
-import {getChildNameByPIid, getUserActions} from "../session/Session";
+import {getBasicChildInfoByPIid, getUserActions} from "../session/Session";
 import ActionComponent from "./ActionComponent";
 import {Panel, Tab, Tabs} from "react-bootstrap";
 
@@ -11,8 +11,8 @@ class ActionView extends Component {
         this.state = {
             // (key, value) => {child: [actions...]}
             childActions: {},
-            // {key, value} => {PIid: {Fname, Lname}}
-            childNames: {},
+            // {key, value} => {PIid: {Fname, Lname, Age}}
+            childrenInfo: {},
             loading: true
         };
     }
@@ -22,17 +22,18 @@ class ActionView extends Component {
             .then(response => response.json())
             .then(responseJson => {
                 let childActions = {}, i = 0;
+                console.log(responseJson);
                 for (i; i < responseJson.length; i++) {
                     const PIid = responseJson[i].PIid;
 
-                    // get child's name, add to {childNames}
-                    getChildNameByPIid(PIid)
-                        .then(childName => childName.json())
-                        .then(childNameJson => {
-                            let childNames = Object.assign(this.state.childNames);
-                            childNames[PIid] = childNameJson[0];
+                    // get child's name and age, add to {childrenInfo}
+                    getBasicChildInfoByPIid(PIid)
+                        .then(childInfo => childInfo.json())
+                        .then(childInfoJson => {
+                            let childrenInfo = Object.assign(this.state.childrenInfo);
+                            childrenInfo[PIid] = childInfoJson[0];
                             this.setState({
-                                childNames
+                                childrenInfo
                             });
                         });
 
@@ -54,14 +55,18 @@ class ActionView extends Component {
 
 
     createTabFromActions(actions) {
-        const { childNames } = this.state;
+        const { childrenInfo } = this.state;
+        console.log(childrenInfo);
         const PIid = actions[0].PIid;
         let childName = 'Name not found';
-        if (typeof childNames[PIid] !== "undefined") {
-            childName = childNames[PIid].Fname + ' ' + childNames[PIid].Lname;
+        let firstName;
+        if (typeof childrenInfo[PIid] !== "undefined") {
+            firstName = childrenInfo[PIid].Fname;
+            childName = firstName + ' ' + childrenInfo[PIid].Lname;
         }
         return (
             <Tab eventKey={PIid} title={childName}>
+                <p> Based on {firstName}'s age, here are important learning materials for you: </p>
                 {actions.map((action) => {
                     return <ActionComponent action={action}/>;
                 })}
@@ -70,12 +75,12 @@ class ActionView extends Component {
     }
 
     render() {
-        const { childActions, childNames, loading } = this.state;
+        const { childActions, childrenInfo, loading } = this.state;
         const childActionsKeys = Object.keys(childActions);
-        const childNamesKeys = Object.keys(childNames);
+        const childInfoKeys = Object.keys(childrenInfo);
         if (!loading) {
-            if (childNamesKeys.length > 0) {
-                const firstKey = childNamesKeys[0];
+            if (childInfoKeys.length > 0) {
+                const firstKey = childInfoKeys[0];
                 if (childActionsKeys.length > 0) {
                     return (
                         <div>
