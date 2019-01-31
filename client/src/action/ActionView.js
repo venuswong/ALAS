@@ -4,6 +4,7 @@ import {getBasicChildInfoByPIid, getUserActions} from "../session/Session";
 import ActionComponent from "./ActionComponent";
 import {Panel, Tab, Tabs} from "react-bootstrap";
 import HundredDayKitYoung from '../materials/100DayKitYoung.pdf'
+import DownloadIcon from '../image/ALAS-download-glyph.svg'
 import PanelHeading from "react-bootstrap/es/PanelHeading";
 import PanelBody from "react-bootstrap/es/PanelBody";
 
@@ -70,7 +71,10 @@ class ActionView extends Component {
                         <div class="age-recognition-content">
                             <p>AutismSpeaks 100-Day Kit For Young Children</p>
                             <a href={HundredDayKitYoung} download>
-                                <button type="button" class="btn btn-primary">Download</button>
+                                <button type="button" class="btn btn-primary">
+                                    <img src={DownloadIcon} class="download-icon"/>
+                                    Download
+                                </button>
                             </a>
                         </div>
                     </div>
@@ -78,7 +82,7 @@ class ActionView extends Component {
                         <div class="age-recognition-content">
                             <p>OCALI Modules</p>
                             <a href="https://www.ocali.org/">
-                                <button type="button" class="btn btn-primary">Visit</button>
+                                <button type="button" class="btn btn-primary">Visit &#187;</button>
                             </a>
                         </div>
                     </div>
@@ -104,8 +108,9 @@ class ActionView extends Component {
         }
         return (
             <Tab eventKey={PIid} title={childName}>
-                <h2 class="age-recognition-header"> Based on {firstName}'s age, here are important learning materials for you: </h2>
+                <h2 class="age-recognition-header"> Based on {firstName}'s age, here are relevant learning materials for you: </h2>
                 { this.renderAgeSpecificMaterials(age) }
+                <h2 class="step-header"> Here are four steps to ensure that {firstName} has the best care:</h2>
                 {actions.map((action) => {
                     return <ActionComponent action={action}/>;
                 })}
@@ -123,11 +128,6 @@ class ActionView extends Component {
                 if (childActionsKeys.length > 0) {
                     return (
                         <div>
-                            <div>
-                                <blockquote>
-                                    <h4>Here are four steps to complete to help your child get the care they need:</h4>
-                                </blockquote>
-                            </div>
                             <Tabs id={"child-actions-tabs"}>
                                 {childActionsKeys.map((PIid) => {
                                     return this.createTabFromActions(childActions[PIid]);

@@ -6,7 +6,12 @@
 
 }
 
-.age-recognition-header {
+.download-icon {
+    width: 15px;
+    margin-right: 7px;
+}
+
+.age-recognition-header, .step-header {
     font-size: 20px;
     padding: 1rem 1.5rem;
 }
