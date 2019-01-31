@@ -6,6 +6,38 @@
 
 }
 
+.age-recognition-header {
+    font-size: 20px;
+    padding: 1rem 1.5rem;
+}
+
+.age-recognition-panel {
+    flex: 1;
+    margin: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    max-width: 330px;
+}
+
+.age-recognition-content {
+    text-align: center;
+    padding: 1rem;
+    background-color: #edf4f9;
+    white-space: nowrap;
+}
+
+.age-recognition-content p {
+    text-align: center;
+}
+
+#age-recognition-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 1rem;
+}
+
 .buttonWidth {
     width: 100%;
 }

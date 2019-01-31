@@ -3,6 +3,9 @@ import "./ActionView.css";
 import {getBasicChildInfoByPIid, getUserActions} from "../session/Session";
 import ActionComponent from "./ActionComponent";
 import {Panel, Tab, Tabs} from "react-bootstrap";
+import HundredDayKitYoung from '../materials/100DayKitYoung.pdf'
+import PanelHeading from "react-bootstrap/es/PanelHeading";
+import PanelBody from "react-bootstrap/es/PanelBody";
 
 class ActionView extends Component {
     constructor(props) {
@@ -53,13 +56,34 @@ class ActionView extends Component {
             })
     }
 
+    //TODO: HTML templates for other age ranges
     renderAgeSpecificMaterials(age) {
         if (age > 5) {
-            return <p>hey!</p>
+
         } else if (age >= 3 && age <= 5) {
 
         } else if (age < 3) {
-
+            return (
+                // TODO: Extract this into a constant?
+                <div id="age-recognition-container">
+                    <div class="age-recognition-panel">
+                        <div class="age-recognition-content">
+                            <p>AutismSpeaks 100-Day Kit For Young Children</p>
+                            <a href={HundredDayKitYoung} download>
+                                <button type="button" class="btn btn-primary">Download</button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="age-recognition-panel">
+                        <div class="age-recognition-content">
+                            <p>OCALI Modules</p>
+                            <a href="https://www.ocali.org/">
+                                <button type="button" class="btn btn-primary">Visit</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            );
         } else {
             return;
         }
@@ -80,7 +104,7 @@ class ActionView extends Component {
         }
         return (
             <Tab eventKey={PIid} title={childName}>
-                <p> Based on {firstName}'s age, here are important learning materials for you: </p>
+                <h2 class="age-recognition-header"> Based on {firstName}'s age, here are important learning materials for you: </h2>
                 { this.renderAgeSpecificMaterials(age) }
                 {actions.map((action) => {
                     return <ActionComponent action={action}/>;
