@@ -299,15 +299,6 @@ class ProfileView extends Component {
                         </FormGroup>
                     </div>
                     <div>
-                        <FormGroup controlId="child_age" bsSize="medium">
-                            <ControlLabel>Age</ControlLabel>
-                            <FormControl
-                                value={child.Age}
-                                disabled ="true"
-                            />
-                        </FormGroup>
-                    </div>
-                    <div>
                         <FormGroup controlId="child_address" bsSize="medium">
                             <ControlLabel>Address</ControlLabel>
                             <FormControl

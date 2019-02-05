@@ -10,6 +10,10 @@ body {
     border-radius: 0;
 }
 
+.btn-primary {
+    background-color: #1a4397;
+}
+
 /* Color palette (Nationwide Children's):
  * Neutral background: #FEFEFE
  * Primary blue: #4677D8

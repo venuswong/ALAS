@@ -7,6 +7,25 @@
     padding: 10px;
 }
 
+#child-hub {
+    display: flex;
+    flex-direction: row;
+}
+
+.action-cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.child-hub-section {
+
+}
+
+.keyword {
+    color: #4677d8;
+}
+
 .Modal {
     height: 90%;
     margin: 5%;

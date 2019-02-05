@@ -35,6 +35,7 @@ class ActionView extends Component {
                         .then(childInfo => childInfo.json())
                         .then(childInfoJson => {
                             let childrenInfo = Object.assign(this.state.childrenInfo);
+                            console.log(childrenInfo);
                             childrenInfo[PIid] = childInfoJson[0];
                             this.setState({
                                 childrenInfo
@@ -100,20 +101,27 @@ class ActionView extends Component {
         const PIid = actions[0].PIid;
         let childName = 'Name not found';
         let firstName;
-        let age;
         if (typeof childrenInfo[PIid] !== "undefined") {
-            age = childrenInfo[PIid].Age;
             firstName = childrenInfo[PIid].Fname;
             childName = firstName + ' ' + childrenInfo[PIid].Lname;
         }
         return (
             <Tab eventKey={PIid} title={childName}>
-                <h2 class="age-recognition-header"> Based on {firstName}'s age, here are relevant learning materials for you: </h2>
-                { this.renderAgeSpecificMaterials(age) }
-                <h2 class="step-header"> Here are four steps to ensure that {firstName} has the best care:</h2>
-                {actions.map((action) => {
-                    return <ActionComponent action={action}/>;
-                })}
+                <h2 class="age-recognition-header"> Based on {firstName}'s age, here is a guide to ensure the best care.</h2>
+                <div id="child-hub">
+                    <div class="child-hub-section">
+                        <h2 className="step-header">Relevant <span class="keyword">materials</span> to consult:</h2>
+                        { this.renderAgeSpecificMaterials(2) }
+                    </div>
+                    <div class="child-hub-section">
+                        <h2 className="step-header">Important <span class="keyword">actions</span> to take:</h2>
+                        <div class="action-cards">
+                            {actions.map((action) => {
+                                return <ActionComponent action={action}/>;
+                            })}
+                        </div>
+                    </div>
+                </div>
             </Tab>
         );
     }
@@ -132,17 +140,6 @@ class ActionView extends Component {
                                 {childActionsKeys.map((PIid) => {
                                     return this.createTabFromActions(childActions[PIid]);
                                 })}
-                                <Panel bsStyle={"success"} className="spacing">
-                                    <Panel.Heading>
-                                        <Panel.Title componentClass="h3">Learn About Autism</Panel.Title>
-                                    </Panel.Heading>
-                                    <Panel.Body>
-                                        <div>
-                                            You can start learning now. There are multiple websites, toolkits and webinars to teach you about autism.
-                                            Two great internet resources are <a href="https://www.autismspeaks.org ">AutismSpeaks</a> and <a href="https://www.ocali.org)">The Ohio Center for Autism and Low Incidence</a>.
-                                        </div>
-                                    </Panel.Body>
-                                </Panel>
                             </Tabs>
                         </div>
                     );
