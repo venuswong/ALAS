@@ -78,7 +78,7 @@
 
 .age-recognition-panel {
     margin: 1rem 2rem 1rem 1rem;
-    border: 1px solid #ddd;
+    border: 1px solid #1a4397;
     border-radius: 4px;
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
     max-width: 330px;
@@ -87,7 +87,6 @@
 .age-recognition-content {
     text-align: center;
     padding: 1rem;
-    background-color: rgba(70,119,216,.10);
     white-space: nowrap;
 }
 

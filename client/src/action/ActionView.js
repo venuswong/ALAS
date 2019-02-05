@@ -108,6 +108,7 @@ class ActionView extends Component {
         return (
             <Tab eventKey={PIid} title={childName}>
                 <h2 class="age-recognition-header"> Based on {firstName}'s age, here is a guide to ensure the best care.</h2>
+                <hr/>
                 <div id="child-hub">
                     <div class="child-hub-section">
                         <h2 className="step-header">Relevant <span class="keyword">materials</span> to consult:</h2>
