@@ -52,9 +52,9 @@ class ActionComponent extends Component {
 
     displayCompletionButton(isComplete) {
         if(isComplete) {
-            return <button onClick={this.toggleCompleted} class="btn btn-default incomplete-button">Mark as Incomplete <span class="incomplete">x</span></button>
+            return <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth">Mark as Incomplete</button>
         } else {
-            return <button onClick={this.toggleCompleted} class="btn btn-default complete-button">Mark as Complete</button>
+            return <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth">Mark as Complete</button>
         }
     }
 

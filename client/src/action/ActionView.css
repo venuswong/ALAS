@@ -10,12 +10,12 @@
 #child-hub {
     display: flex;
     flex-direction: row;
+    justify-content: center;
 }
 
 .action-cards {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
 }
 
 .child-hub-section {

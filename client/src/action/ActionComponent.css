@@ -44,7 +44,7 @@
 .action-card-completed {
     border-radius: 5px;
     box-shadow: 0 2px 1px rgba(0,0,0,.25);
-    max-width: 500px;
+    max-width: 650px;
     margin: 1rem;
     border: 2px solid green;
     background-color: #e8f4e8;
@@ -58,7 +58,7 @@
     border: 1px solid #1a4397;
     border-radius: 5px;
     box-shadow: 0 2px 1px rgba(0,0,0,.25);
-    max-width: 500px;
+    max-width: 650px;
     margin: 1rem;
 }
 
