@@ -29,6 +29,26 @@
     /*color: white;*/
 /*}*/
 
+/* ACTION CARDS */
+
+.action-cards {
+    border: 1px dashed gray;
+    display: flex;
+    flex-direction: column;
+}
+
+.action-card {
+    border: 1px solid #1a4397;
+    border-radius: 5px;
+    box-shadow: 0 2px 1px rgba(0,0,0,.25);
+    max-width: 650px;
+    margin: 1rem;
+}
+
+.action-card-content {
+    padding: 1.5rem;
+}
+
 .action-card h2, .action-card-completed h2 {
     padding-left: 1.5rem;
     color: #4677d8;
@@ -50,55 +70,16 @@
     background-color: #e8f4e8;
 }
 
+/* end of action cards styling */
+
 
 .action-phone-button, .toggle-completion {
     margin: 0.6rem;
-}
-.action-card {
-    border: 1px solid #1a4397;
-    border-radius: 5px;
-    box-shadow: 0 2px 1px rgba(0,0,0,.25);
-    max-width: 650px;
-    margin: 1rem;
-}
-
-.action-card-content {
-    padding: 1.5rem;
 }
 
 .download-icon {
     width: 15px;
     margin-right: 7px;
-}
-
-.age-recognition-header, .step-header {
-    font-size: 20px;
-    padding: 1rem 1.5rem;
-}
-
-.age-recognition-panel {
-    margin: 1rem 2rem 1rem 1rem;
-    border: 1px solid #1a4397;
-    border-radius: 4px;
-    box-shadow: 0 1px 1px rgba(0,0,0,.05);
-    max-width: 330px;
-}
-
-.age-recognition-content {
-    text-align: center;
-    padding: 1rem;
-    white-space: nowrap;
-}
-
-.age-recognition-content p {
-    text-align: center;
-}
-
-#age-recognition-container {
-    display: flex;
-    flex-direction: column;
-    margin: 1rem;
-    border-right: 1px dashed gray;
 }
 
 .buttonWidth {

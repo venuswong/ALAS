@@ -46,6 +46,8 @@ class ClinicianComponent extends Component {
                 return require('../action/ActionText').ABA_GET;
             case "BDD_GET":
                 return require('../action/ActionText').BDD_GET;
+            case "HMG_GET":
+                return require('../action/ActionText').HMG_GET;
             default:
             // Should not get here!
         }

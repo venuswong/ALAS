@@ -110,17 +110,17 @@ class ActionView extends Component {
                 <h2 class="age-recognition-header"> Based on {firstName}'s age, here is a guide to ensure the best care.</h2>
                 <hr/>
                 <div id="child-hub">
-                    <div class="child-hub-section">
-                        <h2 className="step-header">Relevant <span class="keyword">materials</span> to consult:</h2>
-                        { this.renderAgeSpecificMaterials(2) }
-                    </div>
-                    <div class="child-hub-section">
-                        <h2 className="step-header">Important <span class="keyword">actions</span> to take:</h2>
-                        <div class="action-cards">
+                    <div className="child-hub-section">
+                        <h2 className="actions-header">Important <span className="keyword">actions</span> to take:</h2>
+                        <div className="action-cards">
                             {actions.map((action) => {
                                 return <ActionComponent action={action}/>;
                             })}
                         </div>
+                    </div>
+                    <div class="child-hub-section">
+                        <h2 className="materials-header">Relevant <span class="keyword">materials</span> to consult:</h2>
+                        { this.renderAgeSpecificMaterials(2) }
                     </div>
                 </div>
             </Tab>

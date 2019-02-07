@@ -9,23 +9,58 @@
 
 #child-hub {
     display: flex;
-    flex-direction: row;
     justify-content: center;
+    margin: 1rem;
 }
+
+/* age-recognition panels */
+
+.age-recognition-panel {
+    margin: 1rem 2rem 1rem 1rem;
+    border: 1px solid #1a4397;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    max-width: 330px;
+}
+
+.age-recognition-content {
+    text-align: center;
+    padding: 1rem;
+    white-space: nowrap;
+}
+
+.age-recognition-content p {
+    text-align: center;
+}
+
+#age-recognition-container {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+}
+
+/* end of age-recognition styling */
+
+/* headers */
+
+.materials-header {
+    margin: 3rem 0 1rem 2rem;
+}
+
+.age-recognition-header {
+    margin-left: 2rem;
+}
+
+.actions-header {
+    margin-bottom: 2rem;
+}
+
+/* end of headers */
 
 hr {
     height: 12px;
     border: 0;
     box-shadow: inset 0 12px 12px -12px rgba(26,67,151, 0.5)
-}
-
-.action-cards {
-    display: flex;
-    flex-direction: column;
-}
-
-.child-hub-section {
-
 }
 
 .keyword {
@@ -229,4 +264,33 @@ hr {
 
 .yesnobut {
     margin-top: 50px;
+}
+
+/* MEDIA QUERIES */
+
+@media (max-width: 714.99px) {
+    #child-hub {
+        flex-direction: column;
+    }
+
+    .actions-header {
+        font-size: 22px;
+    }
+
+    .age-recognition-header, .materials-header {
+        font-size: 16px;
+    }
+}
+
+@media(min-width: 715px) {
+    #child-hub {
+        flex-direction: row;
+    }
+    .actions-header {
+        font-size: 26px;
+    }
+
+    .age-recognition-header, .materials-header {
+        font-size: 20px;
+    }
 }
