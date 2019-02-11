@@ -68,7 +68,7 @@ class ActionView extends Component {
 
                 this.setState({
                     childActions,
-                    loading: false,
+                    loading: false
                 });
             })
     }
