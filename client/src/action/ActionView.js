@@ -107,8 +107,9 @@ class ActionView extends Component {
                     <div className="age-recognition-content">
                         <p>{material.Title}</p>
                         <a href={material.Link} download>
-                            <button type="button" className="btn btn-primary">Download</button>
-                            <img src={DownloadIcon} className="download-icon"/>
+                            <button type="button" className="btn btn-primary">Download
+                                <img src={DownloadIcon} className="download-icon"/>
+                            </button>
                         </a>
                     </div>
                 </div>
