@@ -53,6 +53,16 @@ export function getUserActions() {
     });
 }
 
+export function getMaterials() {
+    return fetch("/api/user/getMaterials/", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
 // updates database with new value for Action
 export function updateAction(action) {
     return fetch("/api/user/updateAction", {

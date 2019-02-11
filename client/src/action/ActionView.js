@@ -1,41 +1,56 @@
 import React, { Component } from 'react';
 import "./ActionView.css";
-import {getBasicChildInfoByPIid, getUserActions} from "../session/Session";
+import {getBasicChildInfoByPIid, getUserActions, getMaterials} from "../session/Session";
 import ActionComponent from "./ActionComponent";
 import {Panel, Tab, Tabs} from "react-bootstrap";
 import HundredDayKitYoung from '../materials/100DayKitYoung.pdf'
 import DownloadIcon from '../image/ALAS-download-glyph.svg'
+import moment from 'moment'
 import PanelHeading from "react-bootstrap/es/PanelHeading";
 import PanelBody from "react-bootstrap/es/PanelBody";
 
 class ActionView extends Component {
+
     constructor(props) {
         super(props);
 
         this.state = {
             // (key, value) => {child: [actions...]}
             childActions: {},
-            // {key, value} => {PIid: {Fname, Lname, Age}}
+            // {key, value} => {PIid: {Fname, Lname, DoB}}
             childrenInfo: {},
-            loading: true
+            loading: true,
+            materials: undefined
         };
     }
 
     componentWillMount() {
+        this.fetchLearningMaterials();
+        this.fetchUserActions();
+    }
+
+    // Gets all learning materials rows from the database
+    fetchLearningMaterials() {
+        getMaterials().then(response => response.json()).then(responseJson => {
+            this.setState({
+                materials: responseJson
+            });
+            console.log(this.state.materials);
+        });
+    }
+
+    fetchUserActions() {
         getUserActions()
             .then(response => response.json())
             .then(responseJson => {
                 let childActions = {}, i = 0;
-                console.log(responseJson);
                 for (i; i < responseJson.length; i++) {
                     const PIid = responseJson[i].PIid;
-
                     // get child's name and age, add to {childrenInfo}
                     getBasicChildInfoByPIid(PIid)
                         .then(childInfo => childInfo.json())
                         .then(childInfoJson => {
                             let childrenInfo = Object.assign(this.state.childrenInfo);
-                            console.log(childrenInfo);
                             childrenInfo[PIid] = childInfoJson[0];
                             this.setState({
                                 childrenInfo
@@ -53,55 +68,63 @@ class ActionView extends Component {
 
                 this.setState({
                     childActions,
-                    loading: false
+                    loading: false,
                 });
             })
     }
 
-    //TODO: HTML templates for other age ranges
+    // returns panel HTML based on the age of the child
     renderAgeSpecificMaterials(age) {
-        if (age > 5) {
+        let ageSpecificMaterials;
+        if(age < 3)
+            ageSpecificMaterials = this.state.materials.filter((material) => material.Toddler === 1);
+        else if (3 <= age && age <= 5) {
+            ageSpecificMaterials = this.state.materials.filter((material) => material.Young === 1);
+        } else {
+            ageSpecificMaterials = this.state.materials.filter((material) => material.Child === 1);
+        }
+        return ageSpecificMaterials.map((material) => {
+            return this.buildAgeRecognitionPanel(material);
+        });
+    }
 
-        } else if (age >= 3 && age <= 5) {
-
-        } else if (age < 3) {
-            return (
-                // TODO: Extract this into a constant?
-                <div id="age-recognition-container">
-                    <div class="age-recognition-panel">
-                        <div class="age-recognition-content">
-                            <p>AutismSpeaks 100-Day Kit For Young Children</p>
-                            <a href={HundredDayKitYoung} download>
-                                <button type="button" class="btn btn-primary">
-                                    <img src={DownloadIcon} class="download-icon"/>
-                                    Download
-                                </button>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="age-recognition-panel">
-                        <div class="age-recognition-content">
-                            <p>OCALI Modules</p>
-                            <a href="https://www.ocali.org/">
-                                <button type="button" class="btn btn-primary">Visit &#187;</button>
-                            </a>
-                        </div>
+    // Takes a material JSON object that was fetched from the Materials table and builds the corresponding panel
+    buildAgeRecognitionPanel(material) {
+        if(material.IsLink === 1) {
+            return(
+                <div class="age-recognition-panel">
+                    <div class="age-recognition-content">
+                        <p>{material.Title}</p>
+                        <a href={material.Link}>
+                            <button type="button" class="btn btn-primary">Visit &#187;</button>
+                        </a>
                     </div>
                 </div>
-            );
+            )
         } else {
-            return;
+            return (
+                <div className="age-recognition-panel">
+                    <div className="age-recognition-content">
+                        <p>{material.Title}</p>
+                        <a href={material.Link} download>
+                            <button type="button" className="btn btn-primary">Download</button>
+                            <img src={DownloadIcon} className="download-icon"/>
+                        </a>
+                    </div>
+                </div>
+            )
         }
     }
 
-
     createTabFromActions(actions) {
+        //console.log("called");
         const { childrenInfo } = this.state;
-        console.log(childrenInfo);
         const PIid = actions[0].PIid;
         let childName = 'Name not found';
         let firstName;
+        let age;
         if (typeof childrenInfo[PIid] !== "undefined") {
+            age = moment().diff(moment(childrenInfo[PIid].DoB), 'year');
             firstName = childrenInfo[PIid].Fname;
             childName = firstName + ' ' + childrenInfo[PIid].Lname;
         }
@@ -120,7 +143,16 @@ class ActionView extends Component {
                     </div>
                     <div class="child-hub-section">
                         <h2 className="materials-header">Relevant <span class="keyword">materials</span> to consult:</h2>
-                        { this.renderAgeSpecificMaterials(2) }
+                        {this.state.materials &&
+                            <div id="age-recognition-container">
+                                {this.renderAgeSpecificMaterials(age)}
+                            </div>
+                        }
+                        {!this.state.materials &&
+                            <div id="age-recognition-container">
+                                Could not display learning materials at this time.
+                            </div>
+                        }
                     </div>
                 </div>
             </Tab>
