@@ -78,7 +78,7 @@ class ActionView extends Component {
         let ageSpecificMaterials;
         if(age < 3)
             ageSpecificMaterials = this.state.materials.filter((material) => material.Toddler === 1);
-        else if (3 <= age && age <= 5) {
+        else if (3 <= age && age < 5) {
             ageSpecificMaterials = this.state.materials.filter((material) => material.Young === 1);
         } else {
             ageSpecificMaterials = this.state.materials.filter((material) => material.Child === 1);
