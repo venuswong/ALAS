@@ -6,7 +6,7 @@
     z-index: 3; /* Stay on top */
     top: 0; /* Stay at the top */
     left: 0;
-    background-color: #70A5FA;
+    background-color: #1a4397;
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
@@ -32,7 +32,7 @@
 .sidenav .sidenav-btn-close {
     position: absolute;
     top: 0;
-    right: 25px;
+    right: 13px;
     font-size: 36px;
     margin-left: 50px;
 }

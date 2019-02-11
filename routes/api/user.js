@@ -38,6 +38,21 @@ router.get('/getActions', function (req, res) {
     }
 });
 
+// Retrieve array of materials corresponding to child
+router.get('/getMaterials', function (req, res) {
+    if (!req.session.Uid) {
+        res.status(404).send("User is not logged in");
+    } else {
+        const query = 'SELECT * FROM Materials';
+        db.query(query, function(err, result) {
+            if (err) throw err;
+            else {
+                res.status(200).send(JSON.stringify(result));
+            }
+        });
+    }
+});
+
 router.post('/updateAction', function (req, res) {
     const action = req.body;
     if (!req.session.Uid) {

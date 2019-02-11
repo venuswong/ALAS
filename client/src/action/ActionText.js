@@ -66,3 +66,12 @@ export const BDD_GET = {
             <li>How long will this take?</li>
         </ul></p>
 };
+
+export const HMG_GET = {
+    title: "Help Me Grow - asking for county services",
+    description: <p>Help Me Grow is a county-based service, similar to that of the Board of Developmental Disabilities,
+        but geared towards younger children. The service focuses on parental education, as well as early prenatal and
+        well-baby care. Making a referral can enable several supportive programs, such as home visiting.</p>,
+    description_title: "Why contact Help Me Grow?",
+    phoneScript: ""
+};

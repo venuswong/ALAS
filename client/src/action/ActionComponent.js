@@ -6,7 +6,8 @@ import Well from "react-bootstrap/es/Well";
 import {Grid, Row, Col} from "react-bootstrap/es";
 import './ActionComponent.css';
 import { Popover, Table } from 'react-bootstrap';
-import OverlayTrigger from "react-bootstrap/es/OverlayTrigger";
+import OverlayTrigger from "react-bootstrap/es/OverlayTrigger"
+import CheckmarkIcon from '../image/alas-checkmark.svg'
 
 class ActionComponent extends Component {
     constructor(props) {
@@ -34,8 +35,26 @@ class ActionComponent extends Component {
                 return require('./ActionText').ABA_GET;
             case "BDD_GET":
                 return require('./ActionText').BDD_GET;
+            case "HMG_GET":
+                return require('./ActionText').HMG_GET;
             default:
                 // Should not get here!
+        }
+    }
+
+    displayCheckmarkIfCompleted(isCompleted) {
+        if (isCompleted) {
+            return <img className="completed-checkmark" src={CheckmarkIcon}/>
+        } else {
+            return;
+        }
+    }
+
+    displayCompletionButton(isComplete) {
+        if(isComplete) {
+            return <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth">Mark as Incomplete</button>
+        } else {
+            return <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth">Mark as Complete</button>
         }
     }
 
@@ -142,7 +161,7 @@ class ActionComponent extends Component {
         const {title, description_title, description, phoneScript} = this.state.actionText;
         const phoneNumber = 'tel:18008888888'; // TODO: Get this from DB
 
-        const bsStyle = IsCompleted ? "success" : (IsStarted) ? "warning" : "danger" ;
+        const actionCardStyle = IsCompleted ? "action-card-completed" : "action-card";
 
         const popoverTop = (
             <Popover id="popover-positioned-top">
@@ -199,72 +218,58 @@ class ActionComponent extends Component {
         );
 
         return (
-            <Panel bsStyle={bsStyle} className="spacing">
-                <Panel.Heading>
-                    <Panel.Title componentClass="h3">{title} </Panel.Title>
-                </Panel.Heading>
-                <Panel.Body>
-                    <Grid>
-                        <Row className="row-eq-height">
-                            <Col xs={12} sm={12} md={12} lg={12}>
+            <div class={actionCardStyle}>
+                <div class="action-card-header">
+                    <h2>{title}</h2>
+                    { this.displayCheckmarkIfCompleted(IsCompleted)}
+                </div>
+                <div class="action-card-content">
+                    <div>
+                        <h5><a onClick={() => this.setState({ open_Description: !this.state.open_Description })}>
+                            {description_title}
+                        </a></h5>
+                        <Collapse in={this.state.open_Description}>
+                            <div>
+                                <Well>
+                                    {description}
+                                </Well>
+                           </div>
+                        </Collapse>
+                    </div>
+                    {phoneScript && !IsCompleted &&
+                        <div>
+                            <a onClick={() => this.setState({ open_Script: !this.state.open_Script })}>Ready to call but don't know what to say?</a><br/>
+                            <Collapse in={this.state.open_Script}>
                                 <div>
-                                    <h5><a onClick={() => this.setState({ open_Description: !this.state.open_Description })}>
-                                        {description_title}
-                                    </a></h5>
-                                    <Collapse in={this.state.open_Description}>
-                                        <div>
-                                            <Well>
-                                                {description}
-                                            </Well>
-                                       </div>
-                                    </Collapse>
+                                   <Well>
+                                        {phoneScript}
+                                    </Well>
                                 </div>
-                                {phoneScript &&
-                                    <div>
-                                        <a onClick={() => this.setState({ open_Script: !this.state.open_Script })}>Ready to call but don't know what to say?</a><br/>
-                                        <Collapse in={this.state.open_Script}>
-                                            <div>
-                                               <Well>
-                                                    {phoneScript}
-                                                </Well>
-                                            </div>
-                                       </Collapse>
-                                    </div>
-                                }
-                                <br/>
-                                <span>
-                                    <Col xs={5} sm={5} md={5} lg={5} xl={5}>
-                                        <a href={phoneNumber}>
-                                            <Button className={"buttonWidth"}>
-                                                <Glyphicon glyph={"glyphicon glyphicon-earphone"}/>
-                                            </Button>
-                                        </a>
-                                    </Col>
-                                    <Col xs={5} sm={5} md={5} lg={5} xl={5}>
-                                        <OverlayTrigger trigger="click" placement="top" overlay={popoverTop}>
-                                            <Button className={"buttonWidth"} bsStyle={"primary"} >Made Call</Button>
-                                        </OverlayTrigger>
-                                    </Col>
-                                    <Col xs={2} sm={2} md={2} lg={2} xl={2}>
-                                        <OverlayTrigger trigger="click" placement="left" overlay={popoverProgress}>
-                                            <a className={"buttonWidth"} onClick={this.loadProgress}>View Progress</a>
-                                        </OverlayTrigger>
-                                    </Col>
-                                </span>
-                            </Col>
-                        </Row>
-                    </Grid>
-                </Panel.Body>
-            </Panel>
+                           </Collapse>
+                        </div>
+                    }
+                    <br/>
+                    <span>
+                    {!IsCompleted &&
+                        <div class="action-phone-button">
+                            <a href={phoneNumber}>
+                                <Button className={"buttonWidth"}>
+                                    <Glyphicon glyph={"glyphicon glyphicon-earphone"}/>
+                                </Button>
+                            </a>
+                        </div>
+                    }
+                        <div class="toggle-completion">
+                            { this.displayCompletionButton(IsCompleted)}
+                        </div>
+                    </span>
+                </div>
+            </div>
         );
     }
 
     render() {
-        return (
-            <div>
-                {this.createActionComponent()}
-            </div>
-        );
+        return this.createActionComponent();
     }
 }
 

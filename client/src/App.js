@@ -23,7 +23,7 @@ import './common/Sidenav.css';
 import AddUser from "./views/AddUserView";
 
 class App extends Component {
-    SIDENAV_WIDTH = "186px";
+    SIDENAV_WIDTH = "210px";
 
     constructor(props){
         super(props);
