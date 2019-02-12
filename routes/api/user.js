@@ -7,9 +7,9 @@ const db = require('../../models/dbconnection');
 // Send a status (200 or 404) depending on if the user is logged in
 router.get('/logged-in', function (req, res) {
     if (req.session.Uid) {
-        res.status(200).send("User is logged in");
+        return res.status(200).send("User is logged in");
     } else {
-        res.status(404).send("User is NOT logged in");
+        return res.status(404).send("User is NOT logged in");
     }
 });
 
@@ -18,21 +18,22 @@ router.get('/account-type', function (req, res) {
     if (req.session.Uid) {
         return res.status(200).json({ Account_Type: req.session.Account_Type});
     } else {
-        res.status(404).send("User is NOT logged in");
+        return res.status(404).send("User is NOT logged in");
     }
 });
 
 // Retrieve array of actions from Action table corresponding to user
 router.get('/getActions', function (req, res) {
     if (!req.session.Uid) {
-        res.status(404).send("User is not logged in");
+        return res.status(404).send("User is not logged in");
     } else {
         const query = 'SELECT A.Aid, A.PIid, A.ActionType, A.IsCompleted, A.CompletedDate, A.IsStarted FROM Actions AS A, Patient_Info AS PI WHERE A.PIid = PI.PIid AND PI.Uid = ?;';
         const filter = [req.session.Uid];
         db.query(query, filter, function(err, result){
-            if (err) throw err;
-            else{
-                res.status(200).send(JSON.stringify(result));
+            if (err) {
+                return res.sendStatus(500);
+            } else {
+                return res.status(200).send(JSON.stringify(result));
             }
         });
     }
@@ -48,7 +49,7 @@ router.get('/getMaterials', function (req, res) {
             if (err) {
                 return res.sendStatus(500);
             } else {
-                res.status(200).send(JSON.stringify(result));
+                return res.status(200).send(JSON.stringify(result));
             }
         });
     }
@@ -80,6 +81,7 @@ router.get('/getPatientInfo', function (req, res) {
         db.query(query, filter, function(err, result){
             if (err) {
                 throw err;
+                return res.sendStatus(500);
             }
             else{
                 res.status(200).send(JSON.stringify(result));
@@ -91,18 +93,18 @@ router.get('/getPatientInfo', function (req, res) {
 // Retrieve FName from User table by session Uid
 router.get('/fname', function (req, res) {
     if (req.session.Uid && req.session.Fname) {
-        res.status(200).json({ Fname: req.session.Fname });
+        return res.status(200).json({ Fname: req.session.Fname });
     } else {
-        res.status(404).send("User not logged in");
+        return res.status(404).send("User not logged in");
     }
 });
 
 // Retrieve FName from User table by session Uid
 router.get('/lname', function (req, res) {
     if (req.session.Uid && req.session.Lname) {
-        res.status(200).json({ Lname: req.session.Lname });
+        return res.status(200).json({ Lname: req.session.Lname });
     } else {
-        res.status(404).send("User not logged in");
+        return res.status(404).send("User not logged in");
     }
 });
 
@@ -112,15 +114,18 @@ router.get('/profile', function (req, res) {
         const query = 'SELECT Account_Type, Fname, Lname, Email, Password, Picture, Language FROM Users WHERE Uid = ?';
         const filter = [req.session.Uid];
         db.query(query, filter, function(err, result){
-            if (err) throw err;
+            if (err) {
+                throw err;
+                return res.sendStatus(500);
+            }   
             if (result && result.length === 1) {
                 return res.json(200, { Account_Type: result[0].Account_Type, Fname: result[0].Fname, Lname: result[0].Lname, Email: result[0].Email, Password: result[0].Password, Picture: result[0].Picture, Language: result[0].Language});
             } else {
-                res.status(404).send("User not logged in");
+                return res.status(404).send("User not logged in");
             }
         });
     } else {
-        res.status(404).send("User not logged in");
+        return res.status(404).send("User not logged in");
     }
 });
 
