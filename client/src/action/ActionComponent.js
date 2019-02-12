@@ -14,6 +14,7 @@ class ActionComponent extends Component {
         super(props);
 
         const action = props.action;
+
         this.state = {
             action,
             actionText: this.getActionText(action.ActionType),
@@ -158,10 +159,6 @@ class ActionComponent extends Component {
     createActionComponent() {
         const {IsCompleted, IsStarted} = this.state.action;
         const progress_table = this.state.progress_table;
-        const {title, description_title, description, phoneScript} = this.state.actionText;
-        const phoneNumber = 'tel:18008888888'; // TODO: Get this from DB
-
-        const actionCardStyle = IsCompleted ? "action-card-completed" : "action-card";
 
         const popoverTop = (
             <Popover id="popover-positioned-top">
@@ -217,52 +214,85 @@ class ActionComponent extends Component {
             </Popover>
         );
 
-        return (
-            <div class={actionCardStyle}>
-                <div class="action-card-header">
-                    <h2>{title}</h2>
-                    { this.displayCheckmarkIfCompleted(IsCompleted)}
-                </div>
-                <div class="action-card-content">
-                    <div>
-                        <h5><a onClick={() => this.setState({ open_Description: !this.state.open_Description })}>
-                            {description_title}
-                        </a></h5>
-                        <Collapse in={this.state.open_Description}>
-                            <div>
-                                <Well>
-                                    {description}
-                                </Well>
-                           </div>
-                        </Collapse>
+        return this.renderActionCard();
+    }
+
+    renderActionCard() {
+        const {IsCompleted, IsStarted} = this.state.action;
+        const progress_table = this.state.progress_table;
+        const {title, description_title, description, phoneScript} = this.state.actionText;
+        const phoneNumber = 'tel:18008888888'; // TODO: Get this from DB
+        const actionCardStyle = IsCompleted ? "action-card-completed" : "action-card";
+
+        if (this.props.age < 3 && this.state.action.ActionType === "IEP_GET") {
+            return this.renderDisabledSchoolCard();
+        } else {
+            return(
+                <div className={actionCardStyle}>
+                    <div className="action-card-header">
+                        <h2>{title}</h2>
+                        {this.displayCheckmarkIfCompleted(IsCompleted)}
                     </div>
-                    {phoneScript && !IsCompleted &&
+                    <div className="action-card-content">
                         <div>
-                            <a onClick={() => this.setState({ open_Script: !this.state.open_Script })}>Ready to call but don't know what to say?</a><br/>
+                            <h5><a onClick={() => this.setState({open_Description: !this.state.open_Description})}>
+                                {description_title}
+                            </a></h5>
+                            <Collapse in={this.state.open_Description}>
+                                <div>
+                                    <Well>
+                                        {description}
+                                    </Well>
+                                </div>
+                            </Collapse>
+                        </div>
+                        {phoneScript && !IsCompleted &&
+                        <div>
+                            <a onClick={() => this.setState({open_Script: !this.state.open_Script})}>Ready to call but don't
+                                know what to say?</a><br/>
                             <Collapse in={this.state.open_Script}>
                                 <div>
-                                   <Well>
+                                    <Well>
                                         {phoneScript}
                                     </Well>
                                 </div>
-                           </Collapse>
+                            </Collapse>
                         </div>
-                    }
-                    <br/>
-                    <span>
-                    {!IsCompleted &&
-                        <div class="action-phone-button">
+                        }
+                        <br/>
+                        <span>
+                        {!IsCompleted &&
+                        <div className="action-phone-button">
                             <a href={phoneNumber}>
                                 <Button className={"buttonWidth"}>
                                     <Glyphicon glyph={"glyphicon glyphicon-earphone"}/>
                                 </Button>
                             </a>
                         </div>
-                    }
-                        <div class="toggle-completion">
-                            { this.displayCompletionButton(IsCompleted)}
-                        </div>
-                    </span>
+                        }
+                            <div className="toggle-completion">
+                                {this.displayCompletionButton(IsCompleted)}
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    renderDisabledSchoolCard() {
+        return(
+            <div className="disabled-action-card">
+                <div className="action-card-header">
+                    <h2>School – asking for special education services</h2>
+                    <p class="not-needed-header">Not Needed</p>
+                </div>
+                <div className="action-card-content">
+                    <p class="disabled-description">
+                        Your child is too young to require requesting special education services from a school. You
+                        should, however, complete this step once your child turns 3. If your child turns 3 while you are
+                        still using ALAS, this action will become enabled.
+                    </p>
                 </div>
             </div>
         );

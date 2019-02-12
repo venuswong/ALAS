@@ -40,9 +40,19 @@
 .action-card {
     border: 1px solid #1a4397;
     border-radius: 5px;
-    box-shadow: 0 2px 1px rgba(0,0,0,.25);
+    box-shadow: 0 4px 4px rgba(0,0,0,.45);
     max-width: 650px;
     margin: 1rem;
+}
+
+.disabled-action-card {
+    border: 1px solid gray;
+    opacity: 0.7;
+    border-radius: 5px;
+    box-shadow: 0 4px 4px rgba(0,0,0,.45);
+    max-width: 650px;
+    margin: 1rem;
+    pointer-events: none;
 }
 
 .action-card-content {
@@ -56,6 +66,25 @@
     font-weight: bolder;
 }
 
+.disabled-action-card h2 {
+    padding-left: 1.5rem;
+    color: #343435;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+.not-needed-header {
+    font-weight: 500;
+    font-size: 16px;
+    margin: 1.5rem 1.5rem 0 0;
+    font-style: italic;
+}
+
+.disabled-action-card .action-card-content {
+    padding: 1.5rem;
+    color: black;
+}
+
 .action-card-header {
     display: flex;
     flex-direction: row;
@@ -63,7 +92,7 @@
 }
 .action-card-completed {
     border-radius: 5px;
-    box-shadow: 0 2px 1px rgba(0,0,0,.25);
+    box-shadow: 0 4px 4px rgba(0,0,0,.45);
     max-width: 650px;
     margin: 1rem;
     border: 2px solid green;
@@ -108,4 +137,15 @@
 
 .overdue {
     margin: 0px;
+}
+
+/*MEDIA QUERIES*/
+
+@media (max-width: 714.99px) {
+    .disabled-action-card .action-card-header {
+        flex-direction: column;
+    }
+    .not-needed-header {
+        margin: 1.5rem 0 0 1.5rem;
+    }
 }

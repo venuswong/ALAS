@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import {Panel, Table} from "react-bootstrap";
+import {Button, Glyphicon, Panel, Table} from "react-bootstrap";
 import Collapse from "@material-ui/core/Collapse/Collapse";
-
+import '../action/ActionComponent.css';
+import Well from "../action/ActionComponent";
+import CheckmarkIcon from "../image/alas-checkmark.svg";
 
 class ClinicianComponent extends Component {
     constructor(props) {
@@ -53,25 +55,30 @@ class ClinicianComponent extends Component {
         }
     }
 
+    displayCheckmarkIfCompleted(isCompleted) {
+        if (isCompleted) {
+            return <img className="completed-checkmark" src={CheckmarkIcon}/>
+        } else {
+            return;
+        }
+    }
 
     createActionComponent() {
         const {IsCompleted, IsStarted} = this.state.action;
         const {title} = this.state.actionText;
-
-        const bsStyle = IsCompleted ? "success" : IsStarted ? "warning" : "danger";
         const progress_table = this.state.progress_table;
+        const actionCardStyle = IsCompleted ? "action-card-completed" : "action-card";
         return (
-            <Panel bsStyle={bsStyle} className="spacing">
-                <Panel.Heading>
-                    <Panel.Title componentClass="h3">{title}</Panel.Title>
-                </Panel.Heading>
-                <Panel.Body>
-                    <div>
-
-                        {this.state.progress_table.length ? (
-                            <div>
-                                <a onClick={() => this.setState({ open_Table: !this.state.open_Table })}>Show table</a>
-                                <Collapse in={this.state.open_Table}>
+            <div className={actionCardStyle}>
+                <div className="action-card-header">
+                    <h2>{title}</h2>
+                    {this.displayCheckmarkIfCompleted(IsCompleted)}
+                </div>
+                <div className="action-card-content">
+                    {this.state.progress_table.length ? (
+                        <div>
+                            <a onClick={() => this.setState({ open_Table: !this.state.open_Table })}>Show table</a>
+                            <Collapse in={this.state.open_Table}>
                                 <Table striped bordered condensed hover>
                                     <thead>
                                     <tr>
@@ -94,15 +101,14 @@ class ClinicianComponent extends Component {
                                     }
                                     </tbody>
                                 </Table>
-                                </Collapse>
-                            </div>
-                        ) : (
-                            <p>No progress has been made yet.</p>
-                        )
-                        }
-                    </div>
-                </Panel.Body>
-            </Panel>
+                            </Collapse>
+                        </div>
+                    ) : (
+                        <p>No progress has been made yet.</p>
+                    )
+                    }
+                </div>
+            </div>
         );
     }
 

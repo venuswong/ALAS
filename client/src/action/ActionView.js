@@ -4,6 +4,7 @@ import {getBasicChildInfoByPIid, getUserActions, getMaterials} from "../session/
 import ActionComponent from "./ActionComponent";
 import {Panel, Tab, Tabs} from "react-bootstrap";
 import HundredDayKitYoung from '../materials/100DayKitYoung.pdf'
+import HundredDayKitSchoolAged from '../materials/100DayKitYoung.pdf'
 import DownloadIcon from '../image/ALAS-download-glyph.svg'
 import moment from 'moment'
 import PanelHeading from "react-bootstrap/es/PanelHeading";
@@ -20,7 +21,7 @@ class ActionView extends Component {
             // {key, value} => {PIid: {Fname, Lname, DoB}}
             childrenInfo: {},
             loading: true,
-            materials: undefined
+            materials: undefined,
         };
     }
 
@@ -102,11 +103,12 @@ class ActionView extends Component {
                 </div>
             )
         } else {
+            let link = "file://" + material.Link;
             return (
                 <div className="age-recognition-panel">
                     <div className="age-recognition-content">
                         <p>{material.Title}</p>
-                        <a href={material.Link} download>
+                        <a href={link} download>
                             <button type="button" className="btn btn-primary">Download
                                 <img src={DownloadIcon} className="download-icon"/>
                             </button>
@@ -138,7 +140,7 @@ class ActionView extends Component {
                         <h2 className="actions-header">Important <span className="keyword">actions</span> to take:</h2>
                         <div className="action-cards">
                             {actions.map((action) => {
-                                return <ActionComponent action={action}/>;
+                                return <ActionComponent action={action} age={age}/>;
                             })}
                         </div>
                     </div>
