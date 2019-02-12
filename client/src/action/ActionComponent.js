@@ -150,7 +150,6 @@ class ActionComponent extends Component {
                 });
                 // Update in DB
                 updateAction({Aid: newAction.Aid, IsCompleted: newAction.IsCompleted, CompletedDate: newAction.CompletedDate, IsStarted: newAction.IsStarted});
-                window.location.reload();
             }
         });
     }
