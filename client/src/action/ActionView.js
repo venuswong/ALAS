@@ -100,21 +100,28 @@ class ActionView extends Component {
                         </a>
                     </div>
                 </div>
-            )
+            );
         } else {
-            let link = "file://" + material.Link;
             return (
                 <div className="age-recognition-panel">
                     <div className="age-recognition-content">
                         <p>{material.Title}</p>
-                        <a href={link} download>
+                        <a href={this.getStaticAsset(material)} download>
                             <button type="button" className="btn btn-primary">Download
                                 <img src={DownloadIcon} className="download-icon"/>
                             </button>
                         </a>
                     </div>
                 </div>
-            )
+            );
+        }
+    }
+
+    getStaticAsset(material) {
+        if(material.Title.match(/AutismSpeaks/) && material.Title.match(/Young/)) {
+            return HundredDayKitYoung;
+        } else {
+            return HundredDayKitSchoolAged;
         }
     }
 
