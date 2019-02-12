@@ -45,8 +45,9 @@ router.get('/getMaterials', function (req, res) {
     } else {
         const query = 'SELECT * FROM Materials';
         db.query(query, function(err, result) {
-            if (err) throw err;
-            else {
+            if (err) {
+                return res.sendStatus(500);
+            } else {
                 res.status(200).send(JSON.stringify(result));
             }
         });
