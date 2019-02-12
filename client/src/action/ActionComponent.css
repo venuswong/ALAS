@@ -138,3 +138,14 @@
 .overdue {
     margin: 0px;
 }
+
+/*MEDIA QUERIES*/
+
+@media (max-width: 714.99px) {
+    .disabled-action-card .action-card-header {
+        flex-direction: column;
+    }
+    .not-needed-header {
+        margin: 1.5rem 0 0 1.5rem;
+    }
+}
