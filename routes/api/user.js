@@ -31,6 +31,7 @@ router.get('/getActions', function (req, res) {
         const filter = [req.session.Uid];
         db.query(query, filter, function(err, result){
             if (err) {
+                throw err;
                 return res.sendStatus(500);
             } else {
                 return res.status(200).send(JSON.stringify(result));
@@ -42,11 +43,12 @@ router.get('/getActions', function (req, res) {
 // Retrieve array of materials corresponding to child
 router.get('/getMaterials', function (req, res) {
     if (!req.session.Uid) {
-        res.status(404).send("User is not logged in");
+        return res.status(404).send("User is not logged in");
     } else {
         const query = 'SELECT * FROM Materials';
         db.query(query, function(err, result) {
             if (err) {
+                throw err;
                 return res.sendStatus(500);
             } else {
                 return res.status(200).send(JSON.stringify(result));
