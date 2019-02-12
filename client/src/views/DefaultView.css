@@ -9,17 +9,13 @@ h1 {
     text-align: center;
 }
 
-p {
-    text-align: justify;
-}
-
 @media all and (max-width: 480px) {
     h1 {
         font-size: 6vw;
     }
 
     p {
-        font-size: 3vw;
+        font-size: 3.5vw;
     }
 }
 
