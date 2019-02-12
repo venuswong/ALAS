@@ -26,17 +26,16 @@ class ActionView extends Component {
     }
 
     componentWillMount() {
-        this.fetchLearningMaterials();
-        this.fetchUserActions();
+        this.getNecessaryDate();
     }
 
     // Gets all learning materials rows from the database
-    fetchLearningMaterials() {
+    getNecessaryDate() {
         getMaterials().then(response => response.json()).then(responseJson => {
             this.setState({
                 materials: responseJson
             });
-            console.log(this.state.materials);
+            this.fetchUserActions();
         });
     }
 
