@@ -25,16 +25,16 @@ router.get('/account-type', function (req, res) {
 // Retrieve array of actions from Action table corresponding to user
 router.get('/getActions', function (req, res) {
     if (!req.session.Uid) {
-        return res.status(404).send("User is not logged in");
+        //return res.status(404).send("User is not logged in");
     } else {
         const query = 'SELECT A.Aid, A.PIid, A.ActionType, A.IsCompleted, A.CompletedDate, A.IsStarted FROM Actions AS A, Patient_Info AS PI WHERE A.PIid = PI.PIid AND PI.Uid = ?;';
         const filter = [req.session.Uid];
         db.query(query, filter, function(err, result){
             if (err) {
                 throw err;
-                return res.sendStatus(500);
+                //return res.sendStatus(500);
             } else {
-                return res.status(200).send(JSON.stringify(result));
+                //return res.status(200).send(JSON.stringify(result));
             }
         });
     }
@@ -43,15 +43,15 @@ router.get('/getActions', function (req, res) {
 // Retrieve array of materials corresponding to child
 router.get('/getMaterials', function (req, res) {
     if (!req.session.Uid) {
-        return res.status(404).send("User is not logged in");
+        //return res.status(404).send("User is not logged in");
     } else {
         const query = 'SELECT * FROM Materials';
         db.query(query, function(err, result) {
             if (err) {
                 throw err;
-                return res.sendStatus(500);
+                //return res.sendStatus(500);
             } else {
-                return res.status(200).send(JSON.stringify(result));
+                //return res.status(200).send(JSON.stringify(result));
             }
         });
     }
