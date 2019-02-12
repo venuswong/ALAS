@@ -159,10 +159,6 @@ class ActionComponent extends Component {
     createActionComponent() {
         const {IsCompleted, IsStarted} = this.state.action;
         const progress_table = this.state.progress_table;
-        const {title, description_title, description, phoneScript} = this.state.actionText;
-        const phoneNumber = 'tel:18008888888'; // TODO: Get this from DB
-
-        const actionCardStyle = IsCompleted ? "action-card-completed" : "action-card";
 
         const popoverTop = (
             <Popover id="popover-positioned-top">
