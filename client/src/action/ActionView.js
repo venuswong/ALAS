@@ -18,11 +18,10 @@ class ActionView extends Component {
         this.state = {
             // (key, value) => {child: [actions...]}
             childActions: {},
-            // {key, value} => {PIid: {Fname, Lname, DoB, SDIid}}
             childrenInfo: {},
             loading: true,
             materials: undefined,
-            schoolDistricts: {}
+            schoolDistricts: {} /* SCHOOL DISTRICTS FOR EACH CHILD WILL BE IN HERE. */
         };
     }
 
