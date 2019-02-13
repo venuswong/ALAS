@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "./ActionView.css";
-import {getBasicChildInfoByPIid, getUserActions, getMaterials} from "../session/Session";
+import {getUserActions, getUserPatients, getMaterials, getSchoolDistrict} from "../session/Session";
 import ActionComponent from "./ActionComponent";
 import {Panel, Tab, Tabs} from "react-bootstrap";
 import HundredDayKitYoung from '../materials/100DayKitYoung.pdf'
@@ -18,45 +18,41 @@ class ActionView extends Component {
         this.state = {
             // (key, value) => {child: [actions...]}
             childActions: {},
-            // {key, value} => {PIid: {Fname, Lname, DoB}}
+            // {key, value} => {PIid: {Fname, Lname, DoB, SDIid}}
             childrenInfo: {},
             loading: true,
             materials: undefined,
+            schoolDistricts: {}
         };
     }
 
     componentWillMount() {
-        this.getNecessaryDate();
-    }
-
-    // Gets all learning materials rows from the database
-    getNecessaryDate() {
+        // Gets all learning materials from database and updates state of materials object
         getMaterials().then(response => response.json()).then(responseJson => {
             this.setState({
                 materials: responseJson
             });
-            this.fetchUserActions();
         });
-    }
-
-    fetchUserActions() {
+        // Get all children of the current user and update state of children info object
+        getUserPatients().then(response => response.json()).then(responseJson => {
+            let patientMap = {};
+            // Make sure the key in each (key, value) pair is the patient ID
+            for (let i = 0; i < responseJson.length; i++) {
+                patientMap[responseJson[i].PIid] = responseJson[i];
+            }
+            this.setState({
+                childrenInfo: patientMap
+            }, () => { // After the children info has been updated, get the school districts for them
+                this.getChildrenSchoolDistricts();
+            });
+        });
+        // Get all the actions for the user's children, update state of actions object
         getUserActions()
             .then(response => response.json())
             .then(responseJson => {
                 let childActions = {}, i = 0;
                 for (i; i < responseJson.length; i++) {
                     const PIid = responseJson[i].PIid;
-                    // get child's name and age, add to {childrenInfo}
-                    getBasicChildInfoByPIid(PIid)
-                        .then(childInfo => childInfo.json())
-                        .then(childInfoJson => {
-                            let childrenInfo = Object.assign(this.state.childrenInfo);
-                            childrenInfo[PIid] = childInfoJson[0];
-                            this.setState({
-                                childrenInfo
-                            });
-                        });
-
                     // add to childActions object
                     responseJson[i].IsCompleted === 0 ? responseJson[i].IsCompleted = false : responseJson[i].IsCompleted = true;
                     if (childActions.hasOwnProperty(PIid)) {
@@ -65,12 +61,28 @@ class ActionView extends Component {
                         childActions[PIid] = new Array(responseJson[i]);
                     }
                 }
-
                 this.setState({
                     childActions,
                     loading: false
                 });
             })
+    }
+
+    getChildrenSchoolDistricts() {
+        for (let child in this.state.childrenInfo) {
+            // Retrieve school district from the database using child's school district ID
+            getSchoolDistrict(this.state.childrenInfo[child].SDIid)
+                .then(schoolDistrictInfo => schoolDistrictInfo.json())
+                .then(schoolDistrictJson => {
+                    let schoolDistricts = Object.assign(this.state.schoolDistricts);
+                    schoolDistricts[this.state.childrenInfo[child].PIid] = schoolDistrictJson[0];
+                    // update school districts object with new entry
+                    this.setState({
+                        schoolDistricts
+                    });
+                    console.log(this.state.schoolDistricts);
+                });
+        }
     }
 
     // returns panel HTML based on the age of the child

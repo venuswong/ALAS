@@ -92,6 +92,24 @@ router.get('/getPatientInfo', function (req, res) {
     }
 });
 
+router.get('/getSchoolDistrict/:SDid', function(req, res) {
+    const districtId = req.params.SDid;
+    if (!req.session.Uid) {
+        res.status(404).send("User is not logged in");
+    } else {
+        const query = 'SELECT * FROM School_District_Info WHERE SDIid = ?';
+        const filter = [districtId];
+        db.query(query, filter, function (err, result) {
+            if (err) {
+                throw err;
+                return res.sendStatus(500);
+            } else {
+                return res.status(200).send(JSON.stringify(result));
+            }
+        });
+    }
+});
+
 // Retrieve FName from User table by session Uid
 router.get('/fname', function (req, res) {
     if (req.session.Uid && req.session.Fname) {

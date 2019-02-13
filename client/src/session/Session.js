@@ -54,7 +54,28 @@ export function getUserActions() {
 }
 
 export function getMaterials() {
-    return fetch("/api/user/getMaterials/", {
+    return fetch("/api/user/getMaterials", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+// returns promise containing patient info for all user's patients
+export function getUserPatients() {
+    return fetch("/api/user/getPatientInfo", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export function getSchoolDistrict(SDIid) {
+    return fetch("api/user/getSchoolDistrict/" + SDIid.toString(), {
         method: "get",
         headers: {
             'Accept': 'application/json',
