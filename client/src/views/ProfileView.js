@@ -338,17 +338,22 @@ class ProfileView extends Component {
             <Tab eventKey={childSchoolIndex+"school"} title={child.Fname + ' ' + child.Lname}>
                 <form onSubmit={(e) => this.handleSchoolSubmit(e, childSchoolIndex)}>
                     <div>
-                        <FormGroup controlId={childSchoolIndex} bsSize="medium">
-                            <ControlLabel>School District</ControlLabel>
+                        <FormGroup controlId="child_School_District" bsSize="medium">
+                            <ControlLabel>School District Phone</ControlLabel>
+                            {typeof childschool[childSchoolIndex] === "undefined" &&
                             <FormControl
-                                componentClass="select"
-                                placeholder={childschool[childSchoolIndex].Name}
-                                value={childschool[childSchoolIndex].Name}
-                                onChange={(e)=>this.handleChange(e, 'school', childSchoolIndex)}
+                                value={"Undefined"}
+                                disabled="true"
                             >
-                                <option value="South-Western City School Dist">South-Western City School Dist</option>
-                                <option value="School 2">School District 2</option>
                             </FormControl>
+                            }
+                            {typeof childschool[childSchoolIndex] !== "undefined" &&
+                            <FormControl
+                                value={childschool[childSchoolIndex].Dname}
+                                disabled="true"
+                            >
+                            </FormControl>
+                            }
                         </FormGroup>
                     </div>
                     <div>
@@ -387,6 +392,20 @@ class ProfileView extends Component {
                             >
                             </FormControl>
                             }
+                        </FormGroup>
+                    </div>
+                    <div>
+                        <FormGroup controlId={childSchoolIndex} bsSize="medium">
+                            <ControlLabel>Other School District</ControlLabel>
+                            <FormControl
+                                componentClass="select"
+                                placeholder={childschool[childSchoolIndex].Name}
+                                value={childschool[childSchoolIndex].Name}
+                                onChange={(e)=>this.handleChange(e, 'school', childSchoolIndex)}
+                            >
+                                <option value="South-Western City School Dist">South-Western City School Dist</option>
+                                <option value="School 2">School District 2</option>
+                            </FormControl>
                         </FormGroup>
                     </div>
                     <Button type="submit" className={"btn btn-primary"}>Save Changes</Button>

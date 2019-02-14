@@ -260,7 +260,41 @@ router.post('/updatechildschool', function (req, res) {
 
 router.get('/childrenschool', function (req, res) {
     if (req.session.Uid) {
-        const query = 'SELECT Dname, Phone, Email FROM School_District_Info AS SDI, Patient_Info AS PI WHERE SDI.SDIid = PI.SDIid AND PI.Uid = ?;';
+        const query = 'SELECT Dname, Phone, Email, County, SD_Address, city, state, SD_Zip FROM School_District_Info AS SDI, Patient_Info AS PI WHERE SDI.SDIid = PI.SDIid AND PI.Uid = ?;';
+        const filter = [req.session.Uid];
+        db.query(query, filter, function(err, result){
+            if (err) throw err;
+            if (result && result.length >= 1) {
+                return res.status(200).json({result});
+            } else {
+                res.status(404).send("User not logged in");
+            }
+        });
+    } else {
+        res.status(404).send("User not logged in");
+    }
+});
+
+router.get('SD_in_zip', function (req, res) {
+    if (req.session.Uid) {
+        const query = 'SELECT District1, District2, District3, District4, District5, District6, District7, District8, District9, District10 FROM Zip AS Z, Patient_Info AS PI WHERE Z.Zip = PI.Zip AND PI.Uid = ?;';
+        const filter = [req.session.Uid];
+        db.query(query, filter, function(err, result){
+            if (err) throw err;
+            if (result && result.length >= 1) {
+                return res.status(200).json({result});
+            } else {
+                res.status(404).send("User not logged in");
+            }
+        });
+    } else {
+        res.status(404).send("User not logged in");
+    }
+});
+
+router.get('zip_to_SD', function (req, res) {
+    if (req.session.Uid) {
+        const query = 'SELECT Dname FROM School_District_Info AS SD WHERE SD.SD_Zip = ?;';
         const filter = [req.session.Uid];
         db.query(query, filter, function(err, result){
             if (err) throw err;

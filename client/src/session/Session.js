@@ -162,6 +162,26 @@ export function getChildrenSchool() {
     });
 }
 
+export function getSD_From_SDIid() {
+    return fetch("/api/user/zip_to_SD", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export function getSD_in_ZipCode() {
+    return fetch("/api/user/SD_in_zip", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
 export function getBasicChildInfoByPIid(PIid) {
     return fetch("/api/patient/" + PIid.toString(), {
         method: "get",
