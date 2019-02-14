@@ -68,7 +68,7 @@
 }
 
 .disabled-action-card h2 {
-    padding-left: 1.5rem;
+    padding: 0 1.5rem 0 1.5rem;
     color: #343435;
     font-size: 18px;
     font-weight: normal;
