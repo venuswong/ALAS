@@ -60,7 +60,7 @@
     padding: 1.5rem;
 }
 
-.action-card h2, .action-card-completed h2, .disabled-action-card h2 {
+.action-card h2, .action-card-completed h2 {
     padding: 0 1.5rem 0 1.5rem;
     color: #1a4397;
     font-size: 18px;
@@ -71,7 +71,7 @@
     padding-left: 1.5rem;
     color: #343435;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .not-needed-header {
