@@ -140,6 +140,28 @@ export function postChildInsurance(information, insurance) {
     });
 }
 
+export function getChildrenProvider() {
+    return fetch("/api/user/childrenprovider", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export function postChildProvider(information, provider) {
+    return fetch("/api/user/updatechildprovider", {
+        method: "post",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        // Serialize JSON body
+        body: JSON.stringify({information, provider})
+    });
+}
+
 export function postChildSchool(information, school) {
     return fetch("/api/user/updatechildschool", {
         method: "post",

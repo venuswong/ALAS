@@ -14,8 +14,9 @@ import {
     getUserFirstName,
     getChildrenInfo,
     getChildrenInsurance,
+    getChildrenProvider,
     getChildrenSchool,
-    postQuestionReponse, postChildInsurance, postChildSchool
+    postQuestionReponse, postChildInsurance, postChildProvider, postChildSchool
 } from "../session/Session";
 import Cookies from 'universal-cookie';
 import {sleep} from "../helpers";
@@ -38,6 +39,7 @@ class ProfileView extends Component {
             Language: '',
             Children_Information: [],
             Children_Insurance: [],
+            Children_Provider: [],
             Children_School: [],
             alertProps: {
                 show: false,
@@ -49,6 +51,7 @@ class ProfileView extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleInsuranceSubmit = this.handleInsuranceSubmit.bind(this);
         this.handleSchoolSubmit = this.handleSchoolSubmit.bind(this)
+        this.handleProviderSubmit = this.handleProviderSubmit.bind(this)
     }
 
     displayAlert() {
@@ -70,6 +73,12 @@ class ProfileView extends Component {
             newArray[childDataIndex].Name = event.target.value;
             this.setState({
                 Children_Insurance: newArray
+            });
+        } else if (dataType === 'provider') {
+            let newArray = Object.assign(this.state.Children_Provider);
+            newArray[childDataIndex].Name = event.target.value;
+            this.setState({
+                Children_Provider: newArray
             });
         } else {
             let newArray = Object.assign(this.state.Children_School);
@@ -108,6 +117,49 @@ class ProfileView extends Component {
                     alertProps: {
                         show: true,
                         message: 'Unable to change insurance',
+                        bsStyle: 'warning'
+                    }
+                });
+                sleep(SLEEP_TIME).then(() => {
+                    this.setState({
+                        alertProps: {
+                            show: false,
+                            message: '',
+                            bsStyle: '',
+                        }
+                    });
+                });
+            }
+        })
+    };
+
+    handleProviderSubmit(e, childProviderIndex) {
+        console.log('got here');
+        const { Children_Information, Children_Provider} = this.state;
+        e.preventDefault();
+        postChildInsurance(Children_Information[childProviderIndex], Children_Provider[childProviderIndex]).then((res) => {
+            if (res.status === 200) {
+                this.setState({
+                    alertProps: {
+                        show: true,
+                        message: 'Successfully changed provider',
+                        bsStyle: 'success'
+                    }
+                });
+                sleep(SLEEP_TIME).then(() => {
+                    this.setState({
+                        alertProps: {
+                            show: false,
+                            message: '',
+                            bsStyle: '',
+                        }
+                    });
+                });
+            } else {
+                this.setState({
+                    alertProps: {
+                        show: true,
+                        message: 'Unable to change provider',
                         bsStyle: 'warning'
                     }
                 });
@@ -199,6 +251,12 @@ class ProfileView extends Component {
                         Children_Insurance: json.result
                     })
                 });
+            getChildrenProvider().then(result => result.json())
+                .then(json => {
+                    this.setState({
+                        Children_Provider: json.result
+                    })
+                });
             getChildrenSchool().then(result => result.json())
                 .then(json => {
                     this.setState({
@@ -209,8 +267,9 @@ class ProfileView extends Component {
     }
 
     render(){
-        const {Children_Information, Children_Insurance, Children_School} = this.state;
+        const {Children_Information, Children_Insurance, Children_Provider, Children_School} = this.state;
         let childInsuranceIndex = 0;
+        let childProviderIndex = 0;
         let childSchoolIndex = 0;
         return(
             <div className={"defaultview"}>
@@ -260,6 +319,14 @@ class ProfileView extends Component {
                                                 (child) => {
                                                     if (Children_Insurance[childInsuranceIndex]) {
                                                         return this.createChildInfoTab(child, childInsuranceIndex++, Children_Insurance);
+                                                    }
+                                                })
+                                        }
+                                        {
+                                            Children_Information.map(
+                                                (child) => {
+                                                    if (Children_Provider[childProviderIndex]) {
+                                                        return this.createChildInfoTab(child, childProviderIndex++, Children_Provider);
                                                     }
                                                 })
                                         }
@@ -321,9 +388,45 @@ class ProfileView extends Component {
                                 <option value="Buckeye Health Plan">Buckeye Health Plan</option>
                                 <option value="CareSource">CareSource</option>
                                 <option value="Medicaid">Medicaid</option>
-                                <option value="Monila Healthcare">Monila Healthcare</option>
+                                <option value="Molina Healthcare">Molina Healthcare</option>
                                 <option value="Paramount Advantage">Paramount Advantage</option>
                                 <option value="United Healthcare">United Healthcare</option>
+                            </FormControl>
+                        </FormGroup>
+                        <FormGroup controlId={childInsuranceIndex} bsSize="medium">
+                            <ControlLabel>Provider</ControlLabel>
+                            <FormControl
+                                componentClass="select"
+                                //placeholder={childprovider[childProviderIndex].Name}
+                                //value={childprovider[childProviderIndex].Name}
+                                //onChange={(e)=>this.handleChange(e, 'provider', childProviderIndex)}
+                            >
+                                <option value="A.B.L.E. Academic and Behavioral Learning Enrichment">A.B.L.E. Academic and Behavioral Learning Enrichment</option>
+                                <option value="Amigo Family Counseling">Amigo Family Counseling</option>
+                                <option value="Amy Boland, PhD">Amy Boland, PhD</option>
+                                <option value="Boundless">Boundless</option>
+                                <option value="Bridgeway Academy">Bridgeway Academy</option>
+                                <option value="Center for Autism Spectrum Disorder">Center for Autism Spectrum Disorder</option>
+                                <option value="Development Associates">Development Associates</option>
+                                <option value="Directions Counseling">Directions Counseling</option>
+                                <option value="Faith Hope and Love Intervention Services">Faith Hope and Love Intervention Services</option>
+                                <option value="Flourish Integrated Therapy">Flourish Integrated Therapy</option>
+                                <option value="Haugland Learning Center">Haugland Learning Center</option>
+                                <option value="Hopebridge Autism Therapy Centers">Hopebridge Autism Therapy Centers</option>
+                                <option value="Janet Hansen, PhD">Janet Hansen, PhD</option>
+                                <option value="Julie Canfield, PsyD">Julie Canfield, PsyD</option>
+                                <option value="Kari S. Watts, PhD">Kari S. Watts, PhD</option>
+                                <option value="Keith G. Hughes, PhD">Keith G. Hughes, PhD</option>
+                                <option value="Oakstone Academy">Oakstone Academy</option>
+                                <option value="Ohio State University Nisonger Center">Ohio State University Nisonger Center</option>
+                                <option value="Pathfinder Progress">Pathfinder Progress</option>
+                                <option value="Reach Educational Services">Reach Educational Services</option>
+                                <option value="The Center for Cognitive and Behavioral Therapy of Greater Columbus">The
+                                    Center for Cognitive and Behavioral Therapy of Greater Columbus</option>
+                                <option value="The Learning Spectrum">The Learning Spectrum</option>
+                                <option value="The Silver Lining Group">The Silver Lining Group</option>
+                                <option value="Total Education Solutions">Total Education Solutions</option>
+                                <option value="Trumpet Behavioral Health">Trumpet Behavioral Health</option>
                             </FormControl>
                         </FormGroup>
                     </div>
