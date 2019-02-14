@@ -63,14 +63,14 @@
     padding: 0 1.5rem 0 1.5rem;
     color: #4677d8;
     font-size: 18px;
-    font-weight: bolder;
+    font-weight: bold;
 }
 
 .disabled-action-card h2 {
     padding-left: 1.5rem;
     color: #343435;
     font-size: 18px;
-    font-weight: bolder;
+    font-weight: bold;
 }
 
 .not-needed-header {
