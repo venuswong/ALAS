@@ -32,7 +32,8 @@
 /* ACTION CARDS */
 
 .action-cards {
-    border: 1px dashed gray;
+    border: 1px solid gray;
+    border-radius: 5px;
     display: flex;
     flex-direction: column;
 }
@@ -61,9 +62,9 @@
 
 .action-card h2, .action-card-completed h2, .disabled-action-card h2 {
     padding: 0 1.5rem 0 1.5rem;
-    color: #4677d8;
+    color: #1a4397;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .disabled-action-card h2 {
@@ -97,6 +98,11 @@
     margin: 1rem;
     border: 2px solid green;
     background-color: #e8f4e8;
+}
+
+.phone-glyph {
+    font-size: 25px;
+    color: #1a4397;
 }
 
 /* end of action cards styling */

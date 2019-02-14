@@ -264,7 +264,7 @@ class ActionComponent extends Component {
                         <div className="action-phone-button">
                             <a href={phoneNumber}>
                                 <Button className={"buttonWidth"}>
-                                    <Glyphicon glyph={"glyphicon glyphicon-earphone"}/>
+                                    <Glyphicon glyph={"glyphicon glyphicon-earphone phone-glyph"}/>
                                 </Button>
                             </a>
                         </div>
