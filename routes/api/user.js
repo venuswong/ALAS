@@ -185,7 +185,7 @@ router.post('/change-language', function (req, res) {
 // Retrieve child insurance info from Insurance table by joining session Uid and Patient_Info.Iid on Insurance.Iid
 router.get('/childreninsurance', function (req, res) {
     if (req.session.Uid) {
-        const query = 'SELECT I.Name FROM Insurance AS I, Patient_Info AS PI WHERE I.Iid = PI.Iid AND PI.Uid = ?;';
+        const query = 'SELECT I.IName FROM Insurance AS I, Patient_Info AS PI WHERE I.Iid = PI.Iid AND PI.Uid = ?;';
         const filter = [req.session.Uid];
         db.query(query, filter, function(err, result){
             if (err) throw err;
@@ -214,7 +214,7 @@ router.post('/updatechildinsurance', function (req, res) {
             res.status(404).send("User currently logged in does not correspond to child");
         } else {
             const query = 'UPDATE Patient_Info ' +
-                'SET Patient_Info.Iid =(SELECT Iid FROM Insurance WHERE Insurance.Name = ?) ' +
+                'SET Patient_Info.Iid =(SELECT Iid FROM Insurance WHERE Insurance.IName = ?) ' +
                 'WHERE Patient_Info.PIid = ?';
             const filter = [insuranceName, PIid];
             db.query(query, filter, function (err, result) {
