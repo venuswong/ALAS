@@ -37,7 +37,7 @@ router.post('/update_progress', function (req, res) {
 router.get('/progress/:PIid/:Aid', function(req, res) {
     const PIid = req.params.PIid;
     const Aid = req.params.Aid;
-    const query = "SELECT progress, time from Progress where PIid=? and Aid=?;";
+    const query = "SELECT progress, Ptime from Progress where PIid=? and Aid=?;";
     const filter = [PIid, Aid];
     db.query(query, filter, function(err, result){
         if (err) throw err;

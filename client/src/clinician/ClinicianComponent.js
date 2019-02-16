@@ -93,7 +93,7 @@ class ClinicianComponent extends Component {
                                                 return (
                                                     <tr>
                                                         <td>{progress_row.progress}</td>
-                                                        <td>{progress_row.time.substring(0, 10)}</td>
+                                                        <td>{progress_row.Ptime.substring(0, 10)}</td>
                                                     </tr>
                                                 );
                                             }
