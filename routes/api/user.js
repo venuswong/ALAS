@@ -27,7 +27,7 @@ router.get('/getActions', function (req, res) {
     if (!req.session.Uid) {
         return res.status(404).send("User is not logged in");
     } else {
-        const query = 'SELECT A.Aid, A.PIid, A.ActionType, A.IsCompleted, A.CompletedDate, A.IsStarted FROM Actions AS A, Patient_Info AS PI WHERE A.PIid = PI.PIid AND PI.Uid = ?;';
+        const query = 'SELECT A.Aid, A.PIid, A.ActionType, A.IsCompleted, A.CompletedDate, A.IsStarted, A.Note FROM Actions AS A, Patient_Info AS PI WHERE A.PIid = PI.PIid AND PI.Uid = ?;';
         const filter = [req.session.Uid];
         db.query(query, filter, function(err, result){
             if (err) {
@@ -60,8 +60,25 @@ router.post('/updateAction', function (req, res) {
     if (!req.session.Uid) {
         return res.status(404).send("User is not logged in");
     } else {
-        const query = 'UPDATE Actions SET IsCompleted = ? , CompletedDate = ?, IsStarted = ? WHERE Aid = ?';
-        const filter = [action.IsCompleted, action.CompletedDate, action.IsStarted, action.Aid];
+        const query = 'UPDATE Actions SET IsCompleted = ? , CompletedDate = ?, IsStarted = ?, Note = ? WHERE Aid = ?';
+        const filter = [action.IsCompleted, action.CompletedDate, action.IsStarted, action.Note, action.Aid];
+        db.query(query, filter, function(err){
+            if (err) {
+                return res.sendStatus(500);
+            } else {
+                return res.status(200).send("Successfully updated action in DB.")
+            }
+        });
+    }
+});
+
+router.post('/updateActionNote', function (req, res) {
+    const action = req.body;
+    if (!req.session.Uid) {
+        return res.status(404).send("User is not logged in");
+    } else {
+        const query = 'UPDATE Actions SET Note = ? WHERE Aid = ?';
+        const filter = [action.Note, action.Aid];
         db.query(query, filter, function(err){
             if (err) {
                 return res.sendStatus(500);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Panel, Button, Glyphicon, FormGroup, FormControl} from "react-bootstrap";
-import {updateAction} from "../session/Session";
+import {updateAction, updateActionNote} from "../session/Session";
 import Collapse from "@material-ui/core/Collapse/Collapse";
 import Well from "react-bootstrap/es/Well";
 import {Grid, Row, Col} from "react-bootstrap/es";
@@ -18,6 +18,7 @@ class ActionComponent extends Component {
         super(props);
 
         const action = props.action;
+        console.log(action);
 
         this.state = {
             action,
@@ -25,9 +26,13 @@ class ActionComponent extends Component {
             open_Description: false,
             open_Script: false,
             progress_table: [],
-            note: ""
+            remainingCharacters: 500,
+            saveButtonValue: "Save",
+            saveButtonClass: "btn btn-default note-save-button"
         };
 
+        this.updateNote = this.updateNote.bind(this);
+        this.saveNote = this.saveNote.bind(this);
         this.toggleMessage = this.toggleMessage.bind(this);
         this.loadProgress = this.loadProgress.bind(this);
         this.toggleCompleted = this.toggleCompleted.bind(this);
@@ -60,13 +65,28 @@ class ActionComponent extends Component {
     }
 
     updateNote(event) {
-        this.setState({note: event.target.value})
+        let newAction = this.state.action;
+        newAction.Note = event.target.value;
+        this.setState({
+            action: newAction,
+            saveButtonValue: "Save",
+            saveButtonClass: "btn btn-default note-save-button",
+            remainingCharacters: 500 - newAction.Note.length
+        });
+    }
+
+    saveNote() {
+        updateActionNote(this.state.action)
+        this.setState({
+            saveButtonValue: "Saved!",
+            saveButtonClass: "btn btn-default note-save-button saved"
+        });
     }
 
 //<button onClick={this.toggleMessage} className="btn btn-default buttonWidth">I'm having an issue</button>-->
-    displayProgressButtons(isCompleted, isStarted) {
+    displayProgressOptions(isCompleted, isStarted) {
         let checkmarkVisibility = isStarted ? 'checkmark-small' : 'checkmark-hidden';
-        let noteVisibility = isStarted ? 'clinitian-note' : 'note-hidden';
+        let noteVisibility = isStarted ? 'clinician-note' : 'note-hidden';
         if (isCompleted) {
             return (
                 <div class="progress-buttons">
@@ -75,21 +95,26 @@ class ActionComponent extends Component {
             );
         } else {
             return (
-                <div class="progress-buttons">
-                    <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth">Mark as Complete</button>
-                    <div class="checkbox-container">I'm having an issue
-                        <div class="checkmark" onClick={this.toggleMessage}>
-                            <img alt="checkmark" class={checkmarkVisibility} src={CheckmarkIconNavy} />
+                <div class="in-progress-container">
+                    <div class="progress-buttons">
+                        <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth">Mark as Complete</button>
+                        <div class="checkbox-container">I'm having an issue
+                            <div class="checkmark" onClick={this.toggleMessage}>
+                                <img alt="checkmark" class={checkmarkVisibility} src={CheckmarkIconNavy} />
+                            </div>
                         </div>
                     </div>
-                    <div class={noteVisibility}>
-                        <form onSubmit={this.saveNote()}>
-                            <label>
-                                Describe the issue to your clinician:
-                                <input type="text" placeholder="Type something..." value={this.state.note} onChange={this.updateNote()}/>
-                            </label>
-                            <input class="note-submit-button" type="submit" value="Save"/>
-                        </form>
+                    <div class="note-container">
+                        <div class={noteVisibility}>
+                            <div class="note-form">
+                                <label class="note-label">Describe the issue to your clinician (optional):</label>
+                                <textarea class="note-text-box" placeholder="Type something..." onChange={this.updateNote}>{this.state.action.Note}</textarea>
+                                <div class="form-save">
+                                    <p class="characters-remaining">{this.state.remainingCharacters}</p>
+                                    <button onClick={this.saveNote} class={this.state.saveButtonClass}>{this.state.saveButtonValue}</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             );
@@ -127,7 +152,7 @@ class ActionComponent extends Component {
             action: newAction
         });
 
-        /*fetch("/api/patient/update_progress", {
+        fetch("/api/patient/update_progress", {
             method: "post",
             headers: {
                 'Accept': 'application/json',
@@ -142,14 +167,13 @@ class ActionComponent extends Component {
         }).then(result => {
             if (result.status === 200) {
                 let newAction = Object.assign(this.state.action);
-                newAction.IsStarted = !this.state.action.IsStarted;
                 this.setState({
                     action: newAction
                 });
                 // Update in DB
-                //updateAction({Aid: newAction.Aid, IsCompleted: newAction.IsCompleted, CompletedDate: newAction.CompletedDate, IsStarted: newAction.IsStarted});
+                updateAction({Aid: newAction.Aid, IsCompleted: newAction.IsCompleted, CompletedDate: newAction.CompletedDate, IsStarted: newAction.IsStarted, Note: newAction.Note});
             }
-        });*/
+        });
     }
 
     toggleCompleted() {
@@ -319,7 +343,7 @@ class ActionComponent extends Component {
                             </a>
                         </div>
                         }
-                        {this.displayProgressButtons(IsCompleted, IsStarted)}
+                        {this.displayProgressOptions(IsCompleted, IsStarted)}
                         </span>
                     </div>
                 </div>

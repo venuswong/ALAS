@@ -97,6 +97,19 @@ export function updateAction(action) {
     });
 }
 
+// updates database with new value for an Action's note field
+export function updateActionNote(action) {
+    return fetch("/api/user/updateActionNote", {
+        method: "post",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        // Serialize JSON body
+        body: JSON.stringify(action)
+    });
+}
+
 // returns a promise containing the user's profile information
 export function getProfile() {
     return fetch("/api/user/profile", {
