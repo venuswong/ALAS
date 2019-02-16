@@ -24,7 +24,7 @@ router.get('/:PIid', function (req, res) {
 
 router.post('/update_progress', function (req, res) {
     const action = req.body;
-    const query = "INSERT INTO Progress (PIid, Aid, progress, time) VALUES (?, ?, ?, ?);";
+    const query = "INSERT INTO Progress (PIid, Aid, progress, Ptime) VALUES (?, ?, ?, ?);";
     const filter = [action.PIid, action.Aid, action.progress, action.timestamp];
     db.query(query, filter, function(err){
         if (err) throw err;

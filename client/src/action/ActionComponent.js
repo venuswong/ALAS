@@ -8,6 +8,10 @@ import './ActionComponent.css';
 import { Popover, Table } from 'react-bootstrap';
 import OverlayTrigger from "react-bootstrap/es/OverlayTrigger"
 import CheckmarkIcon from '../image/alas-checkmark.svg'
+import CheckmarkIconNavy from '../image/alas-checkmark-navy.svg'
+import InProgressIcon from '../image/in-progress-circle.svg'
+import "react-select";
+import 'classnames'
 
 class ActionComponent extends Component {
     constructor(props) {
@@ -21,6 +25,7 @@ class ActionComponent extends Component {
             open_Description: false,
             open_Script: false,
             progress_table: [],
+            note: ""
         };
 
         this.toggleMessage = this.toggleMessage.bind(this);
@@ -43,21 +48,54 @@ class ActionComponent extends Component {
         }
     }
 
-    displayCheckmarkIfCompleted(isCompleted) {
+    displayProgressSymbol(isCompleted, isStarted) {
         if (isCompleted) {
             return <img className="completed-checkmark" src={CheckmarkIcon}/>
+        } else if(!isCompleted && isStarted)
+        {
+            return <img className="in-progress-circle" src={InProgressIcon}/>;
         } else {
             return;
         }
     }
 
-    displayCompletionButton(isComplete) {
-        if(isComplete) {
-            return <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth">Mark as Incomplete</button>
+    updateNote(event) {
+        this.setState({note: event.target.value})
+    }
+
+//<button onClick={this.toggleMessage} className="btn btn-default buttonWidth">I'm having an issue</button>-->
+    displayProgressButtons(isCompleted, isStarted) {
+        let checkmarkVisibility = isStarted ? 'checkmark-small' : 'checkmark-hidden';
+        let noteVisibility = isStarted ? 'clinitian-note' : 'note-hidden';
+        if (isCompleted) {
+            return (
+                <div class="progress-buttons">
+                    <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth">Mark as Incomplete</button>
+                </div>
+            );
         } else {
-            return <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth">Mark as Complete</button>
+            return (
+                <div class="progress-buttons">
+                    <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth">Mark as Complete</button>
+                    <div class="checkbox-container">I'm having an issue
+                        <div class="checkmark" onClick={this.toggleMessage}>
+                            <img alt="checkmark" class={checkmarkVisibility} src={CheckmarkIconNavy} />
+                        </div>
+                    </div>
+                    <div class={noteVisibility}>
+                        <form onSubmit={this.saveNote()}>
+                            <label>
+                                Describe the issue to your clinician:
+                                <input type="text" placeholder="Type something..." value={this.state.note} onChange={this.updateNote()}/>
+                            </label>
+                            <input class="note-submit-button" type="submit" value="Save"/>
+                        </form>
+                    </div>
+                </div>
+            );
         }
     }
+
 
     loadProgress() {
         const action = this.state.action;
@@ -83,8 +121,13 @@ class ActionComponent extends Component {
     toggleMessage() {
         const action = this.state.action;
         const now = new Date();
+        let newAction = Object.assign(this.state.action);
+        newAction.IsStarted = !this.state.action.IsStarted;
+        this.setState({
+            action: newAction
+        });
 
-        fetch("/api/patient/update_progress", {
+        /*fetch("/api/patient/update_progress", {
             method: "post",
             headers: {
                 'Accept': 'application/json',
@@ -99,15 +142,14 @@ class ActionComponent extends Component {
         }).then(result => {
             if (result.status === 200) {
                 let newAction = Object.assign(this.state.action);
-                newAction.IsStarted = true;
+                newAction.IsStarted = !this.state.action.IsStarted;
                 this.setState({
                     action: newAction
                 });
                 // Update in DB
-                updateAction({Aid: newAction.Aid, IsCompleted: newAction.IsCompleted, CompletedDate: newAction.CompletedDate, IsStarted: newAction.IsStarted});
-                window.location.reload();
+                //updateAction({Aid: newAction.Aid, IsCompleted: newAction.IsCompleted, CompletedDate: newAction.CompletedDate, IsStarted: newAction.IsStarted});
             }
-        });
+        });*/
     }
 
     toggleCompleted() {
@@ -139,6 +181,9 @@ class ActionComponent extends Component {
         }).then(result => {
             if (result.status === 200) {
                 let newAction = Object.assign(this.state.action);
+                if(!this.state.action.IsCompleted) {
+                    newAction.IsStarted = false;
+                }
                 newAction.IsCompleted = !this.state.action.IsCompleted;
                 if (newAction.IsCompleted) {
                     newAction.CompletedDate = now;
@@ -221,7 +266,12 @@ class ActionComponent extends Component {
         const progress_table = this.state.progress_table;
         const {title, description_title, description, phoneScript} = this.state.actionText;
         const phoneNumber = 'tel:18008888888'; // TODO: Get this from DB
-        const actionCardStyle = IsCompleted ? "action-card-completed" : "action-card";
+        const classes = require('classnames');
+        const actionCardStyle = classes({
+            'action-card-completed': IsCompleted,
+            'action-card': !IsCompleted && !IsStarted,
+            'action-card-in-progress': IsStarted && !IsCompleted
+        });
 
         if (this.props.age < 3 && this.state.action.ActionType === "IEP_GET") {
             return this.renderDisabledSchoolCard();
@@ -230,7 +280,7 @@ class ActionComponent extends Component {
                 <div className={actionCardStyle}>
                     <div className="action-card-header">
                         <h2>{title}</h2>
-                        {this.displayCheckmarkIfCompleted(IsCompleted)}
+                        {this.displayProgressSymbol(IsCompleted, IsStarted)}
                     </div>
                     <div className="action-card-content">
                         <div>
@@ -269,9 +319,7 @@ class ActionComponent extends Component {
                             </a>
                         </div>
                         }
-                            <div className="toggle-completion">
-                                {this.displayCompletionButton(IsCompleted)}
-                            </div>
+                        {this.displayProgressButtons(IsCompleted, IsStarted)}
                         </span>
                     </div>
                 </div>
