@@ -197,7 +197,7 @@ class ActionComponent extends Component {
                                         return (
                                             <tr>
                                                 <td>{progress_row.progress}</td>
-                                                <td>{progress_row.time.substring(0, 10)}</td>
+                                                <td>{progress_row.Ptime.substring(0, 10)}</td>
                                             </tr>
                                         );
                                     }
@@ -264,7 +264,7 @@ class ActionComponent extends Component {
                         <div className="action-phone-button">
                             <a href={phoneNumber}>
                                 <Button className={"buttonWidth"}>
-                                    <Glyphicon glyph={"glyphicon glyphicon-earphone"}/>
+                                    <Glyphicon glyph={"glyphicon glyphicon-earphone phone-glyph"}/>
                                 </Button>
                             </a>
                         </div>

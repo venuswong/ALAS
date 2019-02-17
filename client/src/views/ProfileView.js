@@ -70,7 +70,7 @@ class ProfileView extends Component {
     handleChange(event, dataType, childDataIndex) {
         if(dataType === 'insurance') {
             let newArray = Object.assign(this.state.Children_Insurance);
-            newArray[childDataIndex].Name = event.target.value;
+            newArray[childDataIndex].IName = event.target.value;
             this.setState({
                 Children_Insurance: newArray
             });
@@ -379,8 +379,8 @@ class ProfileView extends Component {
                             <ControlLabel>Insurance</ControlLabel>
                             <FormControl
                                 componentClass="select"
-                                placeholder={childinsurance[childInsuranceIndex].Name}
-                                value={childinsurance[childInsuranceIndex].Name}
+                                placeholder={childinsurance[childInsuranceIndex].IName}
+                                value={childinsurance[childInsuranceIndex].IName}
                                 onChange={(e)=>this.handleChange(e, 'insurance', childInsuranceIndex)}
                             >
                                 <option value="Aetna">Aetna</option>

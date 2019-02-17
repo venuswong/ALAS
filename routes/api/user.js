@@ -31,7 +31,6 @@ router.get('/getActions', function (req, res) {
         const filter = [req.session.Uid];
         db.query(query, filter, function(err, result){
             if (err) {
-                throw err;
                 return res.sendStatus(500);
             } else {
                 return res.status(200).send(JSON.stringify(result));
@@ -48,7 +47,6 @@ router.get('/getMaterials', function (req, res) {
         const query = 'SELECT * FROM Materials';
         db.query(query, function(err, result) {
             if (err) {
-                throw err;
                 return res.sendStatus(500);
             } else {
                 return res.status(200).send(JSON.stringify(result));
@@ -60,14 +58,15 @@ router.get('/getMaterials', function (req, res) {
 router.post('/updateAction', function (req, res) {
     const action = req.body;
     if (!req.session.Uid) {
-        res.status(404).send("User is not logged in");
+        return res.status(404).send("User is not logged in");
     } else {
         const query = 'UPDATE Actions SET IsCompleted = ? , CompletedDate = ?, IsStarted = ? WHERE Aid = ?';
         const filter = [action.IsCompleted, action.CompletedDate, action.IsStarted, action.Aid];
         db.query(query, filter, function(err){
-            if (err) throw err;
-            else{
-                res.status(200).send("Successfully updated action in DB.")
+            if (err) {
+                return res.sendStatus(500);
+            } else {
+                return res.status(200).send("Successfully updated action in DB.")
             }
         });
     }
@@ -76,17 +75,16 @@ router.post('/updateAction', function (req, res) {
 // Retrieve array of patients from Patient_Info table corresponding to user
 router.get('/getPatientInfo', function (req, res) {
     if (!req.session.Uid) {
-        res.status(404).send("User is not logged in");
+        return res.status(404).send("User is not logged in");
     } else {
         const query = 'SELECT * FROM Patient_Info WHERE Uid = ?';
         const filter = [req.session.Uid];
         db.query(query, filter, function(err, result){
             if (err) {
-                throw err;
                 return res.sendStatus(500);
             }
             else{
-                res.status(200).send(JSON.stringify(result));
+                return res.status(200).send(JSON.stringify(result));
             }
         });
     }
@@ -95,13 +93,12 @@ router.get('/getPatientInfo', function (req, res) {
 router.get('/getSchoolDistrict/:SDid', function(req, res) {
     const districtId = req.params.SDid;
     if (!req.session.Uid) {
-        res.status(404).send("User is not logged in");
+        return res.status(404).send("User is not logged in");
     } else {
         const query = 'SELECT * FROM School_District_Info WHERE SDIid = ?';
         const filter = [districtId];
         db.query(query, filter, function (err, result) {
             if (err) {
-                throw err;
                 return res.sendStatus(500);
             } else {
                 return res.status(200).send(JSON.stringify(result));
@@ -135,7 +132,6 @@ router.get('/profile', function (req, res) {
         const filter = [req.session.Uid];
         db.query(query, filter, function(err, result){
             if (err) {
-                throw err;
                 return res.sendStatus(500);
             }   
             if (result && result.length === 1) {
@@ -189,7 +185,7 @@ router.post('/change-language', function (req, res) {
 // Retrieve child insurance info from Insurance table by joining session Uid and Patient_Info.Iid on Insurance.Iid
 router.get('/childreninsurance', function (req, res) {
     if (req.session.Uid) {
-        const query = 'SELECT I.Name FROM Insurance AS I, Patient_Info AS PI WHERE I.Iid = PI.Iid AND PI.Uid = ?;';
+        const query = 'SELECT I.IName FROM Insurance AS I, Patient_Info AS PI WHERE I.Iid = PI.Iid AND PI.Uid = ?;';
         const filter = [req.session.Uid];
         db.query(query, filter, function(err, result){
             if (err) throw err;
@@ -218,7 +214,7 @@ router.post('/updatechildinsurance', function (req, res) {
             res.status(404).send("User currently logged in does not correspond to child");
         } else {
             const query = 'UPDATE Patient_Info ' +
-                'SET Patient_Info.Iid =(SELECT Iid FROM Insurance WHERE Insurance.Name = ?) ' +
+                'SET Patient_Info.Iid =(SELECT Iid FROM Insurance WHERE Insurance.IName = ?) ' +
                 'WHERE Patient_Info.PIid = ?';
             const filter = [insuranceName, PIid];
             db.query(query, filter, function (err, result) {

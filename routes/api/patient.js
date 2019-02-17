@@ -24,7 +24,7 @@ router.get('/:PIid', function (req, res) {
 
 router.post('/update_progress', function (req, res) {
     const action = req.body;
-    const query = "INSERT INTO Progress (PIid, Aid, progress, time) VALUES (?, ?, ?, ?);";
+    const query = "INSERT INTO Progress (PIid, Aid, progress, Ptime) VALUES (?, ?, ?, ?);";
     const filter = [action.PIid, action.Aid, action.progress, action.timestamp];
     db.query(query, filter, function(err){
         if (err) throw err;
@@ -37,7 +37,7 @@ router.post('/update_progress', function (req, res) {
 router.get('/progress/:PIid/:Aid', function(req, res) {
     const PIid = req.params.PIid;
     const Aid = req.params.Aid;
-    const query = "SELECT progress, time from Progress where PIid=? and Aid=?;";
+    const query = "SELECT progress, Ptime from Progress where PIid=? and Aid=?;";
     const filter = [PIid, Aid];
     db.query(query, filter, function(err, result){
         if (err) throw err;
