@@ -60,7 +60,7 @@ class ClinicianComponent extends Component {
         }
     }
 
-    displayProgressSymbol(isCompleted, isStarted) {
+    static displayProgressSymbol(isCompleted, isStarted) {
         if (isCompleted) {
             return <img alt="Complete" className="completed-checkmark" src={CheckmarkIcon}/>
         } else if(!isCompleted && isStarted) {
@@ -70,7 +70,7 @@ class ClinicianComponent extends Component {
         }
     }
 
-    renderDisabledSchoolCard() {
+    static renderDisabledSchoolCard() {
         return(
             <div className="disabled-action-card">
                 <div className="action-card-header">
@@ -94,7 +94,7 @@ class ClinicianComponent extends Component {
             'action-card-in-progress': IsStarted && !IsCompleted
         });
         if (this.state.age < 3 && this.state.action.ActionType === "IEP_GET") {
-            return this.renderDisabledSchoolCard();
+            return ClinicianComponent.renderDisabledSchoolCard();
         } else {
             return (
                 <div className={actionCardStyle}>
@@ -107,7 +107,7 @@ class ClinicianComponent extends Component {
                                 null
                             }
                         </div>
-                        {this.displayProgressSymbol(IsCompleted, IsStarted)}
+                        {ClinicianComponent.displayProgressSymbol(IsCompleted, IsStarted)}
                     </div>
                     <div className="action-card-content">
                         {(IsStarted && !IsCompleted) ? (
