@@ -28,7 +28,8 @@ class ActionComponent extends Component {
             progress_table: [],
             remainingCharacters: 500,
             saveButtonValue: "Save",
-            saveButtonClass: "btn btn-default note-save-button"
+            saveButtonClass: "btn btn-default note-save-button",
+            errorText: ""
         };
 
         this.updateNote = this.updateNote.bind(this);
@@ -76,10 +77,19 @@ class ActionComponent extends Component {
     }
 
     saveNote() {
-        updateActionNote(this.state.action)
-        this.setState({
-            saveButtonValue: "Saved!",
-            saveButtonClass: "btn btn-default note-save-button saved"
+        updateActionNote(this.state.action).then(result => {
+            if (result.status === 200 || result.status === 304) {
+                this.setState({
+                    saveButtonValue: "Saved!",
+                    saveButtonClass: "btn btn-default note-save-button saved",
+                    errorText: ""
+                });
+            } else {
+                this.setState({
+                    saveButtonClass: "btn btn-default note-save-button not-saved",
+                    errorText: "There was a problem saving your changes."
+                });
+            }
         });
     }
 
@@ -90,14 +100,14 @@ class ActionComponent extends Component {
         if (isCompleted) {
             return (
                 <div class="progress-buttons">
-                    <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth">Mark as Incomplete</button>
+                    <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth completion-button">Mark as Incomplete</button>
                 </div>
             );
         } else {
             return (
                 <div class="in-progress-container">
                     <div class="progress-buttons">
-                        <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth">Mark as Complete</button>
+                        <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth completion-button">Mark as Complete</button>
                         <div class="checkbox-container">I'm having an issue
                             <div class="checkmark" onClick={this.toggleMessage}>
                                 <img alt="checkmark" class={checkmarkVisibility} src={CheckmarkIconNavy} />
@@ -110,6 +120,7 @@ class ActionComponent extends Component {
                                 <label class="note-label">Describe the issue to your clinician (optional):</label>
                                 <textarea class="note-text-box" placeholder="Type something..." onChange={this.updateNote}>{this.state.action.Note}</textarea>
                                 <div class="form-save">
+                                    <p class="database-error-text">{this.state.errorText}</p>
                                     <p class="characters-remaining">{this.state.remainingCharacters}</p>
                                     <button onClick={this.saveNote} class={this.state.saveButtonClass}>{this.state.saveButtonValue}</button>
                                 </div>
