@@ -4,6 +4,7 @@ import {Panel, PanelGroup, ProgressBar} from 'react-bootstrap';
 import {getActionsByPIid, getParentEmailByPIid, getPatients} from "../session/Session";
 import ClinicianComponent from "./ClinicianComponent";
 import './ClinicianView.css';
+import moment from 'moment'
 
 class ClinicianView extends Component {
     constructor(props) {
@@ -85,13 +86,14 @@ class ClinicianView extends Component {
         const { Actions, parentEmails } = this.state;
         const parentEmail = parentEmails[PIid];
         const actions = Actions[PIid];
-
+        const age = moment().diff(moment(this.state.Patient_Info[PIid].DoB), 'year');
         return (
             <div>
                 <a href={'mailto:' + parentEmail} className={'panel-contact-link'}>Contact parent</a><br/>
                 {typeof actions !== 'undefined' &&
                     actions.map(action => {
-                        return <ClinicianComponent action={action} onToggle={() => this.handleToggle(this.state.lastSearch)}/>
+                        return <ClinicianComponent action={action} age={age} onToggle={() =>
+                            this.handleToggle(this.state.lastSearch)}/>
                     })
                 }
             </div>

@@ -71,7 +71,7 @@
 }
 
 .action-card h2, .action-card-completed h2, .action-card-in-progress h2 {
-    margin: 2rem 1.5rem;
+    margin: 0.9em;
     color: #1a4397;
     font-size: 18px;
     font-weight: normal;

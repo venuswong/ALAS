@@ -216,10 +216,8 @@ class ActionComponent extends Component {
         }).then(result => {
             if (result.status === 200) {
                 let newAction = Object.assign(this.state.action);
-                if(!this.state.action.IsCompleted) {
-                    newAction.IsStarted = false;
-                }
                 newAction.IsCompleted = !this.state.action.IsCompleted;
+                newAction.IsStarted = newAction.IsCompleted;
                 if (newAction.IsCompleted) {
                     newAction.CompletedDate = now;
                 } else {

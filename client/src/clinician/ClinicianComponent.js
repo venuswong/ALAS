@@ -4,14 +4,19 @@ import Collapse from "@material-ui/core/Collapse/Collapse";
 import '../action/ActionComponent.css';
 import Well from "../action/ActionComponent";
 import CheckmarkIcon from "../image/alas-checkmark.svg";
+import 'classnames';
+import "react-select";
+import InProgressIcon from "../image/in-progress-circle.svg";
 
 class ClinicianComponent extends Component {
     constructor(props) {
         super(props);
 
-        const action = props.action;
+        const action = this.props.action;
+        const age = this.props.age;
         this.state = {
             action,
+            age,
             actionText: this.getActionText(action.ActionType),
             open_Table: false,
             progress_table: [],
@@ -55,61 +60,77 @@ class ClinicianComponent extends Component {
         }
     }
 
-    displayCheckmarkIfCompleted(isCompleted) {
+    displayProgressSymbol(isCompleted, isStarted) {
         if (isCompleted) {
-            return <img className="completed-checkmark" src={CheckmarkIcon}/>
+            return <img alt="Complete" className="completed-checkmark" src={CheckmarkIcon}/>
+        } else if(!isCompleted && isStarted) {
+            return <img alt="In Progress" className="in-progress-circle" src={InProgressIcon}/>;
         } else {
             return;
         }
+    }
+
+    renderDisabledSchoolCard() {
+        return(
+            <div className="disabled-action-card">
+                <div className="action-card-header">
+                    <h2>School – asking for special education services</h2>
+                    <p class="not-needed-header">Not Needed</p>
+                </div>
+                <div className="action-card-content">
+                </div>
+            </div>
+        );
     }
 
     createActionComponent() {
         const {IsCompleted, IsStarted} = this.state.action;
         const {title} = this.state.actionText;
         const progress_table = this.state.progress_table;
-        const actionCardStyle = IsCompleted ? "action-card-completed" : "action-card";
-        return (
-            <div className={actionCardStyle}>
-                <div className="action-card-header">
-                    <h2>{title}</h2>
-                    {this.displayCheckmarkIfCompleted(IsCompleted)}
-                </div>
-                <div className="action-card-content">
-                    {this.state.progress_table.length ? (
-                        <div>
-                            <a onClick={() => this.setState({ open_Table: !this.state.open_Table })}>Show table</a>
-                            <Collapse in={this.state.open_Table}>
-                                <Table striped bordered condensed hover>
-                                    <thead>
-                                    <tr>
-                                        <th>Action</th>
-                                        <th>Date</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {
-                                        progress_table.map(
-                                            (progress_row) => {
-                                                return (
-                                                    <tr>
-                                                        <td>{progress_row.progress}</td>
-                                                        <td>{progress_row.Ptime.substring(0, 10)}</td>
-                                                    </tr>
-                                                );
-                                            }
-                                        )
-                                    }
-                                    </tbody>
-                                </Table>
-                            </Collapse>
+        const classes = require('classnames');
+        const actionCardStyle = classes({
+            'action-card-completed': IsCompleted,
+            'action-card': !IsCompleted && !IsStarted,
+            'action-card-in-progress': IsStarted && !IsCompleted
+        });
+        if (this.state.age < 3 && this.state.action.ActionType === "IEP_GET") {
+            return this.renderDisabledSchoolCard();
+        } else {
+            return (
+                <div className={actionCardStyle}>
+                    <div class="in-progress-header">
+                        <div className="action-card-header">
+                            <h2>{title}</h2>
+                            {IsStarted && !IsCompleted ?
+                                <p className="in-progress-text">In-Progress</p>
+                                :
+                                null
+                            }
                         </div>
-                    ) : (
-                        <p>No progress has been made yet.</p>
-                    )
-                    }
+                        {this.displayProgressSymbol(IsCompleted, IsStarted)}
+                    </div>
+                    <div className="action-card-content">
+                        {(IsStarted && !IsCompleted) ? (
+                            <div>
+                                <h1 class="patient-note-header">Patient notes for you:</h1>
+                                {this.state.action.Note && this.state.action.Note.length > 0 ?
+                                    <textarea class="patient-note" readOnly="true">{this.state.action.Note}</textarea>
+                                    :
+                                    <p>None</p>
+                                }
+                            </div>
+                        ) : (
+                            null
+                        )}
+                        {!IsStarted && !IsCompleted ?
+                            <p>The patient has not started this action.</p>
+                        :
+                            null
+                        }
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
     }
 
     render() {
