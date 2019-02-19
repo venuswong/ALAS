@@ -393,7 +393,7 @@ class ProfileView extends Component {
                                 <option value="United Healthcare">United Healthcare</option>
                             </FormControl>
                         </FormGroup>
-                        <FormGroup controlId={childInsuranceIndex} bsSize="medium">
+                        <FormGroup controlId={childProvider} bsSize="medium">
                             <ControlLabel>Provider</ControlLabel>
                             <FormControl
                                 componentClass="select"

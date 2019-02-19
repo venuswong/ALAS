@@ -200,6 +200,24 @@ router.get('/childreninsurance', function (req, res) {
     }
 });
 
+router.get('/childrenEligibleProviders', function (req, res) {
+    if (req.session.Uid) {
+        //this might be problematic, but I think it'll work?
+        const query = 'SELECT Pr.Name FROM ABA_Providers AS Pr, Patient_Info AS PI WHERE Pr.Ins_Id LIKE PI.Iid AND PI.Uid = ?;';
+        const filter = [req.session.Uid];
+        db.query(query, filter, function(err, result){
+            if (err) throw err;
+            if (result && result.length >= 1) {
+                return res.status(200).json({result});
+            } else {
+                res.status(404).send("User not logged in");
+            }
+        });
+    } else {
+        res.status(404).send("User not logged in");
+    }
+});
+
 router.post('/updatechildinsurance', function (req, res) {
     const params = req.body;
     const information = params.information;
