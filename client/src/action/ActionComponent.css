@@ -164,6 +164,10 @@
 }
 
 .note-save-button:focus {
+    background-color: #fff;
+}
+
+.note-save-button:focus {
     outline: none;
 }
 

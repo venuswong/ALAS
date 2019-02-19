@@ -135,7 +135,7 @@ class ClinicianComponent extends Component {
 
     render() {
         return (
-            <div>
+            <div class ="clinician-action-component">
                 {this.createActionComponent()}
             </div>
         );
