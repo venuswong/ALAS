@@ -99,6 +99,7 @@
 .action-card-header {
     display: flex;
     flex-direction: row;
+    flex: 1;
     justify-content: space-between;
 }
 .action-card-completed {
