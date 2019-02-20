@@ -50,8 +50,8 @@ class ProfileView extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleInsuranceSubmit = this.handleInsuranceSubmit.bind(this);
-        this.handleSchoolSubmit = this.handleSchoolSubmit.bind(this)
-        this.handleProviderSubmit = this.handleProviderSubmit.bind(this)
+        this.handleSchoolSubmit = this.handleSchoolSubmit.bind(this);
+        this.handleProviderSubmit = this.handleProviderSubmit.bind(this);
     }
 
     displayAlert() {
@@ -281,6 +281,7 @@ class ProfileView extends Component {
                                 <NavItem eventKey="first">Account Information</NavItem>
                                 <NavItem eventKey="second">Child Information</NavItem>
                                 <NavItem eventKey="third">School Information</NavItem>
+                                <NavItem eventKey="fourth">Provider Information</NavItem>
                             </Nav>
                         </Col>
                         <Col sm={8}>
@@ -322,14 +323,6 @@ class ProfileView extends Component {
                                                     }
                                                 })
                                         }
-                                        {
-                                            Children_Information.map(
-                                                (child) => {
-                                                    if (Children_Provider[childProviderIndex]) {
-                                                        return this.createChildInfoTab(child, childProviderIndex++, Children_Provider);
-                                                    }
-                                                })
-                                        }
                                     </Tabs>
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="third">
@@ -339,6 +332,18 @@ class ProfileView extends Component {
                                                 (child) => {
                                                     if (Children_School[childSchoolIndex]) {
                                                         return this.createChildSchoolTab(child, childSchoolIndex++, Children_School);
+                                                    }
+                                                })
+                                        }
+                                    </Tabs>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="fourth">
+                                    <Tabs id="child-provider-tabs">
+                                        {
+                                            Children_Information.map(
+                                                (child) => {
+                                                    if (Children_Provider[childProviderIndex]) {
+                                                        return this.createChildProviderTab(child, childProviderIndex++, Children_Provider);
                                                     }
                                                 })
                                         }
@@ -435,6 +440,73 @@ class ProfileView extends Component {
                                 <option value="Total Education Solutions">Total Education Solutions</option>
                                 <option value="Trumpet Behavioral Health">Trumpet Behavioral Health</option>
                             </FormControl>
+                        </FormGroup>
+                    </div>
+                    <Button type="submit" className={"btn btn-primary"}>Save Changes</Button>
+                </form>
+            </Tab>
+        );
+    }
+
+    createChildProviderTab(child, childProviderIndex, childprovider) {
+        return (
+            <Tab eventKey={childProviderIndex+"school"} title={child.Fname + ' ' + child.Lname}>
+                <form onSubmit={(e) => this.handleProviderSubmit(e, childProviderIndex)}>
+                    <div>
+                        <FormGroup controlId={this.childProviderIndex} bsSize="medium">
+                            <ControlLabel>Provider</ControlLabel>
+                            <FormControl
+                                componentClass="select"
+                                placeholder={childprovider[childProviderIndex].Name}
+                                value={childprovider[childProviderIndex].Name}
+                                //onChange={(e)=>this.handleChange(e, 'provider', childProviderIndex)}
+                            >
+                                <option value="A.B.L.E. Academic and Behavioral Learning Enrichment">A.B.L.E. Academic and Behavioral Learning Enrichment</option>
+                                <option value="Amigo Family Counseling">Amigo Family Counseling</option>
+                                <option value="Amy Boland, PhD">Amy Boland, PhD</option>
+                                <option value="Boundless">Boundless</option>
+                                <option value="Bridgeway Academy">Bridgeway Academy</option>
+                                <option value="Center for Autism Spectrum Disorder">Center for Autism Spectrum Disorder</option>
+                                <option value="Development Associates">Development Associates</option>
+                                <option value="Directions Counseling">Directions Counseling</option>
+                                <option value="Faith Hope and Love Intervention Services">Faith Hope and Love Intervention Services</option>
+                                <option value="Flourish Integrated Therapy">Flourish Integrated Therapy</option>
+                                <option value="Haugland Learning Center">Haugland Learning Center</option>
+                                <option value="Hopebridge Autism Therapy Centers">Hopebridge Autism Therapy Centers</option>
+                                <option value="Janet Hansen, PhD">Janet Hansen, PhD</option>
+                                <option value="Julie Canfield, PsyD">Julie Canfield, PsyD</option>
+                                <option value="Kari S. Watts, PhD">Kari S. Watts, PhD</option>
+                                <option value="Keith G. Hughes, PhD">Keith G. Hughes, PhD</option>
+                                <option value="Oakstone Academy">Oakstone Academy</option>
+                                <option value="Ohio State University Nisonger Center">Ohio State University Nisonger Center</option>
+                                <option value="Pathfinder Progress">Pathfinder Progress</option>
+                                <option value="Reach Educational Services">Reach Educational Services</option>
+                                <option value="The Center for Cognitive and Behavioral Therapy of Greater Columbus">The
+                                    Center for Cognitive and Behavioral Therapy of Greater Columbus</option>
+                                <option value="The Learning Spectrum">The Learning Spectrum</option>
+                                <option value="The Silver Lining Group">The Silver Lining Group</option>
+                                <option value="Total Education Solutions">Total Education Solutions</option>
+                                <option value="Trumpet Behavioral Health">Trumpet Behavioral Health</option>
+                            </FormControl>
+                        </FormGroup>
+                    </div>
+                    <div>
+                        <FormGroup controlId="child_provider" bsSize="medium">
+                            <ControlLabel>Provider Name</ControlLabel>
+                            {typeof childprovider[childProviderIndex] === "undefined" &&
+                            <FormControl
+                                value={"Undefined"}
+                                disabled="true"
+                            >
+                            </FormControl>
+                            }
+                            {typeof childprovider[childProviderIndex] !== "undefined" &&
+                            <FormControl
+                                value={childprovider[childProviderIndex].Name}
+                                disabled="true"
+                            >
+                            </FormControl>
+                            }
                         </FormGroup>
                     </div>
                     <Button type="submit" className={"btn btn-primary"}>Save Changes</Button>
