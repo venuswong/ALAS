@@ -150,6 +150,17 @@ export function getChildrenProvider() {
     });
 }
 
+export function getChildrenEligibleProviders() {
+    return fetch("/api/user/childrenEligibleProviders", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+/*
 export function postChildProvider(information, provider) {
     return fetch("/api/user/updatechildprovider", {
         method: "post",
@@ -161,6 +172,7 @@ export function postChildProvider(information, provider) {
         body: JSON.stringify({information, provider})
     });
 }
+*/
 
 export function postChildSchool(information, school) {
     return fetch("/api/user/updatechildschool", {

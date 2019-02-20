@@ -266,12 +266,12 @@ class ProfileView extends Component {
         });
     }
 
-    render(){
+    render() {
         const {Children_Information, Children_Insurance, Children_Provider, Children_School} = this.state;
         let childInsuranceIndex = 0;
         let childProviderIndex = 0;
         let childSchoolIndex = 0;
-        return(
+        return (
             <div className={"defaultview"}>
                 {this.displayAlert()}
                 <Tab.Container id="left-tabs-example" defaultActiveKey="first">
@@ -292,7 +292,7 @@ class ProfileView extends Component {
                                                 <ControlLabel>Name</ControlLabel>
                                                 <FormControl
                                                     value={this.state.Fname + " " + this.state.Lname}
-                                                    disabled ="true"
+                                                    disabled="true"
                                                 />
                                             </FormGroup>
                                         </div>
@@ -352,7 +352,7 @@ class ProfileView extends Component {
         );
     }
 
-    createChildInfoTab(child, childInsuranceIndex, childinsurance) {
+    createChildInfoTab(child, childInsuranceIndex, childinsurance){
         return (
             <Tab eventKey={childInsuranceIndex+"insurance"} title={child.Fname + ' ' + child.Lname}>
                 <form onSubmit={(e) => this.handleInsuranceSubmit(e, childInsuranceIndex)}>
@@ -385,15 +385,22 @@ class ProfileView extends Component {
                             >
                                 <option value="Aetna">Aetna</option>
                                 <option value="Anthem">Anthem</option>
+                                <option value="Blue Cross Blue Shield">Blue Cross Blue Shield</option>
                                 <option value="Buckeye Health Plan">Buckeye Health Plan</option>
                                 <option value="CareSource">CareSource</option>
+                                <option value="Choice Care">Choice Care</option>
                                 <option value="Medicaid">Medicaid</option>
+                                <option value="Medical Mutual">Medical Mutual</option>
+                                <option value="Medicare">Medicare</option>
                                 <option value="Molina Healthcare">Molina Healthcare</option>
+                                <option value="Ohio State">Ohio State</option>
                                 <option value="Paramount Advantage">Paramount Advantage</option>
+                                <option value="Tricare">Tricare</option>
                                 <option value="United Healthcare">United Healthcare</option>
+                                <option value="None">None (private pay)</option>
                             </FormControl>
                         </FormGroup>
-                        <FormGroup controlId={childProvider} bsSize="medium">
+                        <FormGroup controlId={this.childProviderIndex} bsSize="medium">
                             <ControlLabel>Provider</ControlLabel>
                             <FormControl
                                 componentClass="select"
