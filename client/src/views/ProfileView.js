@@ -453,12 +453,12 @@ class ProfileView extends Component {
             <Tab eventKey={childProviderIndex+"school"} title={child.Fname + ' ' + child.Lname}>
                 <form onSubmit={(e) => this.handleProviderSubmit(e, childProviderIndex)}>
                     <div>
-                        <FormGroup controlId={this.childProviderIndex} bsSize="medium">
+                        <FormGroup controlId="child_provider" bsSize="medium">
                             <ControlLabel>Provider</ControlLabel>
                             <FormControl
                                 componentClass="select"
-                                placeholder={childprovider[childProviderIndex].Name}
-                                value={childprovider[childProviderIndex].Name}
+                                //placeholder={childprovider[childProviderIndex].Name}
+                                //value={childprovider[childProviderIndex].Name}
                                 //onChange={(e)=>this.handleChange(e, 'provider', childProviderIndex)}
                             >
                                 <option value="A.B.L.E. Academic and Behavioral Learning Enrichment">A.B.L.E. Academic and Behavioral Learning Enrichment</option>
@@ -488,25 +488,6 @@ class ProfileView extends Component {
                                 <option value="Total Education Solutions">Total Education Solutions</option>
                                 <option value="Trumpet Behavioral Health">Trumpet Behavioral Health</option>
                             </FormControl>
-                        </FormGroup>
-                    </div>
-                    <div>
-                        <FormGroup controlId="child_provider" bsSize="medium">
-                            <ControlLabel>Provider Name</ControlLabel>
-                            {typeof childprovider[childProviderIndex] === "undefined" &&
-                            <FormControl
-                                value={"Undefined"}
-                                disabled="true"
-                            >
-                            </FormControl>
-                            }
-                            {typeof childprovider[childProviderIndex] !== "undefined" &&
-                            <FormControl
-                                value={childprovider[childProviderIndex].Name}
-                                disabled="true"
-                            >
-                            </FormControl>
-                            }
                         </FormGroup>
                     </div>
                     <Button type="submit" className={"btn btn-primary"}>Save Changes</Button>

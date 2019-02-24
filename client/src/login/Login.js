@@ -234,7 +234,7 @@ class Login extends Component {
                         block
                         bsSize="large"
                         bsStyle="primary"
-                        disabled={!this.validateForm()}
+                        //disabled={!this.validateForm()}
                         type="submit"
                     >
                         Login
