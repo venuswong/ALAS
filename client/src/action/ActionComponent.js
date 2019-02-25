@@ -10,6 +10,7 @@ import OverlayTrigger from "react-bootstrap/es/OverlayTrigger"
 import CheckmarkIcon from '../image/alas-checkmark.svg'
 import CheckmarkIconNavy from '../image/alas-checkmark-navy.svg'
 import InProgressIcon from '../image/in-progress-circle.svg'
+import DownArrow from '../image/down-arrow.svg'
 import "react-select";
 import 'classnames'
 
@@ -25,6 +26,7 @@ class ActionComponent extends Component {
             actionText: this.getActionText(action.ActionType),
             open_Description: false,
             open_Script: false,
+            noteExpanded: false,
             progress_table: [],
             remainingCharacters: 500,
             saveButtonValue: "Save",
@@ -37,6 +39,7 @@ class ActionComponent extends Component {
         this.toggleMessage = this.toggleMessage.bind(this);
         this.loadProgress = this.loadProgress.bind(this);
         this.toggleCompleted = this.toggleCompleted.bind(this);
+        this.toggleNote = this.toggleNote.bind(this);
     }
 
     getActionText(ActionType) {
@@ -57,9 +60,6 @@ class ActionComponent extends Component {
     displayProgressSymbol(isCompleted, isStarted) {
         if (isCompleted) {
             return <img className="completed-checkmark" src={CheckmarkIcon}/>
-        } else if(!isCompleted && isStarted)
-        {
-            return <img className="in-progress-circle" src={InProgressIcon}/>;
         } else {
             return;
         }
@@ -93,10 +93,19 @@ class ActionComponent extends Component {
         });
     }
 
-//<button onClick={this.toggleMessage} className="btn btn-default buttonWidth">I'm having an issue</button>-->
+    toggleNote() {
+        this.setState({
+            noteExpanded: !this.state.noteExpanded
+        })
+    }
+
     displayProgressOptions(isCompleted, isStarted) {
         let checkmarkVisibility = isStarted ? 'checkmark-small' : 'checkmark-hidden';
-        let noteVisibility = isStarted ? 'clinician-note' : 'note-hidden';
+        let noteVisibility = isStarted ? 'note-container' : 'note-container-hidden';
+        let noteExpanded = isStarted && this.state.noteExpanded ? 'clinician-note' : 'note-hidden';
+        let arrowState = this.state.noteExpanded? 'arrow arrow-up' : 'arrow arrow-down';
+        let expandButtonState = this.state.noteExpanded? 'toggle-note-button expanded' : 'toggle-note-button';
+
         if (isCompleted) {
             return (
                 <div class="progress-buttons">
@@ -108,17 +117,22 @@ class ActionComponent extends Component {
                 <div class="in-progress-container">
                     <div class="progress-buttons">
                         <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth completion-button">Mark as Complete</button>
-                        <div class="checkbox-container">I'm having an issue
+                        <div class="checkbox-container">In-progress
                             <div class="checkmark" onClick={this.toggleMessage}>
                                 <img alt="checkmark" class={checkmarkVisibility} src={CheckmarkIconNavy} />
                             </div>
                         </div>
                     </div>
-                    <div class="note-container">
-                        <div class={noteVisibility}>
+                    <div class={noteVisibility}>
+                        <button onClick={this.toggleNote} class={expandButtonState}>
+                            Take notes for clinician
+                            <img src={DownArrow} alt="arrow" class={arrowState}/>
+                        </button>
+                        <div class={noteExpanded}>
                             <div class="note-form">
-                                <label class="note-label">Describe the issue to your clinician (optional):</label>
-                                <textarea class="note-text-box" placeholder="Type something..." onChange={this.updateNote}>{this.state.action.Note}</textarea>
+                                <textarea class="note-text-box" placeholder="Type something..."
+                                          onChange={this.updateNote}>{this.state.action.Note}
+                                </textarea>
                                 <div class="form-save">
                                     <p class="database-error-text">{this.state.errorText}</p>
                                     <p class="characters-remaining">{this.state.remainingCharacters}</p>
@@ -160,7 +174,8 @@ class ActionComponent extends Component {
         let newAction = Object.assign(this.state.action);
         newAction.IsStarted = !this.state.action.IsStarted;
         this.setState({
-            action: newAction
+            action: newAction,
+            noteExpanded: false
         });
 
         fetch("/api/patient/update_progress", {
