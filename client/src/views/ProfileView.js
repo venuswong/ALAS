@@ -186,7 +186,6 @@ class ProfileView extends Component {
 
         const { Children_Information, Children_School} = this.state;
         e.preventDefault();
-        // console.log(this.state.SelectedDistrict[childSchoolIndex])
         postChildSchool(Children_Information[childSchoolIndex], this.state.SelectedDistrict[childSchoolIndex]).then((res) => {
             if (res.status === 200) {
                 this.setState({
@@ -224,7 +223,7 @@ class ProfileView extends Component {
                 });
             }
         })
-        window.location.reload();
+        this. componentDidMount();
     };
 
 
