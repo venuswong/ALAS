@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Panel, Button, Glyphicon, FormGroup, FormControl} from "react-bootstrap";
-import {updateAction} from "../session/Session";
+import {getSD_in_ZipCode, updateAction, getSDPhoneNumber} from "../session/Session";
 import Collapse from "@material-ui/core/Collapse/Collapse";
 import Well from "react-bootstrap/es/Well";
 import {Grid, Row, Col} from "react-bootstrap/es";
@@ -21,6 +21,7 @@ class ActionComponent extends Component {
             open_Description: false,
             open_Script: false,
             progress_table: [],
+            School_Phone: "",
         };
 
         this.toggleMessage = this.toggleMessage.bind(this);
@@ -215,12 +216,31 @@ class ActionComponent extends Component {
 
         return this.renderActionCard();
     }
+    GetNumber(SDIid) {
+
+            getSDPhoneNumber(SDIid)
+                .then(schoolDistrictInfo => schoolDistrictInfo.json())
+                .then(schoolDistrictJson => {
+                    let School_Phone = Object.assign(this.state.School_Phone);
+                    School_Phone = schoolDistrictJson;
+                    this.setState({
+                        School_Phone
+                    });
+                });
+    }
 
     renderActionCard() {
         const {IsCompleted, IsStarted} = this.state.action;
         const progress_table = this.state.progress_table;
         const {title, description_title, description, phoneScript} = this.state.actionText;
-        const phoneNumber = 'tel:18008888888'; // TODO: Get this from DB
+        this.GetNumber(this.state.action.SDIid);
+        var phoneNumber = 'tel:18888888888';
+        console.log(this.state.action.ActionType);
+        if(this.state.action.ActionType === "IEP_GET") {
+            if (this.state.School_Phone !== "") {
+                phoneNumber = "tel:" + this.state.School_Phone[0].Phone
+            }
+        }
         const actionCardStyle = IsCompleted ? "action-card-completed" : "action-card";
 
         if (this.props.age < 3 && this.state.action.ActionType === "IEP_GET") {

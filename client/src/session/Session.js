@@ -216,6 +216,16 @@ export function getSD_in_ZipCode(P_ID) {
     });
 }
 
+export function getSDPhoneNumber(SDI_id) {
+    return fetch("/api/user/SDiID_to_Phone/" + SDI_id.toString(), {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
 export function getBasicChildInfoByPIid(PIid) {
     return fetch("/api/patient/" + PIid.toString(), {
         method: "get",
