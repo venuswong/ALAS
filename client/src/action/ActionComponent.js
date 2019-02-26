@@ -76,7 +76,8 @@ class ActionComponent extends Component {
         });
     }
 
-    saveNote() {
+    saveNote(event) {
+        event.preventDefault();
         updateActionNote(this.state.action).then(result => {
             if (result.status === 200 || result.status === 304) {
                 this.setState({
@@ -129,16 +130,16 @@ class ActionComponent extends Component {
                             <img src={DownArrow} alt="arrow" class={arrowState}/>
                         </button>
                         <div class={noteExpanded}>
-                            <div class="note-form">
-                                <textarea class="note-text-box" placeholder="Type something..."
+                            <form onSubmit={this.saveNote} id={"action-form-" + this.state.action.Aid} class="note-form">
+                                <textarea form={"action-form-" + this.state.action.Aid} class="note-text-box" placeholder="Type something..."
                                           onChange={this.updateNote}>{this.state.action.Note}
                                 </textarea>
                                 <div class="form-save">
                                     <p class="database-error-text">{this.state.errorText}</p>
                                     <p class="characters-remaining">{this.state.remainingCharacters}</p>
-                                    <button onClick={this.saveNote} class={this.state.saveButtonClass}>{this.state.saveButtonValue}</button>
+                                    <input type="submit" class={this.state.saveButtonClass} value={this.state.saveButtonValue}/>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -197,7 +198,8 @@ class ActionComponent extends Component {
                     action: newAction
                 });
                 // Update in DB
-                updateAction({Aid: newAction.Aid, IsCompleted: newAction.IsCompleted, CompletedDate: newAction.CompletedDate, IsStarted: newAction.IsStarted, Note: newAction.Note});
+                updateAction({Aid: newAction.Aid, IsCompleted: newAction.IsCompleted,
+                    CompletedDate: newAction.CompletedDate, IsStarted: newAction.IsStarted, Note: newAction.Note});
             }
         });
     }
@@ -242,70 +244,14 @@ class ActionComponent extends Component {
                     action: newAction
                 });
                 // Update in DB
-                updateAction({Aid: newAction.Aid, IsCompleted: newAction.IsCompleted, CompletedDate: newAction.CompletedDate, IsStarted: newAction.IsStarted});
+                updateAction({Aid: newAction.Aid, IsCompleted: newAction.IsCompleted,
+                    CompletedDate: newAction.CompletedDate, IsStarted: newAction.IsStarted});
             }
         });
     }
 
 
     createActionComponent() {
-        const {IsCompleted, IsStarted} = this.state.action;
-        const progress_table = this.state.progress_table;
-
-        const popoverTop = (
-            <Popover id="popover-positioned-top">
-                <div>
-                    <span>
-                        <Button onClick={this.toggleMessage}>Left Message</Button>
-                        {IsCompleted &&
-                        <Button bsStyle={"success"} onClick={this.toggleCompleted}>
-                            Completed
-                        </Button>
-                        }
-                        {!IsCompleted &&
-                        <Button bsStyle={"primary"} onClick={this.toggleCompleted}>
-                            Mark Completed
-                        </Button>
-                        }
-                    </span>
-                </div>
-            </Popover>
-        );
-
-        const popoverProgress = (
-            <Popover id="popover-positioned-left">
-                <div>
-                    {this.state.progress_table.length ? (
-                        <Table striped bordered condensed hover>
-                            <thead>
-                            <tr>
-                                <th>Action</th>
-                                <th>Date</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                progress_table.map(
-                                    (progress_row) => {
-                                        return (
-                                            <tr>
-                                                <td>{progress_row.progress}</td>
-                                                <td>{progress_row.Ptime.substring(0, 10)}</td>
-                                            </tr>
-                                        );
-                                    }
-                                )
-                            }
-                            </tbody>
-                        </Table>
-                    ) : (
-                        <p>No progress has been made yet.</p>
-                    )
-                    }
-                </div>
-            </Popover>
-        );
-
         return this.renderActionCard();
     }
 
