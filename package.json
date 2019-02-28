@@ -19,6 +19,7 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "express-sslify": "^1.2.0",
+    "google-distance": "^1.0.1",
     "material-ui-search-bar": "^0.4.2",
     "mdbreact": "^4.8.2",
     "mysql": "^2.16.0",
