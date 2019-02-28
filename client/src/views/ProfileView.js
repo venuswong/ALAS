@@ -280,13 +280,12 @@ class ProfileView extends Component {
 
     getDistricts() {
         for (let child in this.state.Children_Information) {
-
+            console.log(this.state.Children_Information[child])
             getSD_in_ZipCode(this.state.Children_Information[child].PIid)
                 .then(schoolDistrictInfo => schoolDistrictInfo.json())
                 .then(schoolDistrictJson => {
                     let Local_Districts = Object.assign(this.state.Local_Districts);
-                    Local_Districts = schoolDistrictJson;
-
+                    Local_Districts[child] = schoolDistrictJson;
                     this.setState({
                         Local_Districts
                     });
@@ -364,8 +363,11 @@ class ProfileView extends Component {
                                         {
                                             Children_Information.map(
                                                 (child) => {
-                                                    if (Children_School[childSchoolIndex]) {
-                                                        return this.createChildSchoolTab(child, childSchoolIndex++, Children_School, Local_Districts);
+                                                    if (Children_School[childSchoolIndex] && Local_Districts[childSchoolIndex] !== undefined) {
+
+
+                                                            return this.createChildSchoolTab(child, Local_Districts[childSchoolIndex], Children_School,  childSchoolIndex++);
+
                                                     }
                                                 })
                                         }
@@ -530,11 +532,10 @@ class ProfileView extends Component {
         );
     }
 
-    createChildSchoolTab(child, childSchoolIndex, childschool, Local_Districts) {
+    createChildSchoolTab(child, Local_Districts , childschool, childSchoolIndex) {
         return (
             <Tab eventKey={childSchoolIndex+"school"} title={child.Fname + ' ' + child.Lname}>
                 <form onSubmit={(e) => this.handleSchoolSubmit(e, childSchoolIndex)}>
-
                     <div>
                         <FormGroup controlId="child_School_District" bsSize="medium">
                             <ControlLabel>School District</ControlLabel>
@@ -598,7 +599,6 @@ class ProfileView extends Component {
                             {typeof childschool[childSchoolIndex] === "undefined" &&
                             <FormControl
                                 value={"Undefined"}
-
                             >
                             </FormControl>
                             }

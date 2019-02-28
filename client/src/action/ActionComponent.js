@@ -44,7 +44,9 @@ class ActionComponent extends Component {
     }
 
     componentDidMount() {
-        this.GetNumber(this.state.action.SDIid);
+        if(this.state.action.ActionType === "IEP_GET"){
+            this.GetNumber(this.state.action.SDIid);
+        }
     }
 
     getActionText(ActionType) {
@@ -255,11 +257,6 @@ class ActionComponent extends Component {
         });
     }
 
-    componentDidMount() {
-        if(this.state.action.ActionType === "IEP_GET"){
-        this.GetNumber(this.state.action.SDIid);
-         }
-    }
 
     createActionComponent() {
         return this.renderActionCard();
