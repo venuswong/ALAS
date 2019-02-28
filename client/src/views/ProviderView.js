@@ -13,6 +13,10 @@ import {
 } from "../session/Session";
 
 class ProviderView extends Component {
+    get_distance(home, home_city, home_state, home_zip, dest, dest_city, dest_state, dest_zip) {
+        var distance = require('google-distance');
+    }
+
     constructor(props) {
         super(props);
 
@@ -57,13 +61,14 @@ class ProviderView extends Component {
                     <tr>
                         <th>Provider</th>
                         <th>Phone</th>
+                        <th>Address</th>
                         <th>Distance</th>
                     </tr>{Children_Provider.map(function(item, key){
                         return (
                             <tr key = {key}>
                                 <td>{item.Name}</td>
                                 <td>{item.Phone}</td>
-                                <td>{item.Zip}</td>
+                                <td>{item.Address_Line1} {item.City} {item.State} {item.Zip}</td>
                             </tr>
                         )
                     })}</tbody>

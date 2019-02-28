@@ -220,7 +220,7 @@ router.get('/childreninsurance', function (req, res) {
 
 router.get('/childrenprovider', function (req, res) {
     if (req.session.Uid) {
-        const query = "SELECT DISTINCT Pr.Name, Loc.Phone, Loc.Zip\n" +
+        const query = "SELECT DISTINCT Pr.Name, Loc.Phone, Loc.Address_Line1, Loc.City, Loc.State, Loc.Zip\n" +
             "FROM ABA_Providers AS Pr, Users AS U, Provider_Locations AS Loc, Patient_Info AS PI\n" +
             "WHERE (Loc.Loc_ID = Pr.Address)\n" +
             "AND (INSTR(Pr.Ins_Id, PI.Iid) > 0)\n" +
