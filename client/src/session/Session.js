@@ -97,6 +97,19 @@ export function updateAction(action) {
     });
 }
 
+// updates database with new value for an Action's note field
+export function updateActionNote(action) {
+    return fetch("/api/user/updateActionNote", {
+        method: "post",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        // Serialize JSON body
+        body: JSON.stringify(action)
+    });
+}
+
 // returns a promise containing the user's profile information
 export function getProfile() {
     return fetch("/api/user/profile", {
@@ -174,7 +187,7 @@ export function postChildProvider(information, provider) {
 }
 */
 
-export function postChildSchool(information, school) {
+export function postChildSchool(Info, schoolID) {
     return fetch("/api/user/updatechildschool", {
         method: "post",
         headers: {
@@ -182,7 +195,7 @@ export function postChildSchool(information, school) {
             'Content-Type': 'application/json'
         },
         // Serialize JSON body
-        body: JSON.stringify({information, school})
+        body: JSON.stringify({Info, schoolID})
     });
 }
 
@@ -206,8 +219,18 @@ export function getSD_From_SDIid() {
     });
 }
 
-export function getSD_in_ZipCode() {
-    return fetch("/api/user/SD_in_zip", {
+export function getSD_in_ZipCode(P_ID) {
+    return fetch("/api/user/SD_in_zip/" + P_ID.toString(), {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export function getSDPhoneNumber(SDI_id) {
+    return fetch("/api/user/SDiID_to_Phone/" + SDI_id.toString(), {
         method: "get",
         headers: {
             'Accept': 'application/json',

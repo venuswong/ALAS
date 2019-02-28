@@ -7,3 +7,13 @@
 .img {
     height: 200px;
 }
+
+.informationPanel {
+    margin-top: 30px ;
+    margin-bottom: 20px;
+    border: 1px solid #1a4397;
+    border-radius: 4px;
+    box-shadow: inset 1px 1px 5px rgba(0,0,0,.35);
+    min-width: 775px;
+    max-width: 780px;
+}

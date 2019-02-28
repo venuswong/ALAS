@@ -13,6 +13,7 @@
   "private": true,
   "dependencies": {
     "body-parser": "^1.18.3",
+    "classnames": "^2.2.6",
     "concurrently": "^4.0.1",
     "connect-memcached": "^1.0.0",
     "cookie-parser": "^1.4.3",

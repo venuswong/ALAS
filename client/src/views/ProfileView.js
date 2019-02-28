@@ -8,6 +8,13 @@ import NavItem from "react-bootstrap/es/NavItem";
 import Button from "react-bootstrap/es/Button";
 import {Alert, ControlLabel, FormControl, FormGroup} from "react-bootstrap";
 import "./ProfileView.css"
+import Panel from "react-bootstrap";
+import PanelHeading from "react-bootstrap/es/PanelHeading";
+import PanelBody from "react-bootstrap/es/PanelBody";
+
+
+
+
 import {
     isUserLoggedIn,
     getProfile,
@@ -16,7 +23,8 @@ import {
     getChildrenInsurance,
     getChildrenProvider,
     getChildrenSchool,
-    postQuestionReponse, postChildInsurance, postChildProvider, postChildSchool
+    getSD_in_ZipCode,
+    postQuestionReponse, postChildInsurance, postChildProvider, postChildSchool, getSchoolDistrict
 } from "../session/Session";
 import Cookies from 'universal-cookie';
 import {sleep} from "../helpers";
@@ -29,16 +37,19 @@ class ProfileView extends Component {
         super(props);
 
         this.state = {
+            SelectedDistrict: [],
             Uid: '',
             Account_Type: '',
             Fname: '',
             Lname: '',
+            Local_Hold: [],
             Email: '',
             Password: '',
             Picture: '',
             Language: '',
             Children_Information: [],
             Children_Insurance: [],
+            Local_Districts: [],
             Children_Provider: [],
             Children_School: [],
             alertProps: {
@@ -81,12 +92,7 @@ class ProfileView extends Component {
                 Children_Provider: newArray
             });
         } else {
-            let newArray = Object.assign(this.state.Children_School);
-            newArray[childDataIndex].Name = event.target.value;
-            console.log(newArray);
-            this.setState({
-                Children_School: newArray
-            });
+            this.state.SelectedDistrict[childDataIndex] = event.target.value;
         }
     };
 
@@ -177,11 +183,10 @@ class ProfileView extends Component {
     };
 
     handleSchoolSubmit(e, childSchoolIndex) {
+
         const { Children_Information, Children_School} = this.state;
         e.preventDefault();
-        console.log(Children_Information);
-        console.log(childSchoolIndex);
-        postChildSchool(Children_Information[childSchoolIndex], Children_School[childSchoolIndex]).then((res) => {
+        postChildSchool(Children_Information[childSchoolIndex], this.state.SelectedDistrict[childSchoolIndex]).then((res) => {
             if (res.status === 200) {
                 this.setState({
                     alertProps: {
@@ -218,7 +223,9 @@ class ProfileView extends Component {
                 });
             }
         })
+        this. componentDidMount();
     };
+
 
     componentDidMount() {
         isUserLoggedIn().then(result => {
@@ -239,11 +246,15 @@ class ProfileView extends Component {
                         Language: json.Language
                     })
                 });
+
             getChildrenInfo().then(result => result.json())
                 .then(json => {
                     this.setState({
                         Children_Information: json.result
+                    }, () => { // After the children info has been updated, get the school districts for them
+                        this.getDistricts();
                     })
+
                 });
             getChildrenInsurance().then(result => result.json())
                 .then(json => {
@@ -263,11 +274,34 @@ class ProfileView extends Component {
                         Children_School: json.result
                     })
                 });
+
         });
     }
 
+    getDistricts() {
+        for (let child in this.state.Children_Information) {
+
+            getSD_in_ZipCode(this.state.Children_Information[child].PIid)
+                .then(schoolDistrictInfo => schoolDistrictInfo.json())
+                .then(schoolDistrictJson => {
+                    let Local_Districts = Object.assign(this.state.Local_Districts);
+                    Local_Districts = schoolDistrictJson;
+
+                    this.setState({
+                        Local_Districts
+                    });
+                    if(this.state.Children_Information[child].SDIid !== Local_Districts[0].SDIid) {
+                        this.state.SelectedDistrict[child] = Local_Districts[0].SDIid
+                    }
+                    else{
+                        this.state.SelectedDistrict[child] = Local_Districts[1].SDIid
+                    }
+                });
+        }
+    }
+
     render() {
-        const {Children_Information, Children_Insurance, Children_Provider, Children_School} = this.state;
+        const {Children_Information, Children_Insurance, Children_Provider, Children_School, Local_Districts} = this.state;
         let childInsuranceIndex = 0;
         let childProviderIndex = 0;
         let childSchoolIndex = 0;
@@ -331,7 +365,7 @@ class ProfileView extends Component {
                                             Children_Information.map(
                                                 (child) => {
                                                     if (Children_School[childSchoolIndex]) {
-                                                        return this.createChildSchoolTab(child, childSchoolIndex++, Children_School);
+                                                        return this.createChildSchoolTab(child, childSchoolIndex++, Children_School, Local_Districts);
                                                     }
                                                 })
                                         }
@@ -496,13 +530,14 @@ class ProfileView extends Component {
         );
     }
 
-    createChildSchoolTab(child, childSchoolIndex, childschool) {
+    createChildSchoolTab(child, childSchoolIndex, childschool, Local_Districts) {
         return (
             <Tab eventKey={childSchoolIndex+"school"} title={child.Fname + ' ' + child.Lname}>
                 <form onSubmit={(e) => this.handleSchoolSubmit(e, childSchoolIndex)}>
+
                     <div>
                         <FormGroup controlId="child_School_District" bsSize="medium">
-                            <ControlLabel>School District Phone</ControlLabel>
+                            <ControlLabel>School District</ControlLabel>
                             {typeof childschool[childSchoolIndex] === "undefined" &&
                             <FormControl
                                 value={"Undefined"}
@@ -520,8 +555,27 @@ class ProfileView extends Component {
                         </FormGroup>
                     </div>
                     <div>
+                        <FormGroup controlId="Address" bsSize="medium">
+                            <ControlLabel>Address</ControlLabel>
+                            {typeof childschool[childSchoolIndex] === "undefined" &&
+                            <FormControl
+                                value={"Undefined"}
+                                disabled="true"
+                            >
+                            </FormControl>
+                            }
+                            {typeof childschool[childSchoolIndex] !== "undefined" &&
+                            <FormControl
+                                value={childschool[childSchoolIndex].SD_Address +" "+ childschool[childSchoolIndex].City + ", " + childschool[childSchoolIndex].State + " " + childschool[childSchoolIndex].SD_Zip}
+                                disabled="true"
+                            >
+                            </FormControl>
+                            }
+                        </FormGroup>
+                    </div>
+                    <div>
                         <FormGroup controlId="child_school_phone" bsSize="medium">
-                            <ControlLabel>School District Phone</ControlLabel>
+                            <ControlLabel>Phone</ControlLabel>
                             {typeof childschool[childSchoolIndex] === "undefined" &&
                             <FormControl
                                 value={"Undefined"}
@@ -540,11 +594,11 @@ class ProfileView extends Component {
                     </div>
                     <div>
                         <FormGroup controlId="child_school_email" bsSize="medium">
-                            <ControlLabel>School District Email</ControlLabel>
+                            <ControlLabel>Email</ControlLabel>
                             {typeof childschool[childSchoolIndex] === "undefined" &&
                             <FormControl
                                 value={"Undefined"}
-                                disabled="true"
+
                             >
                             </FormControl>
                             }
@@ -556,26 +610,60 @@ class ProfileView extends Component {
                             </FormControl>
                             }
                         </FormGroup>
+
+                    </div>
+                    <div className="informationPanel">
                     </div>
                     <div>
                         <FormGroup controlId={childSchoolIndex} bsSize="medium">
-                            <ControlLabel>Other School District</ControlLabel>
+                            <ControlLabel>Other School Districts</ControlLabel>
                             <FormControl
                                 componentClass="select"
+                                ref = "hold"
                                 placeholder={childschool[childSchoolIndex].Name}
                                 value={childschool[childSchoolIndex].Name}
                                 onChange={(e)=>this.handleChange(e, 'school', childSchoolIndex)}
                             >
-                                <option value="South-Western City School Dist">South-Western City School Dist</option>
-                                <option value="School 2">School District 2</option>
+                                {typeof Local_Districts[0] !== "undefined" &&  Local_Districts[0].Dname !== childschool[childSchoolIndex].Dname &&
+                                <option
+                                    value={Local_Districts[0].SDIid}>{Local_Districts[0].Dname}</option>
+                                }
+                                {typeof Local_Districts[1] !== "undefined" && Local_Districts[1].Dname !== childschool[childSchoolIndex].Dname &&
+                                <option
+                                    value={Local_Districts[1].SDIid}>{Local_Districts[1].Dname }</option>
+                                }
+                                {typeof Local_Districts[2] !== "undefined" && Local_Districts[2].Dname !== childschool[childSchoolIndex].Dname &&
+                                <option
+                                    value={Local_Districts[2].SDIid}>{Local_Districts[2].Dname}</option>
+                                }
+                                {typeof Local_Districts[3] !== "undefined" && Local_Districts[3].Dname !== childschool[childSchoolIndex].Dname &&
+                                <option
+                                    value={Local_Districts[3].SDIid}>{Local_Districts[3].Dname}</option>
+                                }
+                                {typeof Local_Districts[4] !== "undefined" && Local_Districts[4].Dname !== childschool[childSchoolIndex].Dname &&
+                                <option
+                                    value={Local_Districts[4].SDIid}>{Local_Districts[4].Dname}</option>
+                                }
+                                {typeof Local_Districts[5] !== "undefined" && Local_Districts[5].Dname !== childschool[childSchoolIndex].Dname &&
+                                <option
+                                    value={Local_Districts[5].SDIid}>{Local_Districts[5].Dname}</option>
+                                }
+                                {typeof Local_Districts[6] !== "undefined" && Local_Districts[6].Dname !== childschool[childSchoolIndex].Dname &&
+                                <option
+                                    value={Local_Districts[6].SDIid}>{Local_Districts[6].Dname}</option>
+                                }
+                                {typeof Local_Districts[7] !== "undefined" && Local_Districts[7].Dname !== childschool[childSchoolIndex].Dname &&
+                                <option
+                                    value={Local_Districts[7].SDIid}>{Local_Districts[7].Dname}</option>
+                                }
                             </FormControl>
                         </FormGroup>
+
                     </div>
-                    <Button type="submit" className={"btn btn-primary"}>Save Changes</Button>
+                    <Button type="submit" className={"btn btn-primary"}>Change District</Button>
                 </form>
             </Tab>
         );
-    }
-}
+    }}
 
 export default ProfileView;

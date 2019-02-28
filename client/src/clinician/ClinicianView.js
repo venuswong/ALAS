@@ -4,6 +4,7 @@ import {Panel, PanelGroup, ProgressBar} from 'react-bootstrap';
 import {getActionsByPIid, getParentEmailByPIid, getPatients} from "../session/Session";
 import ClinicianComponent from "./ClinicianComponent";
 import './ClinicianView.css';
+import moment from 'moment'
 
 class ClinicianView extends Component {
     constructor(props) {
@@ -81,17 +82,17 @@ class ClinicianView extends Component {
             });
     }
 
-    createPanelBodyByPIid(PIid) {
+    createPanelBodyByPIid(PIid, age) {
         const { Actions, parentEmails } = this.state;
         const parentEmail = parentEmails[PIid];
         const actions = Actions[PIid];
-
         return (
             <div>
                 <a href={'mailto:' + parentEmail} className={'panel-contact-link'}>Contact parent</a><br/>
                 {typeof actions !== 'undefined' &&
                     actions.map(action => {
-                        return <ClinicianComponent action={action} onToggle={() => this.handleToggle(this.state.lastSearch)}/>
+                        return <ClinicianComponent action={action} age={age} onToggle={() =>
+                            this.handleToggle(this.state.lastSearch)}/>
                     })
                 }
             </div>
@@ -101,9 +102,10 @@ class ClinicianView extends Component {
     createPanelFromPatient(PIid) {
         const { Patient_Info, Actions } = this.state;
         const patientName = Patient_Info[PIid].Fname + ' ' + Patient_Info[PIid].Lname;
+        const age = moment().diff(moment(this.state.Patient_Info[PIid].DoB), 'year');
 
         // calculate number of completed and total actions associated with a PIid
-        let i = 0, numActions = 0, numCompleted = 0;
+        let i = 0, numActions = 0, numCompleted = 0, numStarted = 0;
         const patientActions = Actions[PIid];
 
         if (typeof patientActions !== 'undefined') {
@@ -111,6 +113,9 @@ class ClinicianView extends Component {
                 numActions++;
                 if (patientActions[i].IsCompleted === 1) {
                     numCompleted++;
+                }
+                if (patientActions[i].IsCompleted === 0 && patientActions[i].IsStarted === 1) {
+                    numStarted++;
                 }
             }
         }
@@ -129,17 +134,14 @@ class ClinicianView extends Component {
                     label={`No actions found`}
                 />
             );
-        } else if (numCompleted === 0) {
-            progressBar = (
-                <div>No actions have been completed</div>
-            );
         } else {
             progressBar = (
-                <ProgressBar
-                    bsStyle="success"
-                    now={(100*numCompleted/numActions).toFixed(0)}
-                    label={numCompleted + ' of ' + numActions + ' actions completed.'}
-                />
+                <ProgressBar>
+                    <ProgressBar bsStyle="success" now={(100 * numCompleted/numActions).toFixed(0)}
+                                 label={numCompleted + ' of ' + numActions + ' actions completed.'}/>
+                    <ProgressBar bsStyle="warning" now={(100 * numStarted/numActions).toFixed(0)}
+                                 label={numStarted + ' of ' + numActions + ' actions in-progress'}/>
+                </ProgressBar>
             );
         }
 
@@ -154,7 +156,7 @@ class ClinicianView extends Component {
                     </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                    { this.createPanelBodyByPIid(PIid) }
+                    { this.createPanelBodyByPIid(PIid, age) }
                 </Panel.Body>
             </Panel>
         );
