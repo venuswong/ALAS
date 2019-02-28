@@ -43,6 +43,10 @@ class ActionComponent extends Component {
         this.toggleNote = this.toggleNote.bind(this);
     }
 
+    componentDidMount() {
+        this.GetNumber(this.state.action.SDIid);
+    }
+
     getActionText(ActionType) {
         switch (ActionType) {
             case "IEP_GET":
@@ -255,8 +259,8 @@ class ActionComponent extends Component {
     createActionComponent() {
         return this.renderActionCard();
     }
-    GetNumber(SDIid) {
 
+    GetNumber(SDIid) {
             getSDPhoneNumber(SDIid)
                 .then(schoolDistrictInfo => schoolDistrictInfo.json())
                 .then(schoolDistrictJson => {
@@ -272,7 +276,6 @@ class ActionComponent extends Component {
         const {IsCompleted, IsStarted} = this.state.action;
         const progress_table = this.state.progress_table;
         const {title, description_title, description, phoneScript} = this.state.actionText;
-        this.GetNumber(this.state.action.SDIid);
         var phoneNumber = 'tel:18888888888';
         console.log(this.state.action.ActionType);
         if(this.state.action.ActionType === "IEP_GET") {
