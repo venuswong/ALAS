@@ -62,8 +62,6 @@ class ClinicianComponent extends Component {
     static displayProgressSymbol(isCompleted, isStarted) {
         if (isCompleted) {
             return <img alt="Complete" className="completed-checkmark" src={CheckmarkIcon}/>
-        } else if(!isCompleted && isStarted) {
-            return <img alt="In Progress" className="in-progress-circle" src={InProgressIcon}/>;
         } else {
             return;
         }
@@ -115,7 +113,7 @@ class ClinicianComponent extends Component {
                                 {this.state.action.Note && this.state.action.Note.length > 0 ?
                                     <textarea class="patient-note" readOnly="true">{this.state.action.Note}</textarea>
                                     :
-                                    <p>None</p>
+                                    <p style={{marginTop: 1 + 'rem'}}>None</p>
                                 }
                             </div>
                         ) : (

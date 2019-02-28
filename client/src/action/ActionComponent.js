@@ -10,6 +10,7 @@ import OverlayTrigger from "react-bootstrap/es/OverlayTrigger"
 import CheckmarkIcon from '../image/alas-checkmark.svg'
 import CheckmarkIconNavy from '../image/alas-checkmark-navy.svg'
 import InProgressIcon from '../image/in-progress-circle.svg'
+import DownArrow from '../image/down-arrow.svg'
 import "react-select";
 import 'classnames'
 
@@ -25,6 +26,7 @@ class ActionComponent extends Component {
             actionText: this.getActionText(action.ActionType),
             open_Description: false,
             open_Script: false,
+            noteExpanded: false,
             progress_table: [],
             School_Phone: "",
             remainingCharacters: 500,
@@ -38,6 +40,7 @@ class ActionComponent extends Component {
         this.toggleMessage = this.toggleMessage.bind(this);
         this.loadProgress = this.loadProgress.bind(this);
         this.toggleCompleted = this.toggleCompleted.bind(this);
+        this.toggleNote = this.toggleNote.bind(this);
     }
 
     getActionText(ActionType) {
@@ -58,9 +61,6 @@ class ActionComponent extends Component {
     displayProgressSymbol(isCompleted, isStarted) {
         if (isCompleted) {
             return <img className="completed-checkmark" src={CheckmarkIcon}/>
-        } else if(!isCompleted && isStarted)
-        {
-            return <img className="in-progress-circle" src={InProgressIcon}/>;
         } else {
             return;
         }
@@ -77,7 +77,8 @@ class ActionComponent extends Component {
         });
     }
 
-    saveNote() {
+    saveNote(event) {
+        event.preventDefault();
         updateActionNote(this.state.action).then(result => {
             if (result.status === 200 || result.status === 304) {
                 this.setState({
@@ -94,10 +95,19 @@ class ActionComponent extends Component {
         });
     }
 
-//<button onClick={this.toggleMessage} className="btn btn-default buttonWidth">I'm having an issue</button>-->
+    toggleNote() {
+        this.setState({
+            noteExpanded: !this.state.noteExpanded
+        })
+    }
+
     displayProgressOptions(isCompleted, isStarted) {
         let checkmarkVisibility = isStarted ? 'checkmark-small' : 'checkmark-hidden';
-        let noteVisibility = isStarted ? 'clinician-note' : 'note-hidden';
+        let noteVisibility = isStarted ? 'note-container' : 'note-container-hidden';
+        let noteExpanded = isStarted && this.state.noteExpanded ? 'clinician-note' : 'note-hidden';
+        let arrowState = this.state.noteExpanded? 'arrow arrow-up' : 'arrow arrow-down';
+        let expandButtonState = this.state.noteExpanded? 'toggle-note-button expanded' : 'toggle-note-button';
+
         if (isCompleted) {
             return (
                 <div class="progress-buttons">
@@ -109,23 +119,28 @@ class ActionComponent extends Component {
                 <div class="in-progress-container">
                     <div class="progress-buttons">
                         <button onClick={this.toggleCompleted} class="btn btn-default buttonWidth completion-button">Mark as Complete</button>
-                        <div class="checkbox-container">I'm having an issue
+                        <div class="checkbox-container">In-progress
                             <div class="checkmark" onClick={this.toggleMessage}>
                                 <img alt="checkmark" class={checkmarkVisibility} src={CheckmarkIconNavy} />
                             </div>
                         </div>
                     </div>
-                    <div class="note-container">
-                        <div class={noteVisibility}>
-                            <div class="note-form">
-                                <label class="note-label">Describe the issue to your clinician (optional):</label>
-                                <textarea class="note-text-box" placeholder="Type something..." onChange={this.updateNote}>{this.state.action.Note}</textarea>
+                    <div class={noteVisibility}>
+                        <button onClick={this.toggleNote} class={expandButtonState}>
+                            Take notes for clinician
+                            <img src={DownArrow} alt="arrow" class={arrowState}/>
+                        </button>
+                        <div class={noteExpanded}>
+                            <form onSubmit={this.saveNote} id={"action-form-" + this.state.action.Aid} class="note-form">
+                                <textarea form={"action-form-" + this.state.action.Aid} class="note-text-box" placeholder="Type something..."
+                                          onChange={this.updateNote}>{this.state.action.Note}
+                                </textarea>
                                 <div class="form-save">
                                     <p class="database-error-text">{this.state.errorText}</p>
                                     <p class="characters-remaining">{this.state.remainingCharacters}</p>
-                                    <button onClick={this.saveNote} class={this.state.saveButtonClass}>{this.state.saveButtonValue}</button>
+                                    <input type="submit" class={this.state.saveButtonClass} value={this.state.saveButtonValue}/>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -161,7 +176,8 @@ class ActionComponent extends Component {
         let newAction = Object.assign(this.state.action);
         newAction.IsStarted = !this.state.action.IsStarted;
         this.setState({
-            action: newAction
+            action: newAction,
+            noteExpanded: false
         });
 
         fetch("/api/patient/update_progress", {
@@ -183,7 +199,8 @@ class ActionComponent extends Component {
                     action: newAction
                 });
                 // Update in DB
-                updateAction({Aid: newAction.Aid, IsCompleted: newAction.IsCompleted, CompletedDate: newAction.CompletedDate, IsStarted: newAction.IsStarted, Note: newAction.Note});
+                updateAction({Aid: newAction.Aid, IsCompleted: newAction.IsCompleted,
+                    CompletedDate: newAction.CompletedDate, IsStarted: newAction.IsStarted, Note: newAction.Note});
             }
         });
     }
@@ -228,70 +245,14 @@ class ActionComponent extends Component {
                     action: newAction
                 });
                 // Update in DB
-                updateAction({Aid: newAction.Aid, IsCompleted: newAction.IsCompleted, CompletedDate: newAction.CompletedDate, IsStarted: newAction.IsStarted});
+                updateAction({Aid: newAction.Aid, IsCompleted: newAction.IsCompleted,
+                    CompletedDate: newAction.CompletedDate, IsStarted: newAction.IsStarted});
             }
         });
     }
 
 
     createActionComponent() {
-        const {IsCompleted, IsStarted} = this.state.action;
-        const progress_table = this.state.progress_table;
-
-        const popoverTop = (
-            <Popover id="popover-positioned-top">
-                <div>
-                    <span>
-                        <Button onClick={this.toggleMessage}>Left Message</Button>
-                        {IsCompleted &&
-                        <Button bsStyle={"success"} onClick={this.toggleCompleted}>
-                            Completed
-                        </Button>
-                        }
-                        {!IsCompleted &&
-                        <Button bsStyle={"primary"} onClick={this.toggleCompleted}>
-                            Mark Completed
-                        </Button>
-                        }
-                    </span>
-                </div>
-            </Popover>
-        );
-
-        const popoverProgress = (
-            <Popover id="popover-positioned-left">
-                <div>
-                    {this.state.progress_table.length ? (
-                        <Table striped bordered condensed hover>
-                            <thead>
-                            <tr>
-                                <th>Action</th>
-                                <th>Date</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                progress_table.map(
-                                    (progress_row) => {
-                                        return (
-                                            <tr>
-                                                <td>{progress_row.progress}</td>
-                                                <td>{progress_row.Ptime.substring(0, 10)}</td>
-                                            </tr>
-                                        );
-                                    }
-                                )
-                            }
-                            </tbody>
-                        </Table>
-                    ) : (
-                        <p>No progress has been made yet.</p>
-                    )
-                    }
-                </div>
-            </Popover>
-        );
-
         return this.renderActionCard();
     }
     GetNumber(SDIid) {
