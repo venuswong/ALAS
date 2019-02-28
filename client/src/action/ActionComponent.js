@@ -20,6 +20,10 @@ class ActionComponent extends Component {
 
         const action = props.action;
         console.log(action);
+        let noteLength = 500;
+        if (action.Note && action.Note.length) {
+            noteLength = 500 - action.Note.length
+        }
 
         this.state = {
             action,
@@ -28,7 +32,7 @@ class ActionComponent extends Component {
             open_Script: false,
             noteExpanded: false,
             progress_table: [],
-            remainingCharacters: 500,
+            remainingCharacters: noteLength,
             saveButtonValue: "Save",
             saveButtonClass: "btn btn-default note-save-button",
             errorText: ""
@@ -131,9 +135,8 @@ class ActionComponent extends Component {
                         </button>
                         <div class={noteExpanded}>
                             <form onSubmit={this.saveNote} id={"action-form-" + this.state.action.Aid} class="note-form">
-                                <textarea form={"action-form-" + this.state.action.Aid} class="note-text-box" placeholder="Type something..."
-                                          onChange={this.updateNote}>{this.state.action.Note}
-                                </textarea>
+                                <textarea class="note-text-box" placeholder="Type something..."
+                                          onChange={this.updateNote} value={this.state.action.Note} autoFocus/>
                                 <div class="form-save">
                                     <p class="database-error-text">{this.state.errorText}</p>
                                     <p class="characters-remaining">{this.state.remainingCharacters}</p>
