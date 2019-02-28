@@ -155,6 +155,11 @@ class ActionComponent extends Component {
         });
     }
 
+    componentDidMount() {
+        if(this.state.action.ActionType === "IEP_GET"){
+        this.GetNumber(this.state.action.SDIid);
+         }
+    }
 
     createActionComponent() {
         const {IsCompleted, IsStarted} = this.state.action;
@@ -233,9 +238,7 @@ class ActionComponent extends Component {
         const {IsCompleted, IsStarted} = this.state.action;
         const progress_table = this.state.progress_table;
         const {title, description_title, description, phoneScript} = this.state.actionText;
-        this.GetNumber(this.state.action.SDIid);
         var phoneNumber = 'tel:18888888888';
-        console.log(this.state.action.ActionType);
         if(this.state.action.ActionType === "IEP_GET") {
             if (this.state.School_Phone !== "") {
                 phoneNumber = "tel:" + this.state.School_Phone[0].Phone
