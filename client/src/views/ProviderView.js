@@ -13,32 +13,35 @@ import {
 } from "../session/Session";
 
 class ProviderView extends Component {
-    get_distance(home, home_city, home_state, home_zip, dest, dest_city, dest_state, dest_zip) {
-        var distance = require('google-distance');
-    }
 
     constructor(props) {
         super(props);
-
         this.state = {
-            //Uid: '',
-            //Account_Type: '',
-            //Fname: '',
-            //Lname: '',
-            //Email: '',
-            //Password: '',
-            //Picture: '',
-            //Language: '',
-            //Children_Information: [],
             Children_Insurance: [],
             Children_Provider: [],
-            //Children_School: [],
             alertProps: {
                 show: false,
                 message: '',
                 bsStyle: '',
             }
         };
+    }
+
+    get_distance (home, home_city, home_state, home_zip, dest, dest_city, dest_state, dest_zip) {
+        const distance = require('google-distance');
+        const town = home_city + "," + home_state;
+        const provider = dest_city + "," + dest_state;
+        distance.apiKey = 'AIzaSyC9ME3rZDKiZV8MC51EF6m7hphxp2eEiLk';
+        distance.get(
+            {
+                origin: town,
+                destination: provider
+            },
+            function(err, data) {
+                if (err) return console.log(err);
+                console.log(data);
+            });
+        return("<td>lorem</td>");
     }
 
     componentDidMount() {
@@ -52,10 +55,11 @@ class ProviderView extends Component {
 
     render(){
         const {Children_Provider} = this.state;
-        console.log(Children_Provider);
+        const self = this;
+        //console.log(Children_Provider);
         return(
             <div className={"defaultview"}>
-                <h1>Here are some providers that accept your insurance: </h1>
+                <h3>Here are some providers that accept your insurance: </h3>
                 <table>
                     <tbody>
                     <tr>
@@ -63,12 +67,17 @@ class ProviderView extends Component {
                         <th>Phone</th>
                         <th>Address</th>
                         <th>Distance</th>
+                        <th>Add to List</th>
                     </tr>{Children_Provider.map(function(item, key){
                         return (
-                            <tr key = {key}>
-                                <td>{item.Name}</td>
+                            <tr key = {key} id={item.Prov_ID}>
+                                <td class="provider">{item.Name}</td>
                                 <td>{item.Phone}</td>
-                                <td>{item.Address_Line1} {item.City} {item.State} {item.Zip}</td>
+                                <td>{item.Address_Line1} {item.City}, {item.State} {item.Zip}</td>
+                                <td>{item.Zip}</td>
+                                <td><form>
+                                    <input id={"shortlist"} type={"checkbox"}/>
+                                </form></td>
                             </tr>
                         )
                     })}</tbody>

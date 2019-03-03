@@ -16,7 +16,18 @@ th, td {
 */
 table, th, td {
     border-collapse: collapse;
-    border: 1px solid black;
+    border: 0.5px solid black;
     padding: 5px;
     text-align: center;
 }
+
+th {
+    background-color: #1a4397;
+    color: white;
+}
+
+.provider {
+    text-align: left;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;}
