@@ -1,0 +1,33 @@
+/*
+#providers, th, td {
+    border-collapse: collapse;
+    border: 1px solid black;
+    padding: 5px;
+    text-align: center;
+}
+
+th, td {
+    width: 5%;
+}
+
+#first {
+    width: 20%;
+}
+*/
+table, th, td {
+    border-collapse: collapse;
+    border: 0.5px solid black;
+    padding: 5px;
+    text-align: center;
+}
+
+th {
+    background-color: #1a4397;
+    color: white;
+}
+
+.provider {
+    text-align: left;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;}

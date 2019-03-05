@@ -27,7 +27,8 @@ router.get('/getActions', function (req, res) {
     if (!req.session.Uid) {
         return res.status(404).send("User is not logged in");
     } else {
-        const query = 'SELECT A.Aid, A.PIid, A.ActionType, A.IsCompleted, A.CompletedDate, A.IsStarted, A.Note FROM Actions AS A, Patient_Info AS PI WHERE A.PIid = PI.PIid AND PI.Uid = ?;';
+        const query = 'SELECT A.Aid, PI.SDIid, A.PIid, A.ActionType, A.IsCompleted, A.CompletedDate, A.IsStarted, A.Note' +
+            ' FROM Actions AS A, Patient_Info AS PI WHERE A.PIid = PI.PIid AND PI.Uid = ?;';
         const filter = [req.session.Uid];
         db.query(query, filter, function(err, result){
             if (err) {
@@ -217,6 +218,27 @@ router.get('/childreninsurance', function (req, res) {
     }
 });
 
+router.get('/childrenprovider', function (req, res) {
+    if (req.session.Uid) {
+        const query = "SELECT DISTINCT Pr.Name, Pr.Prov_ID, Loc.Phone, Loc.Address_Line1, Loc.City, Loc.State, Loc.Zip\n" +
+            "FROM ABA_Providers AS Pr, Users AS U, Provider_Locations AS Loc, Patient_Info AS PI\n" +
+            "WHERE (Loc.Loc_ID = Pr.Address)\n" +
+            "AND (INSTR(Pr.Ins_Id, PI.Iid) > 0)\n" +
+            "AND (U.Uid = ?);";
+        const filter = [req.session.Uid];
+        db.query(query, filter, function(err, result){
+            if (err) throw err;
+            if (result && result.length >= 0) {
+                return res.status(200).json({result});
+            } else {
+                res.status(404).send("User not logged in");
+            }
+        });
+    } else {
+        res.status(404).send("User not logged in");
+    }
+});
+
 router.post('/updatechildinsurance', function (req, res) {
     const params = req.body;
     const information = params.information;
@@ -245,22 +267,22 @@ router.post('/updatechildinsurance', function (req, res) {
 });
 
 router.post('/updatechildschool', function (req, res) {
+
     const params = req.body;
-    console.log(params.school);
-    const information = params.information;
-    const schoolName = params.school.DName;
-    const Uid = information.Uid;
-    const PIid = information.PIid;
+
+    const PIid = params.Info.PIid;
+    const Uid =  params.Info.Uid
+    const schoolID = params.schoolID;
+
     if (!req.session.Uid) {
+
         res.status(404).send("User is not logged in");
     } else {
         if (req.session.Uid !== Uid) {
             res.status(404).send("User currently logged in does not correspond to child");
         } else {
-            const query = 'UPDATE Patient_Info ' +
-                'SET Patient_Info.SDIid =(SELECT SDIid FROM School_District_Info WHERE School_District_Info.DName = ?) ' +
-                'WHERE Patient_Info.PIid = ?';
-            const filter = [schoolName, PIid];
+            const query = 'UPDATE Patient_Info SET Patient_Info.SDIid = ? WHERE Patient_Info.PIid = ?;';
+            const filter = [schoolID, PIid];
             db.query(query, filter, function (err, result) {
                 if (err) throw err;
                 else {
@@ -273,7 +295,58 @@ router.post('/updatechildschool', function (req, res) {
 
 router.get('/childrenschool', function (req, res) {
     if (req.session.Uid) {
-        const query = 'SELECT Dname, Phone, Email FROM School_District_Info AS SDI, Patient_Info AS PI WHERE SDI.SDIid = PI.SDIid AND PI.Uid = ?;';
+        const query = 'SELECT * FROM School_District_Info AS SDI, Patient_Info AS PI WHERE SDI.SDIid = PI.SDIid AND PI.Uid = ?;';
+        const filter = [req.session.Uid];
+        db.query(query, filter, function(err, result){
+            if (err) throw err;
+            if (result && result.length >= 1) {
+                return res.status(200).json({result});
+            } else {
+                res.status(404).send("User not logged in");
+            }
+        });
+    } else {
+        res.status(404).send("User not logged in");
+    }
+});
+
+router.get('/SD_in_zip/:P_ID', function(req, res) {
+    const PatientID = req.params.P_ID;
+    if (!req.session.Uid) {
+        return res.status(404).send("User is not logged in");
+    } else {
+        const query = 'select Dname, SD.SDIid from School_District_Info AS SD, (Select * From ZipCode AS Z, Patient_Info AS PI WHERE Z.ZipID = PI.PI_Zip AND PI.PIid = ?) as Zip where Zip.District1 = SD.SDIid OR  Zip.District2 = SD.SDIid or  Zip.District3 = SD.SDIid or  Zip.District4 = SD.SDIid or  Zip.District5 = SD.SDIid or  Zip.District6 = SD.SDIid or  Zip.District7 = SD.SDIid or Zip.District8 = SD.SDIid;';
+        const filter = [PatientID];
+        db.query(query, filter, function (err, result) {
+            if (err) {
+                return res.sendStatus(500);
+            } else {
+                return res.status(200).send(JSON.stringify(result));
+            }
+        });
+    }
+});
+
+router.get('/SDiID_to_Phone/:SDI_id', function(req, res) {
+    const SchoolID = req.params.SDI_id;
+    if (!req.session.Uid) {
+        return res.status(404).send("User is not logged in");
+    } else {
+        const query = 'select Phone From School_District_Info where SDIid = ?;';
+        const filter = [SchoolID];
+        db.query(query, filter, function (err, result) {
+            if (err) {
+                return res.sendStatus(500);
+            } else {
+                return res.status(200).send(JSON.stringify(result));
+            }
+        });
+    }
+});
+
+router.get('zip_to_SD', function (req, res) {
+    if (req.session.Uid) {
+        const query = 'SELECT Dname FROM School_District_Info AS SD WHERE SD.SD_Zip = ?;';
         const filter = [req.session.Uid];
         db.query(query, filter, function(err, result){
             if (err) throw err;

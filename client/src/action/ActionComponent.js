@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Panel, Button, Glyphicon, FormGroup, FormControl} from "react-bootstrap";
-import {updateAction, updateActionNote} from "../session/Session";
+import {getSD_in_ZipCode, updateAction, getSDPhoneNumber, updateActionNote} from "../session/Session";
 import Collapse from "@material-ui/core/Collapse/Collapse";
 import Well from "react-bootstrap/es/Well";
 import {Grid, Row, Col} from "react-bootstrap/es";
@@ -32,6 +32,7 @@ class ActionComponent extends Component {
             open_Script: false,
             noteExpanded: false,
             progress_table: [],
+            School_Phone: "",
             remainingCharacters: noteLength,
             saveButtonValue: "Save",
             saveButtonClass: "btn btn-default note-save-button",
@@ -44,6 +45,12 @@ class ActionComponent extends Component {
         this.loadProgress = this.loadProgress.bind(this);
         this.toggleCompleted = this.toggleCompleted.bind(this);
         this.toggleNote = this.toggleNote.bind(this);
+    }
+
+    componentDidMount() {
+        if(this.state.action.ActionType === "IEP_GET"){
+            this.GetNumber(this.state.action.SDIid);
+        }
     }
 
     getActionText(ActionType) {
@@ -258,11 +265,28 @@ class ActionComponent extends Component {
         return this.renderActionCard();
     }
 
+    GetNumber(SDIid) {
+            getSDPhoneNumber(SDIid)
+                .then(schoolDistrictInfo => schoolDistrictInfo.json())
+                .then(schoolDistrictJson => {
+                    let School_Phone = Object.assign(this.state.School_Phone);
+                    School_Phone = schoolDistrictJson;
+                    this.setState({
+                        School_Phone
+                    });
+                });
+    }
+
     renderActionCard() {
         const {IsCompleted, IsStarted} = this.state.action;
         const progress_table = this.state.progress_table;
         const {title, description_title, description, phoneScript} = this.state.actionText;
-        const phoneNumber = 'tel:18008888888'; // TODO: Get this from DB
+        var phoneNumber = 'tel:18888888888';
+        if(this.state.action.ActionType === "IEP_GET") {
+            if (this.state.School_Phone !== "") {
+                phoneNumber = "tel:" + this.state.School_Phone[0].Phone
+            }
+        }
         const classes = require('classnames');
         const actionCardStyle = classes({
             'action-card-completed': IsCompleted,

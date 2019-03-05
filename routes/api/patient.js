@@ -11,7 +11,7 @@ router.get('/:PIid', function (req, res) {
         res.status(404).send("User is not logged in");
     } else {
         // Filter by Uid to prevent Users from accessing Patient_Info rows that do not belong to them
-        const query = 'SELECT PI.Fname, PI.Lname, PI.DoB, PI.SDIid FROM Patient_Info AS PI WHERE PI.Uid = ? AND PI.PIid = ?;';
+        const query = 'SELECT PI.Fname, PI.Lname, PI.DoB, PI.SDIid, PI.Iid FROM Patient_Info AS PI WHERE PI.Uid = ? AND PI.PIid = ?;';
         const filter = [req.session.Uid, PIid];
         db.query(query, filter, function(err, result){
             if (err) throw err;

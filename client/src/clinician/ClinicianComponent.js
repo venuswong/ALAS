@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import {Button, Glyphicon, Panel, Table} from "react-bootstrap";
 import Collapse from "@material-ui/core/Collapse/Collapse";
 import '../action/ActionComponent.css';
 import Well from "../action/ActionComponent";

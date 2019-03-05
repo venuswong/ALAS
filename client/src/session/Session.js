@@ -153,7 +153,41 @@ export function postChildInsurance(information, insurance) {
     });
 }
 
-export function postChildSchool(information, school) {
+export function getChildrenProvider() {
+    return fetch("/api/user/childrenprovider", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export function getChildrenEligibleProviders() {
+    return fetch("/api/user/childrenEligibleProviders", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+/*
+export function postChildProvider(information, provider) {
+    return fetch("/api/user/updatechildprovider", {
+        method: "post",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        // Serialize JSON body
+        body: JSON.stringify({information, provider})
+    });
+}
+*/
+
+export function postChildSchool(Info, schoolID) {
     return fetch("/api/user/updatechildschool", {
         method: "post",
         headers: {
@@ -161,12 +195,42 @@ export function postChildSchool(information, school) {
             'Content-Type': 'application/json'
         },
         // Serialize JSON body
-        body: JSON.stringify({information, school})
+        body: JSON.stringify({Info, schoolID})
     });
 }
 
 export function getChildrenSchool() {
     return fetch("/api/user/childrenschool", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export function getSD_From_SDIid() {
+    return fetch("/api/user/zip_to_SD", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export function getSD_in_ZipCode(P_ID) {
+    return fetch("/api/user/SD_in_zip/" + P_ID.toString(), {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export function getSDPhoneNumber(SDI_id) {
+    return fetch("/api/user/SDiID_to_Phone/" + SDI_id.toString(), {
         method: "get",
         headers: {
             'Accept': 'application/json',

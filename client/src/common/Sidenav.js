@@ -53,6 +53,7 @@ class Sidenav extends React.Component {
                     <div>
                         <a href="/">Things To Do</a>
                         <a href="/profile">My Profile</a>
+                        <a href="/providers">ABA Providers</a>
                         <a href="/faq">FAQ</a>
                         <a href="/about">About</a>
                     </div>
