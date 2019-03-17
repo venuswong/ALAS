@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {FormControl} from "react-bootstrap";
+import {Button, FormControl, Glyphicon} from "react-bootstrap";
 import "./ProviderView.css"
 import {
     //isUserLoggedIn,
@@ -71,8 +71,14 @@ class ProviderView extends Component {
                     </tr>{Children_Provider.map(function(item, key){
                         return (
                             <tr key = {key} id={item.Prov_ID}>
-                                <td class="provider">{item.Name}</td>
-                                <td>{item.Phone}</td>
+                                <td class="provider"><a href={item.Website}>{item.Name}</a></td>
+                                <td>{item.Phone}
+                                    <a href={item.Phone_Link}>
+                                        <Button className={"buttonWidth"}>
+                                            <Glyphicon glyph={"glyphicon glyphicon-earphone phone-glyph"}/>
+                                        </Button>
+                                    </a>
+                                </td>
                                 <td>{item.Address_Line1} {item.City}, {item.State} {item.Zip}</td>
                                 <td>{item.Zip}</td>
                                 <td><form>
