@@ -22,6 +22,15 @@
     margin-bottom: 0.6rem;
 }
 
+.provider-button {
+    padding: 1rem 1.5rem;
+}
+
+.users-icon {
+    width: 25px;
+    margin-left: 10px;
+}
+
 .incomplete {
     color: #4677d8;
     padding-left: 15px;

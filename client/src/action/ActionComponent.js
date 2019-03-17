@@ -9,7 +9,7 @@ import { Popover, Table } from 'react-bootstrap';
 import OverlayTrigger from "react-bootstrap/es/OverlayTrigger"
 import CheckmarkIcon from '../image/alas-checkmark.svg'
 import CheckmarkIconNavy from '../image/alas-checkmark-navy.svg'
-import InProgressIcon from '../image/in-progress-circle.svg'
+import UsersIcon from '../image/users.svg'
 import DownArrow from '../image/down-arrow.svg'
 import "react-select";
 import 'classnames'
@@ -321,7 +321,9 @@ class ActionComponent extends Component {
                     <span>
                         {!this.state.action.IsCompleted &&
                             <a href="/providers">
-                                <button class="btn btn-default provider-button">Visit the Provider Hub</button>
+                                <button class="btn btn-default provider-button">Visit the Provider Hub
+                                    <img src={UsersIcon} class="users-icon" alt="Providers"/>
+                                </button>
                             </a>
                         }
                         {this.displayProgressOptions(this.state.action.IsCompleted, this.state.action.IsStarted)}
