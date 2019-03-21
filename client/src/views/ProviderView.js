@@ -36,6 +36,23 @@ class ProviderView extends Component {
             });
     }
 
+    renderProviderCard(item, key) {
+        return (
+            <div class="provider-card">
+                <p class="provider"><a href={item.Website}>{item.Name}</a></p>
+                <div class="provider-phone">
+                    <a href={item.Phone_Link}>
+                        <Button className={"buttonWidth"}>
+                            <span class="phone-number">{item.Phone}</span>
+                            <Glyphicon glyph={"glyphicon glyphicon-earphone phone-glyph"}/>
+                        </Button>
+                    </a>
+                </div>
+                <p class="provider-address">{item.Address_Line1} {item.City}, {item.State} {item.Zip}</p>
+            </div>
+        );
+    }
+
     render() {
         const {Children_Provider} = this.state;
         const self = this;
@@ -43,37 +60,9 @@ class ProviderView extends Component {
         return (
             <div className={"defaultview"}>
                 <h3>Here are some providers that accept your insurance: </h3>
-                <table>
-                    <tbody>
-                    <tr>
-                        <th>Provider</th>
-                        <th>Phone</th>
-                        <th>Address</th>
-                        <th>Distance</th>
-                        <th>Add to List</th>
-                    </tr>
                     {Children_Provider.map(function (item, key) {
-                        return (
-                            <tr key={key} id={item.Prov_ID}>
-                                <td class="provider"><a href={item.Website}>{item.Name}</a></td>
-                                <td>{item.Phone}
-                                    <a href={item.Phone_Link}>
-                                        <Button className={"buttonWidth"}>
-                                            <Glyphicon glyph={"glyphicon glyphicon-earphone phone-glyph"}/>
-                                        </Button>
-                                    </a>
-                                </td>
-                                <td>{item.Address_Line1} {item.City}, {item.State} {item.Zip}</td>
-                                <td>{item.Zip}</td>
-                                <td>
-                                    <form>
-                                        <input id={"shortlist"} type={"checkbox"}/>
-                                    </form>
-                                </td>
-                            </tr>
-                        )
-                    })}</tbody>
-                </table>
+                        return self.renderProviderCard(item, key);
+                    })}
             </div>
         );
     }
