@@ -27,11 +27,17 @@ class ProviderView extends Component {
         };
     }
 
+    /*paginateProviders() {
+        let numberOfPages = Math.ceil(this.state.Children_Provider.length % 6);
+    }*/
+
     componentDidMount() {
         getChildrenProvider().then(result => result.json())
             .then(json => {
                 this.setState({
                     Children_Provider: json.result
+                }, () => {
+                    //this.paginateProviders();
                 })
             });
     }
@@ -41,12 +47,11 @@ class ProviderView extends Component {
             <div class="provider-card">
                 <p class="provider"><a href={item.Website}>{item.Name}</a></p>
                 <div class="provider-phone">
-                    <a href={item.Phone_Link}>
-                        <Button className={"buttonWidth"}>
-                            <span class="phone-number">{item.Phone}</span>
-                            <Glyphicon glyph={"glyphicon glyphicon-earphone phone-glyph"}/>
-                        </Button>
-                    </a>
+                    <Button className="btn btn-default provider-call-button">
+                        <span class="phone-number">{item.Phone}</span>
+                        <Glyphicon glyph={"glyphicon glyphicon-earphone phone-glyph"}/>
+                    </Button>
+                    <a href={item.Phone_Link}/>
                 </div>
                 <p class="provider-address">{item.Address_Line1} {item.City}, {item.State} {item.Zip}</p>
             </div>
@@ -60,9 +65,11 @@ class ProviderView extends Component {
         return (
             <div className={"defaultview"}>
                 <h3>Here are some providers that accept your insurance: </h3>
+                <div class="provider-cards">
                     {Children_Provider.map(function (item, key) {
                         return self.renderProviderCard(item, key);
                     })}
+                </div>
             </div>
         );
     }
