@@ -108,16 +108,18 @@ class ProviderView extends Component {
         return (
             <div className={"defaultview"}>
                 <h3>Here are some providers that accept your insurance: </h3>
-                {this.state.providerPages[this.state.currentPage] &&
-                    <div class="provider-cards">
-                        {this.state.providerPages[this.state.currentPage].map(function (item, key) {
-                            return self.renderProviderCard(item, key);
-                        })}
-                    </div>
-                }
-                <div class="page-buttons">
-                    <button onClick={this.goToPrevPage} class="btn btn-default prev-button">Prev</button>
-                    <button onClick={this.goToNextPage} class="btn btn-default prev-button">Next</button>
+                <div className="page-buttons">
+                    <button onClick={this.goToPrevPage} className="btn btn-default prev-button">Prev</button>
+                    <button onClick={this.goToNextPage} className="btn btn-default prev-button">Next</button>
+                </div>
+                <div class="provider-container">
+                    {this.state.providerPages[this.state.currentPage] &&
+                        <div class="provider-cards">
+                            {this.state.providerPages[this.state.currentPage].map(function (item, key) {
+                                return self.renderProviderCard(item, key);
+                            })}
+                        </div>
+                    }
                 </div>
             </div>
         );

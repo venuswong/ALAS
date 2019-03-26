@@ -35,8 +35,8 @@ tr:nth-child(even) {background-color: #f2f2f2;}
 .provider-card {
     border: 1px solid #1a4397;
     border-radius: 5px;
-    margin: 1rem;
-    max-width: 400px;
+    width: 340px;
+    height: 160px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -62,6 +62,41 @@ tr:nth-child(even) {background-color: #f2f2f2;}
 
 .provider-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 350px);
+    grid-gap: 1.5em;
+    justify-content: center;
+}
+
+.provider-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+
+.prev-button, .next-button {
+    margin: 0.5rem;
+}
+
+.page-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+@media(min-width: 1150px) {
+    .provider-cards {
+        grid-template-columns: auto auto auto;
+    }
+}
+
+@media(max-width: 1149.99px) and (min-width: 800px){
+    .provider-cards {
+        grid-template-columns: auto auto;
+    }
+}
+
+@media(max-width: 800px) {
+    .provider-cards {
+        grid-template-columns: auto;
+    }
 }
 
