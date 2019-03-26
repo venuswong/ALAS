@@ -19,26 +19,51 @@ class ProviderView extends Component {
         this.state = {
             Children_Insurance: [],
             Children_Provider: [],
+            providerPages: [],
+            currentPage: 0,
+            numberOfPages: 0,
             alertProps: {
                 show: false,
                 message: '',
                 bsStyle: '',
             }
         };
+
+        this.goToNextPage = this.goToNextPage.bind(this);
+        this.goToPrevPage = this.goToPrevPage.bind(this);
     }
 
-    /*paginateProviders() {
-        let numberOfPages = Math.ceil(this.state.Children_Provider.length % 6);
-    }*/
+    paginateProviders() {
+        let providersPerPage = 6;
+        let providerPages = [];
+        let numberOfPages = Math.ceil(this.state.Children_Provider.length / providersPerPage);
+        this.setState({
+            numberOfPages: numberOfPages
+        });
+        let page = 1;
+        while (page < numberOfPages) {
+            providerPages[page - 1] = this.state.Children_Provider.splice(0, providersPerPage);
+            page ++;
+        }
+        // put remainder on last page
+        if (this.state.Children_Provider.length > 0) {
+            providerPages[page - 1] = this.state.Children_Provider.splice(0, this.state.Children_Provider.length);
+        }
+        return providerPages;
+    }
 
-    componentDidMount() {
+    componentWillMount() {
         getChildrenProvider().then(result => result.json())
             .then(json => {
                 this.setState({
                     Children_Provider: json.result
                 }, () => {
-                    //this.paginateProviders();
-                })
+                    this.setState({
+                        providerPages: this.paginateProviders()
+                    }, () => {
+                        console.log(this.state.providerPages);
+                    });
+                });
             });
     }
 
@@ -58,17 +83,41 @@ class ProviderView extends Component {
         );
     }
 
+    goToPrevPage() {
+        let prevPage = this.state.currentPage - 1;
+        if (prevPage >= 0) {
+            this.setState({
+                currentPage: prevPage
+            });
+        }
+    }
+
+    goToNextPage() {
+        let nextPage = this.state.currentPage + 1;
+        if (nextPage < this.state.numberOfPages) {
+            this.setState({
+                currentPage: nextPage
+            });
+        }
+    }
+
     render() {
-        const {Children_Provider} = this.state;
         const self = this;
-        //console.log(Children_Provider);
+        console.log(this.state.Children_Provider);
+        console.log(this.state.providerPages);
         return (
             <div className={"defaultview"}>
                 <h3>Here are some providers that accept your insurance: </h3>
-                <div class="provider-cards">
-                    {Children_Provider.map(function (item, key) {
-                        return self.renderProviderCard(item, key);
-                    })}
+                {this.state.providerPages[this.state.currentPage] &&
+                    <div class="provider-cards">
+                        {this.state.providerPages[this.state.currentPage].map(function (item, key) {
+                            return self.renderProviderCard(item, key);
+                        })}
+                    </div>
+                }
+                <div class="page-buttons">
+                    <button onClick={this.goToPrevPage} class="btn btn-default prev-button">Prev</button>
+                    <button onClick={this.goToNextPage} class="btn btn-default prev-button">Next</button>
                 </div>
             </div>
         );
