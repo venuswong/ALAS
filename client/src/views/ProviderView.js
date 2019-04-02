@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button, FormControl, Glyphicon} from "react-bootstrap";
+import {Button, FormControl, Glyphicon, Modal} from "react-bootstrap";
 import "./ProviderView.css"
 import {
     //isUserLoggedIn,
@@ -20,6 +20,8 @@ class ProviderView extends Component {
             Children_Insurance: [],
             Children_Provider: [],
             providerPages: [],
+            modal: false,
+            providerScript: require('../action/ActionText').ABA_GET.phoneScript,
             currentPage: 0,
             numberOfPages: 0,
             alertProps: {
@@ -31,6 +33,8 @@ class ProviderView extends Component {
 
         this.goToNextPage = this.goToNextPage.bind(this);
         this.goToPrevPage = this.goToPrevPage.bind(this);
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
     }
 
     paginateProviders() {
@@ -101,17 +105,39 @@ class ProviderView extends Component {
         }
     }
 
+    closeModal() {
+        this.setState({modal: false});
+    }
+
+    openModal(e) {
+        e.preventDefault();
+        this.setState({modal: true});
+    }
+
+
     render() {
         const self = this;
         console.log(this.state.Children_Provider);
         console.log(this.state.providerPages);
         return (
             <div className={"defaultview"}>
-                <h3>Here are some providers that accept your insurance: </h3>
+                <h3>Here are some ABA providers that accept your insurance: </h3>
                 <div className="page-buttons">
                     <button onClick={this.goToPrevPage} className="btn btn-default prev-button">Prev</button>
                     <button onClick={this.goToNextPage} className="btn btn-default prev-button">Next</button>
                 </div>
+                <a href="" onClick={this.openModal}>Ready to call but don't know what to say?</a>
+                <Modal show={this.state.modal} onHide={this.closeModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Sample Phone Script For ABA Providers</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {this.state.providerScript}
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={this.closeModal}>Close</Button>
+                    </Modal.Footer>
+                </Modal>
                 <div class="provider-container">
                     {this.state.providerPages[this.state.currentPage] &&
                         <div class="provider-cards">
