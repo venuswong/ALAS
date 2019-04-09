@@ -62,10 +62,11 @@ class ProviderView extends Component {
                 this.setState({
                     Children_Provider: json.result
                 }, () => {
+                    console.log(this.state.Children_Provider);
                     this.setState({
                         providerPages: this.paginateProviders()
                     }, () => {
-                        console.log(this.state.providerPages);
+                       // console.log(this.state.providerPages);
                     });
                 });
             });
