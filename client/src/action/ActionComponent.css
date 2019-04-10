@@ -70,7 +70,6 @@
     opacity: 0.7;
     border-radius: 5px;
     max-width: 650px;
-    pointer-events: none;
 }
 
 .action-card-content {

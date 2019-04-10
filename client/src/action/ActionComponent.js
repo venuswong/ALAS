@@ -397,13 +397,18 @@ class ActionComponent extends Component {
             <div className="disabled-action-card">
                 <div className="action-card-header">
                     <h2>School – asking for special education services</h2>
-                    <p class="not-needed-header">Not Needed</p>
+                    <p class="not-needed-header">Not Eligable</p>
                 </div>
                 <div className="action-card-content">
                     <p class="disabled-description">
-                        Your child is too young to require requesting special education services from a school. You
-                        should, however, complete this step once your child turns 3. If your child turns 3 while you are
-                        still using ALAS, this action will become enabled.
+                        Children with delays who turn three years old
+                        can benefit from special education services from their local school districts. When your child
+                        is around 30 to 33 months old, you can contact your Special Education Department in your school
+                        district. There are two steps to getting your child enrolled in special education. The first is
+                        an evaluation. The schools call this an ETR (Evaluation Team Report). The second is an educational
+                        plan. The schools call this an IEP (Individualized Education Program). See
+                        <a href="http://education.ohio.gov/Topics/Special-Education/A-Guide-to-Parent-Rights-in-Special-Education"> the Ohio Department of Education's Special Education Guide </a>
+                        for more information about special education
                     </p>
                 </div>
             </div>

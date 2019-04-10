@@ -69,9 +69,10 @@ export const BDD_GET = {
 
 export const HMG_GET = {
     title: "Help Me Grow - asking for county services",
-    description: <p>Help Me Grow is a county-based service, similar to that of the Board of Developmental Disabilities,
-        but geared towards younger children. The service focuses on parental education, as well as early prenatal and
-        well-baby care. Making a referral can enable several supportive programs, such as home visiting.</p>,
+    description: <p>Help Me Grow is a county-based service and offers a range of support for families of children with
+        disabilities (e.g., funding, services, respite care, family support, etc). One unique feature of Help me Grow is
+        that they would often provide home visits and home-based intervention for your children. Call them and ask them
+        how to get started.</p>,
     description_title: "Why contact Help Me Grow?",
     phoneScript: ""
 };

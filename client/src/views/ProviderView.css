@@ -44,6 +44,18 @@ tr:nth-child(even) {background-color: #f2f2f2;}
     box-shadow: 0 4px 4px rgba(0,0,0,.25);
 }
 
+.provider-arrow {
+    width: 35px;
+    height: 40px;
+    cursor: pointer;
+    margin: 0 2em;
+}
+
+.provider-arrow:hover {
+    filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.4));
+    transform: scale(1.05);
+}
+
 .provider-call-button {
     display: flex;
     align-items: center;
@@ -76,10 +88,22 @@ tr:nth-child(even) {background-color: #f2f2f2;}
     margin: 0.5rem;
 }
 
+.prev-button-disabled, .next-button-disabled {
+    pointer-events: none;
+    margin: 0.5rem;
+    opacity: 0.5;
+}
+
 .page-buttons {
     display: flex;
     justify-content: center;
     margin-top: 1rem;
+    align-items: center;
+}
+
+.page-buttons p {
+    margin: 0 1em;
+    color: gray;
 }
 
 @media(min-width: 1150px) {
