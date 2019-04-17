@@ -397,7 +397,7 @@ class ActionComponent extends Component {
             <div className="disabled-action-card">
                 <div className="action-card-header">
                     <h2>School – asking for special education services</h2>
-                    <p class="not-needed-header">Not Eligable</p>
+                    <p class="not-needed-header">Not Eligible</p>
                 </div>
                 <div className="action-card-content">
                     <p class="disabled-description">

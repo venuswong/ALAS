@@ -31,29 +31,8 @@ class ProviderView extends Component {
             }
         };
 
-        this.goToNextPage = this.goToNextPage.bind(this);
-        this.goToPrevPage = this.goToPrevPage.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
-    }
-
-    paginateProviders() {
-        let providersPerPage = 6;
-        let providerPages = [];
-        let numberOfPages = Math.ceil(this.state.Children_Provider.length / providersPerPage);
-        this.setState({
-            numberOfPages: numberOfPages
-        });
-        let page = 1;
-        while (page < numberOfPages) {
-            providerPages[page - 1] = this.state.Children_Provider.splice(0, providersPerPage);
-            page ++;
-        }
-        // put remainder on last page
-        if (this.state.Children_Provider.length > 0) {
-            providerPages[page - 1] = this.state.Children_Provider.splice(0, this.state.Children_Provider.length);
-        }
-        return providerPages;
     }
 
     componentWillMount() {
@@ -61,12 +40,6 @@ class ProviderView extends Component {
             .then(json => {
                 this.setState({
                     Children_Provider: json.result
-                }, () => {
-                    this.setState({
-                        providerPages: this.paginateProviders()
-                    }, () => {
-                        console.log(this.state.providerPages);
-                    });
                 });
             });
     }
@@ -77,32 +50,15 @@ class ProviderView extends Component {
                 <p class="provider"><a href={item.Website}>{item.Name}</a></p>
                 <div class="provider-phone">
                     <Button className="btn btn-default provider-call-button">
-                        <span class="phone-number">{item.Phone}</span>
-                        <Glyphicon glyph={"glyphicon glyphicon-earphone phone-glyph"}/>
+                        <a href={item.Phone_Link}>
+                            <span class="phone-number">{item.Phone}</span>
+                            <Glyphicon glyph={"glyphicon glyphicon-earphone phone-glyph"}/>
+                        </a>
                     </Button>
-                    <a href={item.Phone_Link}/>
                 </div>
                 <p class="provider-address">{item.Address_Line1} {item.City}, {item.State} {item.Zip}</p>
             </div>
         );
-    }
-
-    goToPrevPage() {
-        let prevPage = this.state.currentPage - 1;
-        if (prevPage >= 0) {
-            this.setState({
-                currentPage: prevPage
-            });
-        }
-    }
-
-    goToNextPage() {
-        let nextPage = this.state.currentPage + 1;
-        if (nextPage < this.state.numberOfPages) {
-            this.setState({
-                currentPage: nextPage
-            });
-        }
     }
 
     closeModal() {
@@ -125,13 +81,11 @@ class ProviderView extends Component {
         console.log(this.state.providerPages);
         return (
             <div className={"defaultview"}>
-                <h3>Here are some ABA providers that accept your insurance: </h3>
-                <div className="page-buttons">
-                    <button onClick={this.goToPrevPage} className={leftButtonStyling}>Prev</button>
-                    <button onClick={this.goToNextPage} className={rightButtonStyling}>Next</button>
-                    <p>Page {this.state.currentPage + 1} of {this.state.numberOfPages}</p>
+                <div class="provider-header">
+                    <h3>Here are some ABA providers that accept your insurance.</h3>
+                    <p>We have presented the closest providers to you. To see the full list, navigate to your profile and click on "Provider Information."</p>
+                    <a href="" onClick={this.openModal}>Ready to call but don't know what to say?</a>
                 </div>
-                <a href="" onClick={this.openModal}>Ready to call but don't know what to say?</a>
                 <Modal show={this.state.modal} onHide={this.closeModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>Sample Phone Script For ABA Providers</Modal.Title>
@@ -144,9 +98,9 @@ class ProviderView extends Component {
                     </Modal.Footer>
                 </Modal>
                 <div class="provider-container">
-                    {this.state.providerPages[this.state.currentPage] &&
+                    {this.state.Children_Provider &&
                         <div class="provider-cards">
-                            {this.state.providerPages[this.state.currentPage].map(function (item, key) {
+                            {this.state.Children_Provider.map(function (item, key) {
                                 return self.renderProviderCard(item, key);
                             })}
                         </div>
