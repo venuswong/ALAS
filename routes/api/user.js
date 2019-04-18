@@ -220,11 +220,13 @@ router.get('/childreninsurance', function (req, res) {
 
 router.get('/childrenprovider', function (req, res) {
     if (req.session.Uid) {
-        const query = "SELECT DISTINCT Pr.Name, Pr.Prov_ID, Loc.Phone, Loc.Address_Line1, Loc.City, Loc.State, Loc.Zip\n" +
-            "FROM ABA_Providers AS Pr, Users AS U, Provider_Locations AS Loc, Patient_Info AS PI\n" +
+        const query = "SELECT DISTINCT Pr.Name, Pr.Prov_ID, Pr.Website, Loc.Phone, Loc.Phone_Link, Loc.Address_Line1, Loc.City, Loc.State, Loc.Zip\n" +
+            "FROM ABA_Providers AS Pr, Users AS U, Provider_Locations AS Loc, Patient_Info AS PI, (select * from Closest_Prov where Zip = (Select U_Zip from Users Where Uid = ?)) as near \n" +
             "WHERE (Loc.Loc_ID = Pr.Address)\n" +
             "AND (INSTR(Pr.Ins_Id, PI.Iid) > 0)\n" +
-            "AND (U.Uid = ?);";
+            "AND Pr.Address in (near.Prov_1, near.Prov_2, near.Prov_3, near.Prov_4, near.Prov_5, near.Prov_6, near.Prov_7, near.Prov_8, near.Prov_9, near.Prov_10);"
+
+
         const filter = [req.session.Uid];
         db.query(query, filter, function(err, result){
             if (err) throw err;

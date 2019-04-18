@@ -31,3 +31,104 @@ th {
 }
 
 tr:nth-child(even) {background-color: #f2f2f2;}
+
+.provider-card {
+    border: 1px solid #1a4397;
+    border-radius: 5px;
+    width: 340px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.5rem;
+    box-shadow: 0 4px 4px rgba(0,0,0,.25);
+}
+
+.provider-arrow {
+    width: 35px;
+    height: 40px;
+    cursor: pointer;
+    margin: 0 2em;
+}
+
+.provider-arrow:hover {
+    filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.4));
+    transform: scale(1.05);
+}
+
+.provider-call-button {
+    background-image: linear-gradient(to bottom, white, #f2f2f2, white);
+}
+
+.provider-call-button a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.phone-number {
+    font-weight: bold;
+    color: #1a4397;
+    margin-right: 1rem;
+}
+
+.provider-phone, .provider-address {
+    margin: 0.5rem 0;
+}
+
+.provider-cards {
+    display: grid;
+    grid-gap: 1.5em;
+    justify-content: center;
+}
+
+.provider-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+
+.prev-button, .next-button {
+    margin: 0.5rem;
+}
+
+.prev-button-disabled, .next-button-disabled {
+    pointer-events: none;
+    margin: 0.5rem;
+    opacity: 0.5;
+}
+
+.page-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    align-items: center;
+}
+
+.page-buttons p {
+    margin: 0 1em;
+    color: gray;
+}
+
+.provider-header {
+    margin: 2em;
+}
+
+@media(min-width: 1150px) {
+    .provider-cards {
+        grid-template-columns: auto auto auto;
+    }
+}
+
+@media(max-width: 1149.99px) and (min-width: 800px){
+    .provider-cards {
+        grid-template-columns: auto auto;
+    }
+}
+
+@media(max-width: 800px) {
+    .provider-cards {
+        grid-template-columns: auto;
+    }
+}
+

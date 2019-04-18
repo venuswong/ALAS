@@ -289,14 +289,18 @@ class ProfileView extends Component {
                     this.setState({
                         Local_Districts
                     });
-                    if(this.state.Children_Information[child].SDIid !== Local_Districts[0].SDIid) {
-                        this.state.SelectedDistrict[child] = Local_Districts[0].SDIid
+
+                    if(this.state.Children_Information[child].SDIid !== Local_Districts[0][0].SDIid) {
+                        this.state.SelectedDistrict[child] = Local_Districts[0][0].SDIid
                     }
                     else{
-                        this.state.SelectedDistrict[child] = Local_Districts[1].SDIid
+                        this.state.SelectedDistrict[child] = Local_Districts[0][1].SDIid
                     }
+                    console.log(Local_Districts[0][0].SDIid)
                 });
+
         }
+
     }
 
     render() {

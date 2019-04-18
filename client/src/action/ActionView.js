@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import "./ActionView.css";
 import {getUserActions, getUserPatients, getMaterials, getSchoolDistrict} from "../session/Session";
 import ActionComponent from "./ActionComponent";
-import {Panel, Tab, Tabs} from "react-bootstrap";
+import {Button, Modal, Panel, Tab, Tabs} from "react-bootstrap";
 import HundredDayKitYoung from '../materials/100DayKitYoung.pdf'
-import HundredDayKitSchoolAged from '../materials/100DayKitYoung.pdf'
+import HundredDayKitSchoolAged from '../materials/100DayKitSchoolAged.pdf'
 import DownloadIcon from '../image/ALAS-download-glyph.svg'
+import InfoIcon from '../image/information-icon.svg'
 import moment from 'moment'
 import PanelHeading from "react-bootstrap/es/PanelHeading";
 import PanelBody from "react-bootstrap/es/PanelBody";
@@ -20,9 +21,14 @@ class ActionView extends Component {
             childActions: {},
             childrenInfo: {},
             loading: true,
+            modal: false,
+            modalMaterial: null,
             materials: undefined,
             schoolDistricts: {} /* SCHOOL DISTRICTS FOR EACH CHILD WILL BE IN HERE. */
         };
+
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
     }
 
     componentWillMount() {
@@ -86,6 +92,7 @@ class ActionView extends Component {
 
     // returns panel HTML based on the age of the child
     renderAgeSpecificMaterials(age) {
+        console.log(age);
         let ageSpecificMaterials;
         if(age < 3)
             ageSpecificMaterials = this.state.materials.filter((material) => material.Toddler === 1);
@@ -93,10 +100,48 @@ class ActionView extends Component {
             ageSpecificMaterials = this.state.materials.filter((material) => material.Young === 1);
         } else {
             ageSpecificMaterials = this.state.materials.filter((material) => material.Child === 1);
+            console.log(ageSpecificMaterials);
         }
-        return ageSpecificMaterials.map((material) => {
-            return this.buildAgeRecognitionPanel(material);
+        return (
+            <div>
+                {this.renderInfoModal()}
+                {ageSpecificMaterials.map((material) => {
+                    return this.buildAgeRecognitionPanel(material);
+                })}
+            </div>
+        );
+    }
+
+    closeModal() {
+        this.setState({modal: false});
+    }
+
+    openModal(e, material) {
+        e.preventDefault();
+        this.setState({
+            modal: true,
+            modalMaterial: material
         });
+    }
+
+    renderInfoModal() {
+        return (
+            <div>
+                {this.state.modal ?
+                    <Modal show={this.state.modal} onHide={this.closeModal}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Information about this material</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            {this.state.modalMaterial.Description}
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={this.closeModal}>Close</Button>
+                        </Modal.Footer>
+                    </Modal>
+                    : null }
+            </div>
+        );
     }
 
     // Takes a material JSON object that was fetched from the Materials table and builds the corresponding panel
@@ -106,6 +151,7 @@ class ActionView extends Component {
                 <div class="age-recognition-panel">
                     <div class="age-recognition-content">
                         <p>{material.Title}</p>
+                        <img src={InfoIcon} class="info-icon" onClick={(e) => this.openModal(e, material)}/>
                         <a href={material.Link}>
                             <button type="button" class="btn btn-primary">Visit &#187;</button>
                         </a>
@@ -117,6 +163,7 @@ class ActionView extends Component {
                 <div className="age-recognition-panel">
                     <div className="age-recognition-content">
                         <p>{material.Title}</p>
+                        <img src={InfoIcon} className="info-icon" onClick={(e) => this.openModal(e, material)}/>
                         <a href={this.getStaticAsset(material)} download>
                             <button type="button" className="btn btn-primary">Download
                                 <img src={DownloadIcon} className="download-icon"/>

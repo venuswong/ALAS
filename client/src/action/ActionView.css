@@ -66,6 +66,13 @@ hr {
 .keyword {
 }
 
+.info-icon {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
 .Modal {
     height: 90%;
     margin: 5%;

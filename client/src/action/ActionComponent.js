@@ -9,7 +9,7 @@ import { Popover, Table } from 'react-bootstrap';
 import OverlayTrigger from "react-bootstrap/es/OverlayTrigger"
 import CheckmarkIcon from '../image/alas-checkmark.svg'
 import CheckmarkIconNavy from '../image/alas-checkmark-navy.svg'
-import InProgressIcon from '../image/in-progress-circle.svg'
+import UsersIcon from '../image/users.svg'
 import DownArrow from '../image/down-arrow.svg'
 import "react-select";
 import 'classnames'
@@ -279,14 +279,6 @@ class ActionComponent extends Component {
 
     renderActionCard() {
         const {IsCompleted, IsStarted} = this.state.action;
-        const progress_table = this.state.progress_table;
-        const {title, description_title, description, phoneScript} = this.state.actionText;
-        var phoneNumber = 'tel:18888888888';
-        if(this.state.action.ActionType === "IEP_GET") {
-            if (this.state.School_Phone !== "") {
-                phoneNumber = "tel:" + this.state.School_Phone[0].Phone
-            }
-        }
         const classes = require('classnames');
         const actionCardStyle = classes({
             'action-card-completed': IsCompleted,
@@ -296,42 +288,95 @@ class ActionComponent extends Component {
 
         if (this.props.age < 3 && this.state.action.ActionType === "IEP_GET") {
             return this.renderDisabledSchoolCard();
+        } else if (this.state.action.ActionType === "ABA_GET") {
+            return this.renderProviderCard(actionCardStyle);
         } else {
-            return(
-                <div className={actionCardStyle}>
-                    <div className="action-card-header">
-                        <h2>{title}</h2>
-                        {this.displayProgressSymbol(IsCompleted, IsStarted)}
+            return this.renderCallCard(actionCardStyle);
+        }
+    }
+
+    renderProviderCard(actionCardStyle) {
+        return(
+            <div className={actionCardStyle}>
+                <div className="action-card-header">
+                    <h2>{this.state.actionText.title}</h2>
+                    {this.displayProgressSymbol(this.state.action.IsCompleted, this.state.action.IsStarted)}
+                </div>
+                <div className="action-card-content">
+                    <div>
+                        <h5>
+                            <a onClick={() => this.setState({open_Description: !this.state.open_Description})}>
+                                {this.state.actionText.description_title}
+                            </a>
+                        </h5>
+                        <Collapse in={this.state.open_Description}>
+                            <div>
+                                <Well>
+                                    {this.state.actionText.description}
+                                </Well>
+                            </div>
+                        </Collapse>
                     </div>
-                    <div className="action-card-content">
-                        <div>
-                            <h5><a onClick={() => this.setState({open_Description: !this.state.open_Description})}>
-                                {description_title}
-                            </a></h5>
-                            <Collapse in={this.state.open_Description}>
-                                <div>
-                                    <Well>
-                                        {description}
-                                    </Well>
-                                </div>
-                            </Collapse>
-                        </div>
-                        {phoneScript && !IsCompleted &&
-                        <div>
-                            <a onClick={() => this.setState({open_Script: !this.state.open_Script})}>Ready to call but don't
-                                know what to say?</a><br/>
-                            <Collapse in={this.state.open_Script}>
-                                <div>
-                                    <Well>
-                                        {phoneScript}
-                                    </Well>
-                                </div>
-                            </Collapse>
-                        </div>
+                    <br/>
+                    <span>
+                        {!this.state.action.IsCompleted &&
+                            <a href="/providers">
+                                <button class="btn btn-default provider-button">Visit the Provider Hub
+                                    <img src={UsersIcon} class="users-icon" alt="Providers"/>
+                                </button>
+                            </a>
                         }
-                        <br/>
-                        <span>
-                        {!IsCompleted &&
+                        {this.displayProgressOptions(this.state.action.IsCompleted, this.state.action.IsStarted)}
+                    </span>
+                </div>
+            </div>
+        );
+    }
+
+    renderCallCard(actionCardStyle) {
+        let phoneNumber = 'tel:18888888888';
+        if(this.state.action.ActionType === "IEP_GET") {
+            if (this.state.School_Phone !== "") {
+                phoneNumber = "tel:" + this.state.School_Phone[0].Phone
+            }
+        }
+        return(
+            <div className={actionCardStyle}>
+                <div className="action-card-header">
+                    <h2>{this.state.actionText.title}</h2>
+                    {this.displayProgressSymbol(this.state.action.IsCompleted, this.state.action.IsStarted)}
+                </div>
+                <div className="action-card-content">
+                    <div>
+                        <h5>
+                            <a onClick={() => this.setState({open_Description: !this.state.open_Description})}>
+                                {this.state.actionText.description_title}
+                            </a>
+                        </h5>
+                        <Collapse in={this.state.open_Description}>
+                            <div>
+                                <Well>
+                                    {this.state.actionText.description}
+                                </Well>
+                            </div>
+                        </Collapse>
+                    </div>
+                    {this.state.actionText.phoneScript && !this.state.action.IsCompleted &&
+                    <div>
+                        <a onClick={() => this.setState({open_Script: !this.state.open_Script})}>Ready to call but don't
+                            know what to say?</a><br/>
+                        <Collapse in={this.state.open_Script}>
+                            <div>
+                                <Well>
+                                    {this.state.actionText.phoneScript}
+                                </Well>
+                            </div>
+                        </Collapse>
+                    </div>
+                    }
+                    <br/>
+                    <span>
+                        {!this.state.action.IsCompleted &&
                         <div className="action-phone-button">
                             <a href={phoneNumber}>
                                 <Button className={"buttonWidth"}>
@@ -340,12 +385,11 @@ class ActionComponent extends Component {
                             </a>
                         </div>
                         }
-                        {this.displayProgressOptions(IsCompleted, IsStarted)}
-                        </span>
-                    </div>
+                        {this.displayProgressOptions(this.state.action.IsCompleted, this.state.action.IsStarted)}
+                    </span>
                 </div>
-            );
-        }
+            </div>
+        );
     }
 
     renderDisabledSchoolCard() {
@@ -353,13 +397,18 @@ class ActionComponent extends Component {
             <div className="disabled-action-card">
                 <div className="action-card-header">
                     <h2>School – asking for special education services</h2>
-                    <p class="not-needed-header">Not Needed</p>
+                    <p class="not-needed-header">Not Eligible</p>
                 </div>
                 <div className="action-card-content">
                     <p class="disabled-description">
-                        Your child is too young to require requesting special education services from a school. You
-                        should, however, complete this step once your child turns 3. If your child turns 3 while you are
-                        still using ALAS, this action will become enabled.
+                        Children with delays who turn three years old
+                        can benefit from special education services from their local school districts. When your child
+                        is around 30 to 33 months old, you can contact your Special Education Department in your school
+                        district. There are two steps to getting your child enrolled in special education. The first is
+                        an evaluation. The schools call this an ETR (Evaluation Team Report). The second is an educational
+                        plan. The schools call this an IEP (Individualized Education Program). See
+                        <a href="http://education.ohio.gov/Topics/Special-Education/A-Guide-to-Parent-Rights-in-Special-Education"> the Ohio Department of Education's Special Education Guide </a>
+                        for more information about special education
                     </p>
                 </div>
             </div>
