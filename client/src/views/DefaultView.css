@@ -1,6 +1,5 @@
 .defaultview {
     position: relative;
-    min-height: 86vh;
     padding: 0 24px 24px;
     margin: 0;
 }
@@ -9,17 +8,9 @@ h1 {
     text-align: center;
 }
 
-p {
-    text-align: justify;
-}
-
 @media all and (max-width: 480px) {
     h1 {
         font-size: 6vw;
-    }
-
-    p {
-        font-size: 3vw;
     }
 }
 

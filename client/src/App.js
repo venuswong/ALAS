@@ -18,12 +18,13 @@ import Loading from "./common/Loading";
 import FAQView from "./views/FAQView";
 import AnswerView from "./views/AnswerView";
 import PageNotFound from "./common/PageNotFound";
+import ProviderView from "./views/ProviderView";
 import './App.css';
 import './common/Sidenav.css';
 import AddUser from "./views/AddUserView";
 
 class App extends Component {
-    SIDENAV_WIDTH = "186px";
+    SIDENAV_WIDTH = "210px";
 
     constructor(props){
         super(props);
@@ -122,6 +123,7 @@ class App extends Component {
                         <Switch>
                             <Route exact path={"/"} component={ActionView}/>
                             <Route path={"/profile"} component={ProfileView}/>
+                            <Route path={"/providers"} component={ProviderView}/>
                             <Route path={"/faq"} component={FAQView}/>
                             <Route path={"/about"} component={AboutView}/>
                             <Route path={"/logout"} component={Logout}/>

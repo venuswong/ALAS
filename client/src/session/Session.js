@@ -53,9 +53,53 @@ export function getUserActions() {
     });
 }
 
+export function getMaterials() {
+    return fetch("/api/user/getMaterials", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+// returns promise containing patient info for all user's patients
+export function getUserPatients() {
+    return fetch("/api/user/getPatientInfo", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export function getSchoolDistrict(SDIid) {
+    return fetch("api/user/getSchoolDistrict/" + SDIid.toString(), {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
 // updates database with new value for Action
 export function updateAction(action) {
     return fetch("/api/user/updateAction", {
+        method: "post",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        // Serialize JSON body
+        body: JSON.stringify(action)
+    });
+}
+
+// updates database with new value for an Action's note field
+export function updateActionNote(action) {
+    return fetch("/api/user/updateActionNote", {
         method: "post",
         headers: {
             'Accept': 'application/json',
@@ -109,15 +153,49 @@ export function postChildInsurance(information, insurance) {
     });
 }
 
-export function postChildSchool(information, school) {
-    return fetch("/api/user/updatechildinsurance", {
+export function getChildrenProvider() {
+    return fetch("/api/user/childrenprovider", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export function getChildrenEligibleProviders() {
+    return fetch("/api/user/childrenEligibleProviders", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+/*
+export function postChildProvider(information, provider) {
+    return fetch("/api/user/updatechildprovider", {
         method: "post",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         // Serialize JSON body
-        body: JSON.stringify({information, school})
+        body: JSON.stringify({information, provider})
+    });
+}
+*/
+
+export function postChildSchool(Info, schoolID) {
+    return fetch("/api/user/updatechildschool", {
+        method: "post",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        // Serialize JSON body
+        body: JSON.stringify({Info, schoolID})
     });
 }
 
@@ -131,7 +209,37 @@ export function getChildrenSchool() {
     });
 }
 
-export function getChildNameByPIid(PIid) {
+export function getSD_From_SDIid() {
+    return fetch("/api/user/zip_to_SD", {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export function getSD_in_ZipCode(P_ID) {
+    return fetch("/api/user/SD_in_zip/" + P_ID.toString(), {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export function getSDPhoneNumber(SDI_id) {
+    return fetch("/api/user/SDiID_to_Phone/" + SDI_id.toString(), {
+        method: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export function getBasicChildInfoByPIid(PIid) {
     return fetch("/api/patient/" + PIid.toString(), {
         method: "get",
         headers: {

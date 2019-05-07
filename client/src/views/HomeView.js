@@ -19,7 +19,7 @@ class HomeView extends Component {
                         <Carousel.Item>
                             <img src={About_1} alt=""/>
                             <Carousel.Caption>
-                                <h3>1 in 58 children are affected by Austism Spectrum Disorder</h3>
+                                <h3>1 in 58 children are affected by Autism Spectrum Disorder</h3>
                                 <p></p>
                             </Carousel.Caption>
                         </Carousel.Item>

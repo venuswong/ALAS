@@ -5,7 +5,7 @@ class PageNotFound extends Component {
     render() {
         return (
             <div className={"not-found"}>
-                The page you are looking for cannot be found! click <a href={"/"}>here</a> to go home.
+                The page you are looking for cannot be found! Click <a href={"/"}>here</a> to return to the login page.
             </div>
         );
     }

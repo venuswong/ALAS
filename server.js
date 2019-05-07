@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 //const http = require('http');
 //const enforce = require('express-sslify');
 const secure = require('ssl-express-www');
+const path = require('path');
 
 const test = require("./routes/api/test");
 

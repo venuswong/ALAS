@@ -1,10 +1,22 @@
 .app{
-    width: 100vw;
     height: 100%;
+    margin-bottom: 2rem;
 }
 
 .footer {
     bottom:0vh;
     margin:0;
     position:relative;
+}
+
+.panel-group{
+    margin: 10vh auto 0;
+    width: 65vw;
+}
+
+@media(max-width: 860px) {
+    .panel-group {
+        margin: 10vh auto 0;
+        width: 93vw;
+    }
 }
